@@ -64,11 +64,17 @@ namespace Api.Controllers
         [HttpPost("register")]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        public async Task<IActionResult> Register([FromBody] UserEntity userEntity)
+        public async Task<IActionResult> Register([FromBody] LoginDto loginDto)
         {
-            userEntity.Password = _passwordService.Hash(userEntity.Password);
+            string hashedPassword = _passwordService.Hash(loginDto.Password);
+            string token = _tokenService.GenerateJWTToken();
+
+            UserEntity userEntity = new UserEntity(loginDto.Email, hashedPassword);
+            userEntity.TokenEmailConfirmation = _tokenService.GenerateJWTToken();
+
             Guid guid = await _userService.AddUser(userEntity);
             await _emailService.SendEmailConfirmationEmail(userEntity.Email, userEntity.TokenEmailConfirmation);
+
             return CreatedAtAction(nameof(Register), new { guid });
         }
 

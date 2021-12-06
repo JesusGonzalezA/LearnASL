@@ -20,6 +20,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using AutoMapper;
+using Infraestructure.Mappings;
 
 namespace Api
 {
@@ -34,6 +36,7 @@ namespace Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            ConfigureAutomapper(services);
             ConfigureOptions(services);
             ConfigureDatabase(services);
             ConfigureLogger(services);
@@ -41,7 +44,15 @@ namespace Api
             ConfigureDI(services);
             ConfigureAuthentication(services);
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                })
+                .ConfigureApiBehaviorOptions(options =>
+                {
+                    //options.SuppressModelStateInvalidFilter = true;
+                });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -66,6 +77,17 @@ namespace Api
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private void ConfigureAutomapper(IServiceCollection services)
+        {
+            var mapperConfig = new MapperConfiguration(m =>
+            {
+                m.AddProfile(new AutomapperProfile());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
         }
 
         private void ConfigureOptions(IServiceCollection services)

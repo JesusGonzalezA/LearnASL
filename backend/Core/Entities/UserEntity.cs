@@ -11,6 +11,18 @@ namespace Core.Entities
 
         public UserEntity()
         {
+            Initialize();
+        }
+
+        public UserEntity(string email, string password)
+        {
+            Initialize(email, password);
+        }
+
+        private void Initialize(string email = "", string password = "")
+        {
+            Email = email;
+            Password = password;
             ConfirmedEmail = false;
             TokenPasswordRecovery = null;
             TokenEmailConfirmation = null;
