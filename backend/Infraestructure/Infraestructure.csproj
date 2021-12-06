@@ -16,6 +16,7 @@
     <None Remove="Options\" />
     <None Remove="MailKit" />
     <None Remove="Mappings\" />
+    <None Remove="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Repositories\" />
@@ -24,6 +25,7 @@
     <Folder Include="Services\" />
     <Folder Include="Options\" />
     <Folder Include="Mappings\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />

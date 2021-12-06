@@ -9,19 +9,13 @@ namespace Core.Services
     public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IEmailService _emailService;
-        private readonly ITokenService _tokenService;
 
         public UserService
         (
-            IUnitOfWork unitOfWork,
-            IEmailService emailService,
-            ITokenService tokenService
+            IUnitOfWork unitOfWork
         )
         {
             _unitOfWork = unitOfWork;
-            _emailService = emailService;
-            _tokenService = tokenService;
         }
 
         public async Task<UserEntity> GetUser(Guid id)
@@ -43,7 +37,6 @@ namespace Core.Services
                 throw new BusinessException("User already exist");
             }
 
-            await _emailService.SendRegistrationEmail(user.Email);
             return await _unitOfWork.UserRepository.Add(user);
         }
 
@@ -57,18 +50,6 @@ namespace Core.Services
             }
 
             await _unitOfWork.UserRepository.Delete(userDB.Id);
-        }
-
-        public async Task<bool> CheckCredentials(string email, string password)
-        {
-            UserEntity user = await _unitOfWork.UserRepository.GetUserByEmail(email);
-
-            if ( user == null )
-            {
-                throw new BusinessException("User does not exists");
-            }
-
-            return user.Password.Equals(password);
         }
 
         public async Task<bool> CheckConfirmedUser(string email)
@@ -127,7 +108,7 @@ namespace Core.Services
             await _unitOfWork.UserRepository.Update(user);
         }
 
-        public async Task<string> RegenerateTokenEmailConfirmation(string email)
+        public async Task UpdateTokenEmailConfirmation(string email, string token)
         {
             UserEntity user = await _unitOfWork.UserRepository.GetUserByEmail(email);
 
@@ -140,14 +121,11 @@ namespace Core.Services
                 throw new BusinessException("Email already confirmed");
             }
 
-            string token = _tokenService.GenerateJWTToken();
             user.TokenEmailConfirmation = token;
             await _unitOfWork.UserRepository.Update(user);
-
-            return token;
         }
 
-        public async Task<string> RegenerateTokenPasswordRecovery(string email)
+        public async Task UpdateTokenPasswordRecovery(string email, string token)
         {
             UserEntity user = await _unitOfWork.UserRepository.GetUserByEmail(email);
 
@@ -156,11 +134,8 @@ namespace Core.Services
                 throw new BusinessException("User does not exists");
             }
 
-            string token = _tokenService.GenerateJWTToken();
             user.TokenPasswordRecovery = token;
             await _unitOfWork.UserRepository.Update(user);
-
-            return token;
         }
     }
 }

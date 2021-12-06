@@ -7,6 +7,7 @@ using Core.Interfaces;
 using Core.Services;
 using Infraestructure.Data;
 using Infraestructure.Options;
+using Infraestructure.Interfaces;
 using Infraestructure.Repositories;
 using Infraestructure.Services;
 using Microsoft.AspNetCore.Builder;
@@ -84,6 +85,14 @@ namespace Api
                     options.SecurityKey = Configuration["TokenOptions__SecurityKey"];
                 }
             );
+            services.Configure<PasswordOptions>(
+                options =>
+                {
+                    options.Iterations = int.Parse(Configuration["PasswordOptions__Iterations"]);
+                    options.KeySize = int.Parse(Configuration["PasswordOptions__KeySize"]);
+                    options.SaltSize = int.Parse(Configuration["PasswordOptions__SaltSize"]);
+                }
+            );
         }
 
         private void ConfigureDatabase(IServiceCollection services)
@@ -106,6 +115,7 @@ namespace Api
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddScoped<IEmailService, EmailService>();
+            services.AddSingleton<IPasswordService, PasswordService>();
 
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddTransient<IUnitOfWork, UnitOfWork>();

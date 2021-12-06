@@ -1,5 +1,5 @@
 ﻿
-namespace Core.Interfaces
+namespace Infraestructure.Interfaces
 {
     public interface ITokenService
     {

@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Core.Interfaces;
+using Infraestructure.Interfaces;
 using Infraestructure.Options;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
@@ -16,7 +16,7 @@ namespace Infraestructure.Services
             _emailOptions = emailOptions.Value;
         }
 
-        public async Task SendPasswordRecoveryEmail(string email)
+        public async Task SendPasswordRecoveryEmail(string email, string token)
         {
             MimeMessage message = CreateMessage(
                 email,
@@ -26,7 +26,7 @@ namespace Infraestructure.Services
             await SendAsync(message);
         }
 
-        public async Task SendRegistrationEmail(string email)
+        public async Task SendEmailConfirmationEmail(string email, string token)
         {
             MimeMessage message = CreateMessage(
                 email,
