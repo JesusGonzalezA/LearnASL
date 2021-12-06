@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using Api.Middleware;
+using Api.Filters;
 using Core.Interfaces;
 using Core.Services;
 using Infraestructure.Data;
@@ -22,6 +23,7 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using AutoMapper;
 using Infraestructure.Mappings;
+using FluentValidation.AspNetCore;
 
 namespace Api
 {
@@ -43,6 +45,14 @@ namespace Api
             ConfigureSwagger(services);
             ConfigureDI(services);
             ConfigureAuthentication(services);
+
+            services.AddMvc(options =>
+            {
+                options.Filters.Add<ValidationFilter>();
+            }).AddFluentValidation(options =>
+            {
+                options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+            });
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
