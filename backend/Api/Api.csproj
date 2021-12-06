@@ -21,6 +21,7 @@
     <None Remove="Serilog" />
     <None Remove="Serilog.Sinks.File" />
     <None Remove="Contracts\Outgoing\" />
+    <None Remove="Logs\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.12" />
@@ -39,6 +40,7 @@
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Middleware\" />
+    <Folder Include="Logs\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
