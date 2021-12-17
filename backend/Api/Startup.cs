@@ -61,7 +61,7 @@ namespace Api
                 })
                 .ConfigureApiBehaviorOptions(options =>
                 {
-                    //options.SuppressModelStateInvalidFilter = true;
+                    options.SuppressModelStateInvalidFilter = true;
                 });
         }
 
