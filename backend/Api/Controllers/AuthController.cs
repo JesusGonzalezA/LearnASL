@@ -7,6 +7,9 @@ using System.Net;
 using Core.Entities;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using Api.Responses;
+using Core.Exceptions;
+using System.Collections.Generic;
 
 namespace Api.Controllers
 {
@@ -39,26 +42,33 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         public async Task<IActionResult> Login([FromBody] LoginDto login)
         {
-            UserEntity user = await _userService.GetUserByEmail(login.Email);
-
-            if (user == null)
+            try
             {
-                return Conflict("User does not exist.");
+                UserEntity user = await _userService.GetUserByEmail(login.Email);
+                if (user == null)
+                {
+                    throw new ControllerException("User does not exist.");
+                }
+                bool match = _passwordService.Check(user.Password, login.Password);
+                bool isConfirmed = await _userService.CheckConfirmedUser(login.Email);
+
+                if (!isConfirmed)
+                {
+                    throw new ControllerException("Email is not confirmed.");
+                }
+                if (!match)
+                {
+                    throw new ControllerException("Credentials are not correct.");
+                }
+
+                return Ok(_tokenService.GenerateJWTToken(login.Email));
             }
-
-            bool match = _passwordService.Check(user.Password, login.Password);
-            bool isConfirmed = await _userService.CheckConfirmedUser(login.Email);
-
-            if (!isConfirmed)
+            catch(ControllerException exception)
             {
-                return Conflict("Email is not confirmed.");
+                return Conflict(
+                    new ErrorApiResponse<List<string> >( new List<string>(1) { exception.Message } )
+                );
             }
-            if (!match)
-            {
-                return Conflict("Credentials are not correct.");
-            }
-
-            return Ok(_tokenService.GenerateJWTToken(login.Email));
         }
 
         [HttpPost("register")]
