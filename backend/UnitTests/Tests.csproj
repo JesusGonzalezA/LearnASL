@@ -19,4 +19,16 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Api\" />
+    <None Remove="Core\" />
+    <None Remove="Infraestructure\" />
+    <None Remove="Helpers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Api\" />
+    <Folder Include="Core\" />
+    <Folder Include="Infraestructure\" />
+    <Folder Include="Helpers\" />
+  </ItemGroup>
 </Project>
