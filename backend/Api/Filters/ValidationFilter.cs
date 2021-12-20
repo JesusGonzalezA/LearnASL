@@ -20,6 +20,7 @@ namespace Api.Filters
                 context.Result = new BadRequestObjectResult(
                     new ErrorApiResponse<List<string> >(errors)
                 );
+                context.Result = new BadRequestObjectResult(context.ModelState);
                 return;
             }
 

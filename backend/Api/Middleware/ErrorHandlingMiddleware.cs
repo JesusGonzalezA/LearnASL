@@ -65,7 +65,7 @@ namespace Api.Middleware
                 new ErrorApiResponse<List<string> >( new List<string>(1) { errorMessage } ),
                 Formatting.Indented
             );
-
+          
             await context.Response.WriteAsync(errorMessageAsJson);
         }
 

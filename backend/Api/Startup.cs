@@ -50,6 +50,14 @@ namespace Api
             ConfigureAuthentication(services);
             ConfigureValidators(services);
 
+            services.AddMvc(options =>
+            {
+                options.Filters.Add<ValidationFilter>();
+            }).AddFluentValidation(options =>
+            {
+                options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+            });
+
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
                 {
@@ -93,7 +101,7 @@ namespace Api
             }).AddFluentValidation();
             services.AddTransient<IValidator<LoginDto>, LoginDtoValidator>();
         }
-
+      
         private void ConfigureAutomapper(IServiceCollection services)
         {
             var mapperConfig = new MapperConfiguration(m =>
