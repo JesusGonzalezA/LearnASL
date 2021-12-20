@@ -10,9 +10,6 @@ namespace Infraestructure.Data
     {
         public virtual DbSet<UserEntity> Users { get; set; }
 
-        public DatabaseContext()
-        {}
-
         public DatabaseContext(DbContextOptions<DatabaseContext> options)
             : base(options)
         {
