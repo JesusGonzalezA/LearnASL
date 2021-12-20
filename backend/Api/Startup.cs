@@ -24,6 +24,9 @@ using Serilog;
 using AutoMapper;
 using Infraestructure.Mappings;
 using FluentValidation.AspNetCore;
+using FluentValidation;
+using Core.Contracts.Incoming;
+using Infraestructure.Validators;
 
 namespace Api
 {
@@ -38,21 +41,14 @@ namespace Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            ConfigureDI(services);
             ConfigureAutomapper(services);
             ConfigureOptions(services);
             ConfigureDatabase(services);
             ConfigureLogger(services);
             ConfigureSwagger(services);
-            ConfigureDI(services);
             ConfigureAuthentication(services);
-
-            services.AddMvc(options =>
-            {
-                options.Filters.Add<ValidationFilter>();
-            }).AddFluentValidation(options =>
-            {
-                options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
-            });
+            ConfigureValidators(services);
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
@@ -87,6 +83,15 @@ namespace Api
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private void ConfigureValidators(IServiceCollection services)
+        {
+            services.AddMvc(options =>
+            {
+                options.Filters.Add<ValidationFilter>();
+            }).AddFluentValidation();
+            services.AddTransient<IValidator<LoginDto>, LoginDtoValidator>();
         }
 
         private void ConfigureAutomapper(IServiceCollection services)
