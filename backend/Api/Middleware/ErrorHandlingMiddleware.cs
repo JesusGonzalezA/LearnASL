@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using System.IO;
 using Microsoft.AspNetCore.Http.Extensions;
 using Core.Exceptions;
-using System.Text;
-using System.Linq;
+using Api.Responses;
+using System.Collections.Generic;
 
 namespace Api.Middleware
 {
@@ -60,11 +60,12 @@ namespace Api.Middleware
                 errorMessage = exception.ToString();
             }
 
-            string errorMessageAsJson = JsonConvert.SerializeObject(new
-            {
-                Message = errorMessage
-            }, Formatting.Indented);
-
+            string errorMessageAsJson = JsonConvert.SerializeObject
+            (
+                new ErrorApiResponse<List<string> >( new List<string>(1) { errorMessage } ),
+                Formatting.Indented
+            );
+          
             await context.Response.WriteAsync(errorMessageAsJson);
         }
 

@@ -12,7 +12,7 @@ namespace Infraestructure.Data
 
         public DatabaseContext()
         {}
-
+        
         public DatabaseContext(DbContextOptions<DatabaseContext> options)
             : base(options)
         {
