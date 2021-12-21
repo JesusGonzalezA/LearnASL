@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Core.Entities.Tests;
 using Core.Enums;
 using Microsoft.EntityFrameworkCore;
