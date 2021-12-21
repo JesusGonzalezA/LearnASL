@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Core.Contracts.Common;
+using Core.Contracts.Incoming;
 using Core.Contracts.OutComing;
 using Core.Entities;
+using Core.Entities.Tests;
 
 namespace Infraestructure.Mappings
 {
@@ -14,6 +16,11 @@ namespace Infraestructure.Mappings
             CreateMap<UserEntity, UserDto>()
                 .IncludeBase<BaseEntity, BaseDto>()
                 .ReverseMap();
+            CreateMap<TestCreateDto, TestOptionWordToVideoEntity> ();
+            CreateMap<TestOptionWordToVideoEntity, TestOptionWordToVideoDto>()
+                .IncludeBase<BaseEntity, BaseDto>();
+            CreateMap<QuestionOptionWordToVideoEntity, QuestionOptionWordToVideoDto>()
+                .IncludeBase<BaseEntity, BaseDto>();
         }
     }
 }

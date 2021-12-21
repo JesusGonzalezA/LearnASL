@@ -8,8 +8,7 @@ namespace Infraestructure.Data.Configurations
     public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
     {
         public UserConfiguration()
-        {
-        }
+        {}
 
         public void Configure(EntityTypeBuilder<UserEntity> builder)
         {

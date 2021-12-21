@@ -46,7 +46,7 @@ namespace Core.Services
 
             if (userDB == null)
             {
-                throw new BusinessException("User does not exists");
+                throw new BusinessException("User does not exist");
             }
 
             await _unitOfWork.UserRepository.Delete(userDB.Id);
@@ -58,7 +58,7 @@ namespace Core.Services
             
             if (user == null)
             {
-                throw new BusinessException("User does not exists");
+                throw new BusinessException("User does not exist");
             }
 
             return user.ConfirmedEmail;
@@ -70,7 +70,7 @@ namespace Core.Services
 
             if (user == null)
             {
-                throw new BusinessException("User does not exists");
+                throw new BusinessException("User does not exist");
             }
             if
             (
@@ -92,7 +92,7 @@ namespace Core.Services
 
             if (user == null)
             {
-                throw new BusinessException("User does not exists");
+                throw new BusinessException("User does not exist");
             }
             if
             (
@@ -114,7 +114,7 @@ namespace Core.Services
 
             if (user == null)
             {
-                throw new BusinessException("User does not exists");
+                throw new BusinessException("User does not exist");
             }
             if (user.ConfirmedEmail)
             {
@@ -131,7 +131,7 @@ namespace Core.Services
 
             if (user == null)
             {
-                throw new BusinessException("User does not exists");
+                throw new BusinessException("User does not exist");
             }
 
             user.TokenPasswordRecovery = token;

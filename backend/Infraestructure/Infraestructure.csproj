@@ -22,6 +22,7 @@
     <None Remove="Microsoft.AspNetCore.Mvc.Core" />
     <None Remove="Microsoft.AspNetCore.Mvc.Abstractions" />
     <None Remove="FluentValidation.AspNetCore" />
+    <None Remove="Migrations\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Repositories\" />
@@ -32,6 +33,7 @@
     <Folder Include="Mappings\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Validators\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />

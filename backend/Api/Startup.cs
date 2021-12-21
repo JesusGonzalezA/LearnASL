@@ -27,6 +27,7 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using Core.Contracts.Incoming;
 using Infraestructure.Validators;
+using Newtonsoft.Json.Converters;
 
 namespace Api
 {
@@ -50,18 +51,11 @@ namespace Api
             ConfigureAuthentication(services);
             ConfigureValidators(services);
 
-            services.AddMvc(options =>
-            {
-                options.Filters.Add<ValidationFilter>();
-            }).AddFluentValidation(options =>
-            {
-                options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
-            });
-
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    options.SerializerSettings.Converters.Add(new StringEnumConverter());
                 })
                 .ConfigureApiBehaviorOptions(options =>
                 {
@@ -151,6 +145,7 @@ namespace Api
 
             services.AddDbContext<DatabaseContext>(options =>
             {
+                options.UseLazyLoadingProxies();
                 options.UseSqlServer(connectionString);
             });
         }
@@ -166,7 +161,10 @@ namespace Api
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ITestService, TestService>();
+
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IQuestionsService, QuestionsService>();
         }
 
         private void ConfigureLogger(IServiceCollection services)
