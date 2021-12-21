@@ -1,10 +1,8 @@
 ﻿using System;
 namespace Core.Entities.Tests
 {
-    public class BaseQuestionEntity
+    public abstract class BaseQuestionEntity : BaseEntity
     {
-        public BaseQuestionEntity()
-        {
-        }
+        public abstract bool IsCorrect();
     }
 }

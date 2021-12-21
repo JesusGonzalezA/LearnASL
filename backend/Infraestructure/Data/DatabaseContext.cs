@@ -1,5 +1,6 @@
 ﻿using System;
 using Core.Entities;
+using Core.Entities.Tests;
 using Infraestructure.Data.Configurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -9,6 +10,7 @@ namespace Infraestructure.Data
     public class DatabaseContext : DbContext
     {
         public virtual DbSet<UserEntity> Users { get; set; }
+        //public virtual DbSet<TestEntity<OptionWordToVideoQuestionEntity> > Tests { get; set; }
 
         public DatabaseContext()
         {}
