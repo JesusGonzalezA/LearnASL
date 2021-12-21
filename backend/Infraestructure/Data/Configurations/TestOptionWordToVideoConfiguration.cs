@@ -30,7 +30,7 @@ namespace Infraestructure.Data.Configurations
             builder.HasOne(d => d.User)
                 .WithMany(p => p.TestsOptionWordToVideo)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_TestOptionWordToVideo_User");
         }
     }

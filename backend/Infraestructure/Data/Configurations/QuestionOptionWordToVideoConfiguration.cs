@@ -38,7 +38,7 @@ namespace Infraestructure.Data.Configurations
             builder.HasOne(d => d.Test)
                 .WithMany(p => p.Questions)
                 .HasForeignKey(d => d.TestId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Question_Test");
         }
     }
