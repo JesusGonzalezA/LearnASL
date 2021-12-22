@@ -4,7 +4,7 @@ using Core.Enums;
 
 namespace Core.Entities.Tests
 {
-    public interface ITest<T> where T : IQuestion
+    public interface ITest
     {
         public Difficulty Difficulty { get; set; }
         public int NumberOfQuestions { get; set; }
@@ -12,6 +12,6 @@ namespace Core.Entities.Tests
         public Guid UserId { get; set; }
 
         public UserEntity User { get; set; }
-        public ICollection<T> Questions { get; set; }
+        public ICollection<IQuestion> Questions { get; set; }
     }
 }

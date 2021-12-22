@@ -16,22 +16,17 @@ namespace Core.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task AddQuestions(Guid guid, ICollection<QuestionOptionWordToVideoEntity> questions)
-        {
-            TestOptionWordToVideoEntity test = await _unitOfWork.TestOptionWordToVideoRepository.GetById(guid);
-
-            if (test == null)
-            {
-                throw new BusinessException("Test does not exist");
-            }
-
-            test.Questions = questions;
-            await _unitOfWork.TestOptionWordToVideoRepository.Update(test);
-        }
-
         public async Task<Guid> AddTest(TestOptionWordToVideoEntity test)
         {
-            return await _unitOfWork.TestOptionWordToVideoRepository.Add(test);
+            Guid guid = await _unitOfWork.TestOptionWordToVideoRepository.Add(test);
+
+            foreach(IQuestion question in test.Questions)
+            {
+                question.TestId = guid;
+            }
+            await _unitOfWork.TestOptionWordToVideoRepository.Update(test);
+
+            return guid;
         }
 
         public async Task DeleteTest(Guid guid)
@@ -57,5 +52,6 @@ namespace Core.Services
 
             return test;
         }
+
     }
 }

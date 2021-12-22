@@ -6,9 +6,11 @@ using Core.Contracts.Incoming;
 using Core.Contracts.OutComing;
 using Core.Entities;
 using Core.Entities.Tests;
+using Core.Enums;
 using Core.Exceptions;
 using Core.Interfaces;
 using Infraestructure.Interfaces;
+using Infraestructure.TestFactories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -61,22 +63,18 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         public async Task<IActionResult> Create([FromBody] TestCreateDto testDto)
         {
-            TestOptionWordToVideoEntity test = _mapper.Map<TestOptionWordToVideoEntity>(testDto);
             UserEntity userEntity = await _userService.GetUserByEmail(EmailOfCurrentUser);
-            test.User = userEntity;
+            TestFactory testFactory = new TestOptionWordToVideoFactory();
 
-            Guid guid = await _testService.AddTest(test);
-
-            await _testService.AddQuestions
+            // Create test
+            ITest test = testFactory.CreateTest
             (
-                guid,
-                _questionsService.GenerateQuestionsOptionWordToVideoEntity
-                (
-                    guid,
-                    testDto.NumberOfQuestions,
-                    testDto.IsErrorTest
-                )
+                testDto.TestType,
+                testDto.Difficulty,
+                testDto.NumberOfQuestions
             );
+            test.User = userEntity;
+            Guid guid = await _testService.AddTest((TestOptionWordToVideoEntity) test);
 
             return CreatedAtAction(nameof(Create), new { guid });
         }

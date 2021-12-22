@@ -12,6 +12,7 @@ namespace Core.Entities.Tests
         public string UserAnswer { get; set; }
         public string CorrectAnswer { get; set; }
         public Guid TestId { get; set; }
+
         public virtual TestOptionWordToVideoEntity Test { get; set; }
 
         public bool IsCorrect()

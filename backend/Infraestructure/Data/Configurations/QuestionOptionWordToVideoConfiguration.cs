@@ -1,4 +1,5 @@
-﻿using Core.Entities.Tests;
+﻿using System.Collections.Generic;
+using Core.Entities.Tests;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -36,7 +37,7 @@ namespace Infraestructure.Data.Configurations
             builder.Property(p => p.TestId)
                     .IsRequired();
             builder.HasOne(d => d.Test)
-                .WithMany(p => p.Questions)
+                .WithMany(p => (ICollection<QuestionOptionWordToVideoEntity> )p.Questions)
                 .HasForeignKey(d => d.TestId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Question_Test");

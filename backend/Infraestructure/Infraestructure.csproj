@@ -23,6 +23,9 @@
     <None Remove="Microsoft.AspNetCore.Mvc.Abstractions" />
     <None Remove="FluentValidation.AspNetCore" />
     <None Remove="Migrations\" />
+    <None Remove="Factories\" />
+    <None Remove="Factories\QuestionFactories\" />
+    <None Remove="Factories\TestFactories\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Repositories\" />
@@ -34,6 +37,9 @@
     <Folder Include="Interfaces\" />
     <Folder Include="Validators\" />
     <Folder Include="Migrations\" />
+    <Folder Include="Factories\" />
+    <Folder Include="Factories\QuestionFactories\" />
+    <Folder Include="Factories\TestFactories\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />

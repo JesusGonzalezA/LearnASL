@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infraestructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20211221184548_TestWordToVideo")]
+    [Migration("20211221194811_TestWordToVideo")]
     partial class TestWordToVideo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

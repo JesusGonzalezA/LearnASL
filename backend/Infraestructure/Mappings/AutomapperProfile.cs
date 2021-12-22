@@ -13,10 +13,11 @@ namespace Infraestructure.Mappings
         {
             CreateMap<BaseEntity, BaseDto>()
                 .ReverseMap();
+
             CreateMap<UserEntity, UserDto>()
                 .IncludeBase<BaseEntity, BaseDto>()
                 .ReverseMap();
-            CreateMap<TestCreateDto, TestOptionWordToVideoEntity> ();
+
             CreateMap<TestOptionWordToVideoEntity, TestOptionWordToVideoDto>()
                 .IncludeBase<BaseEntity, BaseDto>();
             CreateMap<QuestionOptionWordToVideoEntity, QuestionOptionWordToVideoDto>()
