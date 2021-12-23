@@ -3,7 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using Core.Contracts.Incoming;
-using Core.Contracts.OutComing;
+using Core.Contracts.OutComing.Tests;
 using Core.Entities;
 using Core.Entities.Tests;
 using Core.Enums;
@@ -51,6 +51,7 @@ namespace Api.Controllers
             {
                 throw new ControllerException("You are not authorized to get this test.");
             }
+
             ITestDto testDto = _mapper.Map<ITestDto>(test);
             return Ok(testDto);
         }

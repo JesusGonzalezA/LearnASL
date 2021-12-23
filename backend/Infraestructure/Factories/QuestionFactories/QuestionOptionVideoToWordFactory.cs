@@ -14,7 +14,7 @@ namespace Infraestructure.Factories.QuestionFactories
                 PossibleAnswer1 = "",
                 PossibleAnswer2 = "",
                 PossibleAnswer3 = "",
-                UserAnswer = "",
+                UserAnswer = null,
                 CorrectAnswer = "",
                 TestId = Guid.Empty
             };

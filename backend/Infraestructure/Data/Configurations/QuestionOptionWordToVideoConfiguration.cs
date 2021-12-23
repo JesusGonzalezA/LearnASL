@@ -29,9 +29,7 @@ namespace Infraestructure.Data.Configurations
             builder.Property(p => p.PossibleAnswer3)
                     .HasMaxLength(20)
                     .IsRequired();
-            builder.Property(p => p.UserAnswer)
-                    .HasDefaultValue(null)
-                    .IsRequired();
+            builder.Property(p => p.UserAnswer);
             builder.Property(p => p.CorrectAnswer)
                     .IsRequired();
             builder.Property(p => p.TestId)

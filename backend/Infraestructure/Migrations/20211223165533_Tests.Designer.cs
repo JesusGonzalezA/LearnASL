@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infraestructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20211223124805_TestVideoToWord")]
-    partial class TestVideoToWord
+    [Migration("20211223165533_Tests")]
+    partial class Tests
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -61,7 +61,6 @@ namespace Infraestructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UserAnswer")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("VideoToGuess")
@@ -116,7 +115,6 @@ namespace Infraestructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UserAnswer")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WordToGuess")

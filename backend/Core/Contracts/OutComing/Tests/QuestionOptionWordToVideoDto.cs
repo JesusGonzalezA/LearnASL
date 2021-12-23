@@ -1,15 +1,15 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Core.Contracts.OutComing
+namespace Core.Contracts.OutComing.Tests
 {
-    public class QuestionOptionVideoToWordDto : IQuestionDto
+    public class QuestionOptionWordToVideoDto : IQuestionDto
     {
         [Required]
         public Guid Id { get; set; }
 
         [Required]
-        public string VideoToGuess { get; set; }
+        public string WordToGuess { get; set; }
 
         [Required]
         public string PossibleAnswer0 { get; set; }

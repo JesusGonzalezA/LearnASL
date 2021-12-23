@@ -59,7 +59,6 @@ namespace Infraestructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UserAnswer")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("VideoToGuess")
@@ -114,7 +113,6 @@ namespace Infraestructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UserAnswer")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WordToGuess")

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Core.Enums;
 
-namespace Core.Contracts.OutComing
+namespace Core.Contracts.OutComing.Tests
 {
     public class ITestDto
     {

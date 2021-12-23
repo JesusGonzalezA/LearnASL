@@ -22,7 +22,6 @@
     <None Remove="Microsoft.AspNetCore.Mvc.Core" />
     <None Remove="Microsoft.AspNetCore.Mvc.Abstractions" />
     <None Remove="FluentValidation.AspNetCore" />
-    <None Remove="Migrations\" />
     <None Remove="Factories\" />
     <None Remove="Factories\QuestionFactories\" />
     <None Remove="Factories\TestFactories\" />
@@ -36,7 +35,6 @@
     <Folder Include="Mappings\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Validators\" />
-    <Folder Include="Migrations\" />
     <Folder Include="Factories\" />
     <Folder Include="Factories\QuestionFactories\" />
     <Folder Include="Factories\TestFactories\" />

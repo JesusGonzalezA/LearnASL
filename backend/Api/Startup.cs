@@ -28,6 +28,7 @@ using FluentValidation;
 using Core.Contracts.Incoming;
 using Infraestructure.Validators;
 using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
 
 namespace Api
 {
@@ -55,7 +56,10 @@ namespace Api
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                    options.SerializerSettings.Converters.Add(new StringEnumConverter());
+                })
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 })
                 .ConfigureApiBehaviorOptions(options =>
                 {
@@ -101,6 +105,7 @@ namespace Api
             var mapperConfig = new MapperConfiguration(m =>
             {
                 m.AddProfile(new AutomapperProfile());
+                m.AddProfile(new TestsAutomapperProfile());
             });
 
             IMapper mapper = mapperConfig.CreateMapper();
@@ -251,6 +256,7 @@ namespace Api
                     "Learn ASL API v1"
                 );
                 c.RoutePrefix = string.Empty;
+                
             });
         }
     }

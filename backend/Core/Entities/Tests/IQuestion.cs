@@ -7,6 +7,7 @@ namespace Core.Entities.Tests
     {
         public Guid TestId { get; set; }
 
+        public bool IsReplied();
         public bool IsCorrect();
     }
 }

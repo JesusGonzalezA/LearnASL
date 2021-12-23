@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Core.Contracts.OutComing
+namespace Core.Contracts.OutComing.Tests
 {
     public class TestOptionVideoToWordDto : ITestDto
     {

@@ -14,6 +14,8 @@
     <None Remove="Services\" />
     <None Remove="Contracts\Common\" />
     <None Remove="Contracts\OutComing\" />
+    <None Remove="Helpers\" />
+    <None Remove="Contracts\OutComing\Tests\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
@@ -23,6 +25,8 @@
     <Folder Include="Services\" />
     <Folder Include="Contracts\Common\" />
     <Folder Include="Contracts\OutComing\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Contracts\OutComing\Tests\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.14.1" />

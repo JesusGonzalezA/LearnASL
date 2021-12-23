@@ -44,7 +44,7 @@ namespace Infraestructure.Data
 
         private void OnEntityTracked(object sender, EntityTrackedEventArgs e)
         {
-            if (!e.FromQuery && e.Entry.State == EntityState.Added && e.Entry.Entity is Core.Entities.BaseEntity entity)
+            if (!e.FromQuery && e.Entry.State == EntityState.Added && e.Entry.Entity is BaseEntity entity)
             {
                 entity.CreatedOn = DateTime.UtcNow;
             }
@@ -52,7 +52,7 @@ namespace Infraestructure.Data
 
         private void OnEntityStateChanged(object sender, EntityStateChangedEventArgs e)
         {
-            if (e.NewState == EntityState.Modified && e.Entry.Entity is Core.Entities.BaseEntity entity)
+            if (e.NewState == EntityState.Modified && e.Entry.Entity is BaseEntity entity)
             {
                 entity.ModifiedOn = DateTime.UtcNow;
             }

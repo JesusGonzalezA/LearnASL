@@ -15,9 +15,14 @@ namespace Core.Entities.Tests
         public string UserAnswer { get; set; }
         public string CorrectAnswer { get; set; }
 
+        public bool IsReplied()
+        {
+            return UserAnswer != null;
+        }
+
         public bool IsCorrect()
         {
-            return (CorrectAnswer.Equals(UserAnswer)) && UserAnswer != null;
+            return IsReplied() && CorrectAnswer.Equals(UserAnswer);
         }
     }
 }
