@@ -3,13 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Core.Contracts.OutComing
 {
-    public class QuestionOptionWordToVideoDto : IQuestionDto
+    public class QuestionOptionVideoToWordDto : IQuestionDto
     {
         [Required]
         public Guid Id { get; set; }
 
         [Required]
-        public string WordToGuess { get; set; }
+        public string VideoToGuess { get; set; }
 
         [Required]
         public string PossibleAnswer0 { get; set; }

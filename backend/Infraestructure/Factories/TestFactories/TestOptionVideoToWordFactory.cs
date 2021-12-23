@@ -1,19 +1,18 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Core.Entities.Tests;
 using Core.Enums;
 using Infraestructure.Factories.QuestionFactories;
 
 namespace Infraestructure.Factories.TestFactories
 {
-    public class TestOptionWordToVideoFactory : TestFactory
+    public class TestOptionVideoToWordFactory : TestFactory
     {
-        public TestOptionWordToVideoFactory()
+        public TestOptionVideoToWordFactory()
         {
-            _questionFactory = new QuestionOptionWordToVideoFactory();
+            _questionFactory = new QuestionOptionVideoToWordFactory();
         }
 
-        public override TestOptionWordToVideoEntity CreateTest
+        public override TestOptionVideoToWordEntity CreateTest
         (
             Difficulty difficulty,
             int numberOfQuestions
@@ -28,7 +27,7 @@ namespace Infraestructure.Factories.TestFactories
             }
 
             // Create test
-            return new TestOptionWordToVideoEntity
+            return new TestOptionVideoToWordEntity
             {
                 Difficulty = difficulty,
                 NumberOfQuestions = numberOfQuestions,

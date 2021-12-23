@@ -164,7 +164,8 @@ namespace Api
             services.AddScoped<ITestService, TestService>();
 
             services.AddScoped<ITokenService, TokenService>();
-            services.AddScoped<IQuestionsService, QuestionsService>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<ITestGenerator, TestGenerator>();
         }
 
         private void ConfigureLogger(IServiceCollection services)

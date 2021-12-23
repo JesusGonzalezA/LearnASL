@@ -1,16 +1,15 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Core.Contracts.OutComing
 {
-    public class TestOptionWordToVideoDto : ITestDto
+    public class TestOptionVideoToWordDto : ITestDto
     {
         [Required]
         public Guid Id { get; set; }
 
         [Required]
-        public new ICollection<QuestionOptionWordToVideoDto> Questions { get; set; }
+        public new ICollection<QuestionOptionVideoToWordDto> Questions { get; set; }
     }
 }

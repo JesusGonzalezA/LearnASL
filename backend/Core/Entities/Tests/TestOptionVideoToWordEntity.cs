@@ -4,7 +4,7 @@ using Core.Enums;
 
 namespace Core.Entities.Tests
 {
-    public class TestOptionWordToVideoEntity : BaseEntity, ITest
+    public class TestOptionVideoToWordEntity : BaseEntity, ITest
     {
         public Difficulty Difficulty { get; set; }
         public int NumberOfQuestions { get; set; }

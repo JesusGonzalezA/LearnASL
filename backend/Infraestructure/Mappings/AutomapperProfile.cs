@@ -18,10 +18,20 @@ namespace Infraestructure.Mappings
                 .IncludeBase<BaseEntity, BaseDto>()
                 .ReverseMap();
 
+            CreateMap<ITestDto, ITest>()
+                .ReverseMap();
+            CreateMap<IQuestion, IQuestionDto>()
+                .ReverseMap();
+
             CreateMap<TestOptionWordToVideoEntity, TestOptionWordToVideoDto>()
-                .IncludeBase<BaseEntity, BaseDto>();
+                .IncludeBase<ITest, ITestDto>();
             CreateMap<QuestionOptionWordToVideoEntity, QuestionOptionWordToVideoDto>()
-                .IncludeBase<BaseEntity, BaseDto>();
+                .IncludeBase<IQuestion, IQuestionDto>();
+
+            CreateMap<TestOptionVideoToWordEntity, TestOptionVideoToWordDto>()
+                .IncludeBase<ITest, ITestDto>();
+            CreateMap<QuestionOptionVideoToWordEntity, QuestionOptionVideoToWordDto>()
+                .IncludeBase<IQuestion, IQuestionDto>();
         }
     }
 }

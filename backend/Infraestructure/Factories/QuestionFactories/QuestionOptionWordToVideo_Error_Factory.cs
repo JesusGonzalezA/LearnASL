@@ -3,7 +3,7 @@ using Core.Entities.Tests;
 
 namespace Infraestructure.Factories.QuestionFactories
 {
-    public class QuestionOptionWordToVideoFactory : QuestionFactory
+    public class QuestionOptionWordToVideo_Error_Factory : QuestionFactory
     {
         public override QuestionOptionWordToVideoEntity CreateQuestion()
         {

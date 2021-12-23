@@ -3,13 +3,13 @@ using Core.Entities.Tests;
 
 namespace Infraestructure.Factories.QuestionFactories
 {
-    public class QuestionOptionWordToVideoFactory : QuestionFactory
+    public class QuestionOptionVideoToWordFactory : QuestionFactory
     {
-        public override QuestionOptionWordToVideoEntity CreateQuestion()
+        public override QuestionOptionVideoToWordEntity CreateQuestion()
         {
-            return new QuestionOptionWordToVideoEntity
+            return new QuestionOptionVideoToWordEntity
             {
-                WordToGuess = "",
+                VideoToGuess = "",
                 PossibleAnswer0 = "",
                 PossibleAnswer1 = "",
                 PossibleAnswer2 = "",

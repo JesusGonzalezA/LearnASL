@@ -6,11 +6,11 @@ using Infraestructure.Factories.QuestionFactories;
 
 namespace Infraestructure.Factories.TestFactories
 {
-    public class TestOptionWordToVideoFactory : TestFactory
+    public class TestOptionWordToVideo_Error_Factory : TestFactory
     {
-        public TestOptionWordToVideoFactory()
+        public TestOptionWordToVideo_Error_Factory()
         {
-            _questionFactory = new QuestionOptionWordToVideoFactory();
+            _questionFactory = new QuestionOptionWordToVideo_Error_Factory();
         }
 
         public override TestOptionWordToVideoEntity CreateTest

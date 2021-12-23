@@ -1,6 +1,6 @@
 ﻿using System;
 using Core.Enums;
-using Infraestructure.TestFactories;
+using Infraestructure.Factories.TestFactories;
 
 namespace ConsoleApp
 {

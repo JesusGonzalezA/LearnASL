@@ -5,16 +5,16 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infraestructure.Data.Configurations
 {
-    public class QuestionOptionWordToVideoConfiguration : IEntityTypeConfiguration<QuestionOptionWordToVideoEntity>
+    public class QuestionOptionVideoToWordConfiguration : IEntityTypeConfiguration<QuestionOptionVideoToWordEntity>
     {
-        public QuestionOptionWordToVideoConfiguration()
+        public QuestionOptionVideoToWordConfiguration()
         {}
 
-        public virtual void Configure(EntityTypeBuilder<QuestionOptionWordToVideoEntity> builder)
+        public virtual void Configure(EntityTypeBuilder<QuestionOptionVideoToWordEntity> builder)
         {
             builder.HasKey(k => k.Id);
 
-            builder.Property(p => p.WordToGuess)
+            builder.Property(p => p.VideoToGuess)
                     .HasMaxLength(20)
                     .IsRequired();
             builder.Property(p => p.PossibleAnswer0)
@@ -37,10 +37,10 @@ namespace Infraestructure.Data.Configurations
             builder.Property(p => p.TestId)
                     .IsRequired();
             builder.HasOne(d => d.Test)
-                .WithMany(p => (ICollection<QuestionOptionWordToVideoEntity> )p.Questions)
+                .WithMany(p => (ICollection<QuestionOptionVideoToWordEntity>)p.Questions)
                 .HasForeignKey(d => d.TestId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_QuestionOptionWordToVideo_Test");
+                .HasConstraintName("FK_QuestionOptionVideoToWord_Test");
         }
     }
 }

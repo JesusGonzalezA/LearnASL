@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Core.Entities;
 using Core.Entities.Tests;
 using Core.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -8,12 +7,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infraestructure.Data.Configurations
 {
-    public class TestOptionWordToVideoConfiguration : IEntityTypeConfiguration<TestOptionWordToVideoEntity>
+    public class TestOptionVideoToWordConfiguration : IEntityTypeConfiguration<TestOptionVideoToWordEntity>
     {
-        public TestOptionWordToVideoConfiguration()
+        public TestOptionVideoToWordConfiguration()
         {}
 
-        public virtual void Configure(EntityTypeBuilder<TestOptionWordToVideoEntity> builder)
+        public virtual void Configure(EntityTypeBuilder<TestOptionVideoToWordEntity> builder)
         {
             builder.HasKey(k => k.Id);
 
@@ -29,10 +28,10 @@ namespace Infraestructure.Data.Configurations
             builder.Property(p => p.UserId)
                     .IsRequired();
             builder.HasOne(d => d.User)
-                .WithMany(p => (ICollection<TestOptionWordToVideoEntity>)p.Tests)
+                .WithMany(p => (ICollection<TestOptionVideoToWordEntity>)p.Tests)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_TestOptionWordToVideo_User");
+                .HasConstraintName("FK_TestOptionVideoToWord_User");
         }
     }
 }

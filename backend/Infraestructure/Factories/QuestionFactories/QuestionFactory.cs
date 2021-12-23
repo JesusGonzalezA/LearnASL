@@ -1,6 +1,6 @@
 ﻿using Core.Entities.Tests;
 
-namespace Infraestructure.TestFactories
+namespace Infraestructure.Factories.QuestionFactories
 {
     public abstract class QuestionFactory
     {

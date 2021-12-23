@@ -10,7 +10,7 @@ namespace Core.Entities
         public bool ConfirmedEmail { get; set; }
         public string? TokenPasswordRecovery { get; set; }
         public string? TokenEmailConfirmation { get; set; }
-        public virtual ICollection<TestOptionWordToVideoEntity> TestsOptionWordToVideo { get; set; }
+        public virtual ICollection<ITest> Tests { get; set; }
 
         public UserEntity()
         {

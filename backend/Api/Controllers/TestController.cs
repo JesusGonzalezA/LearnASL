@@ -10,7 +10,6 @@ using Core.Enums;
 using Core.Exceptions;
 using Core.Interfaces;
 using Infraestructure.Interfaces;
-using Infraestructure.TestFactories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,74 +23,71 @@ namespace Api.Controllers
     {
         private readonly ITestService _testService;
         private readonly IUserService _userService;
-        private readonly IQuestionsService _questionsService;
         private readonly IMapper _mapper;
+        private readonly ITestGenerator _testGenerator;
 
         public TestController
         (
             ITestService testService,
             IUserService userService,
-            IQuestionsService questionsService,
-            IMapper mapper
+            IMapper mapper,
+            ITestGenerator testGenerator
         )
         {
             _testService = testService;
             _userService = userService;
-            _questionsService = questionsService;
             _mapper = mapper;
+            _testGenerator = testGenerator;
         }
 
-        [HttpGet("{guid}")]
-        [ProducesResponseType(typeof(TestOptionWordToVideoEntity), (int)HttpStatusCode.OK)]
+        [HttpGet("{testType}/{guid}")]
+        [ProducesResponseType(typeof(ITest), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        public async Task<IActionResult> Get(Guid guid)
+        public async Task<IActionResult> Get(TestType testType, Guid guid)
         {
-            TestOptionWordToVideoEntity test = await _testService.GetTest(guid);
+            ITest test = await _testService.GetTest(testType, guid);
 
             if (!test.User.Email.Equals(EmailOfCurrentUser))
             {
                 throw new ControllerException("You are not authorized to get this test.");
             }
-
-            TestOptionWordToVideoDto testDto = _mapper.Map<TestOptionWordToVideoDto>(test);
-
+            ITestDto testDto = _mapper.Map<ITestDto>(test);
             return Ok(testDto);
         }
 
-        [HttpPost()]
-        [ProducesResponseType(typeof(Guid), (int)HttpStatusCode.OK)]
+        [HttpPost("{testType}")]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        public async Task<IActionResult> Create([FromBody] TestCreateDto testDto)
+        public async Task<IActionResult> Create(TestType testType, [FromBody] TestCreateDto testDto)
         {
             UserEntity userEntity = await _userService.GetUserByEmail(EmailOfCurrentUser);
-            TestFactory testFactory = new TestOptionWordToVideoFactory();
 
             // Create test
-            ITest test = testFactory.CreateTest
+            ITest test = _testGenerator.CreateTest
             (
-                testDto.TestType,
+                testType,
                 testDto.Difficulty,
                 testDto.NumberOfQuestions
             );
             test.User = userEntity;
-            Guid guid = await _testService.AddTest((TestOptionWordToVideoEntity) test);
+            Guid guid = await _testService.AddTest(testType, test);
 
             return CreatedAtAction(nameof(Create), new { guid });
         }
 
-        [HttpDelete("{guid}")]
+        [HttpDelete("{testType}/{guid}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        public async Task<IActionResult> Delete(Guid guid)
+        public async Task<IActionResult> Delete(TestType testType, Guid guid)
         {
-            TestOptionWordToVideoEntity test = await _testService.GetTest(guid);
+            ITest test = await _testService.GetTest(testType, guid);
 
             if (!test.User.Email.Equals(EmailOfCurrentUser))
             {
                 throw new ControllerException("You are not authorized to delete this test.");
             }
 
-            await _testService.DeleteTest(guid);
+            await _testService.DeleteTest(testType, guid);
             return Ok();
         }
     }

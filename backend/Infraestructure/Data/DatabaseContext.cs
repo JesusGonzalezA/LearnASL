@@ -13,6 +13,9 @@ namespace Infraestructure.Data
         public virtual DbSet<TestOptionWordToVideoEntity> TestsOptionWordToVideo { get; set; }
         public virtual DbSet<QuestionOptionWordToVideoEntity> QuestionsOptionWordToVideo { get; set; }
 
+        public virtual DbSet<TestOptionVideoToWordEntity> TestsOptionVideoToWord { get; set; }
+        public virtual DbSet<QuestionOptionVideoToWordEntity> QuestionsOptionVideoToWord { get; set; }
+
         public DatabaseContext()
         {}
         
@@ -26,8 +29,12 @@ namespace Infraestructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+
             modelBuilder.ApplyConfiguration(new TestOptionWordToVideoConfiguration());
             modelBuilder.ApplyConfiguration(new QuestionOptionWordToVideoConfiguration());
+
+            modelBuilder.ApplyConfiguration(new TestOptionVideoToWordConfiguration());
+            modelBuilder.ApplyConfiguration(new QuestionOptionVideoToWordConfiguration());
         }
 
         public override int SaveChanges()
