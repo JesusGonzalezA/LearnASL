@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Entities.Tests;
 using Core.Enums;
 using Core.Exceptions;
 using Core.Interfaces;
+using System.Linq;
 
 namespace Core.Services
 {
@@ -136,6 +138,20 @@ namespace Core.Services
             }
 
             return test;
+        }
+
+        public async Task<IEnumerable<ITest> > GetAllTests(Guid userGuid)
+        {
+            IEnumerable<ITest> testsOptionWordToVideo
+                = await _unitOfWork.TestOptionWordToVideoRepository.GetAll();
+            IEnumerable<ITest> testsOptionVideoToWord
+                = await _unitOfWork.TestOptionVideoToWordRepository.GetAll();
+
+            IEnumerable<ITest> allTests = testsOptionVideoToWord
+                .Concat(testsOptionWordToVideo)
+                .Where(test => test.UserId == userGuid);
+
+            return allTests;
         }
     }
 }

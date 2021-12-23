@@ -1,12 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Core.Contracts.Common;
 using Core.Enums;
 
 namespace Core.Contracts.OutComing.Tests
 {
-    public class ITestDto
+    public class ISimpleTestDto
     {
+        [Required]
+        public Guid Id { get; set; }
+
         [Required]
         public Difficulty Difficulty { get; set; }
 
@@ -18,8 +21,5 @@ namespace Core.Contracts.OutComing.Tests
 
         [Required]
         public Guid UserId { get; set; }
-
-        [Required]
-        public ICollection<IQuestionDto> Questions { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -54,6 +55,18 @@ namespace Api.Controllers
 
             ITestDto testDto = _mapper.Map<ITestDto>(test);
             return Ok(testDto);
+        }
+
+        [HttpGet("")]
+        [ProducesResponseType(typeof(ICollection<ITest>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        public async Task<IActionResult> GetAll()
+        {
+            UserEntity userEntity = await _userService.GetUserByEmail(EmailOfCurrentUser);
+            IEnumerable<ITest> tests = await _testService.GetAllTests(userEntity.Id);
+
+            IEnumerable<ISimpleTestDto> testsDto = _mapper.Map<IEnumerable<ISimpleTestDto> >(tests);
+            return Ok(testsDto);
         }
 
         [HttpPost("{testType}")]
