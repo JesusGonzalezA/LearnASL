@@ -28,6 +28,7 @@ using FluentValidation;
 using Core.Contracts.Incoming;
 using Infraestructure.Validators;
 using System.Text.Json.Serialization;
+using Core.CustomEntities;
 
 namespace Api
 {
@@ -113,6 +114,10 @@ namespace Api
 
         private void ConfigureOptions(IServiceCollection services)
         {
+            services.Configure<PaginationOptions>(
+                options => Configuration.GetSection("Pagination").Bind(options)
+            );
+
             services.Configure<EmailOptions>(
                 options =>
                 {

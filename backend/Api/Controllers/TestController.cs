@@ -6,14 +6,17 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Core.Contracts.Incoming;
 using Core.Contracts.OutComing.Tests;
+using Core.CustomEntities;
 using Core.Entities;
 using Core.Entities.Tests;
 using Core.Enums;
 using Core.Exceptions;
 using Core.Interfaces;
+using Core.QueryFilters;
 using Infraestructure.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Api.Controllers
 {
@@ -88,19 +91,34 @@ namespace Api.Controllers
         [HttpGet("")]
         [ProducesResponseType(typeof(ICollection<TestDto>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] TestQueryFilterDto filtersDto)
         {
             UserEntity userEntity = await _userService.GetUserByEmail(EmailOfCurrentUser);
-            IEnumerable<TestEntity> tests = await _testService.GetAllTests(userEntity.Id);
-            List<TestEntity> listOfTests = tests.ToList();
+            TestQueryFilter filters = _mapper.Map<TestQueryFilter>(filtersDto);
+            filters.UserId = userEntity.Id;
 
-            List<TestDto> testsDto = _mapper.Map<IEnumerable<TestDto> >(tests).ToList();
+            PagedList<TestEntity> pagedListOfTests = await _testService.GetAllTests(filters);
+            List<TestDto> testsDto = _mapper.Map<List<TestDto>>(pagedListOfTests);
 
             for (int i=0; i<testsDto.Count; ++i)
             {
-                IEnumerable<BaseQuestionEntity> questions = await _questionService.GetQuestions(listOfTests.ElementAt(i));
-                testsDto.ElementAt(i).Questions = _mapper.Map<IEnumerable<BaseQuestionDto>>(questions);
+                TestEntity test = pagedListOfTests.ElementAt(i);
+                TestDto testDto = testsDto.ElementAt(i);
+
+                IEnumerable<BaseQuestionEntity> questions = await _questionService.GetQuestions(test);
+                testDto.Questions = _mapper.Map<IEnumerable<BaseQuestionDto>>(questions);
             }
+
+            Metadata metadata = new Metadata
+            {
+                TotalCount = pagedListOfTests.TotalCount,
+                PageSize = pagedListOfTests.PageSize,
+                CurrentPage = pagedListOfTests.CurrentPage,
+                TotalPages = pagedListOfTests.TotalPages,
+                HasNextPage = pagedListOfTests.HasNextPage,
+                HasPreviousPage = pagedListOfTests.HasPreviousPage
+            };
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
 
             return Ok(testsDto);
         }

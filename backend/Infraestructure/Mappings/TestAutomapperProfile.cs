@@ -4,6 +4,7 @@ using Core.Contracts.Incoming;
 using Core.Contracts.OutComing.Tests;
 using Core.Entities;
 using Core.Entities.Tests;
+using Core.QueryFilters;
 
 namespace Infraestructure.Mappings
 {
@@ -12,6 +13,8 @@ namespace Infraestructure.Mappings
         public TestAutomapperProfile()
         {
             CreateMap<TestCreateDto, TestEntity>();
+
+            CreateMap<TestQueryFilterDto, TestQueryFilter>();
 
             // Unpopulated
             CreateMap<TestEntity, TestDto>()

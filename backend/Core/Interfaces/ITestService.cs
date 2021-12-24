@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Entities.Tests;
-using Core.Enums;
+using Core.QueryFilters;
+using Core.CustomEntities;
 
 namespace Core.Interfaces
 {
@@ -11,6 +11,6 @@ namespace Core.Interfaces
         Task<TestEntity> GetTest(Guid guid);
         Task<Guid> AddTest(TestEntity test);
         Task DeleteTest(Guid guid);
-        Task<IEnumerable<TestEntity> > GetAllTests(Guid userGuid);
+        Task<PagedList<TestEntity> > GetAllTests(TestQueryFilter filters);
     }
 }
