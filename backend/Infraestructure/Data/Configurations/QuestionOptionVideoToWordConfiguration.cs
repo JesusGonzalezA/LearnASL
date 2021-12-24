@@ -1,18 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using Core.Entities.Tests;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infraestructure.Data.Configurations
 {
-    public class QuestionOptionVideoToWordConfiguration : IEntityTypeConfiguration<QuestionOptionVideoToWordEntity>
+    public class QuestionOptionVideoToWordConfiguration : BaseQuestionConfiguration<QuestionOptionVideoToWordEntity>
     {
         public QuestionOptionVideoToWordConfiguration()
         {}
 
-        public virtual void Configure(EntityTypeBuilder<QuestionOptionVideoToWordEntity> builder)
+        public override void Configure(EntityTypeBuilder<QuestionOptionVideoToWordEntity> builder)
         {
-            builder.HasKey(k => k.Id);
+            base.Configure(builder);
 
             builder.Property(p => p.VideoToGuess)
                     .HasMaxLength(20)
@@ -32,13 +31,6 @@ namespace Infraestructure.Data.Configurations
             builder.Property(p => p.UserAnswer);
             builder.Property(p => p.CorrectAnswer)
                     .IsRequired();
-            builder.Property(p => p.TestId)
-                    .IsRequired();
-            builder.HasOne(d => d.Test)
-                .WithMany(p => (ICollection<QuestionOptionVideoToWordEntity>)p.Questions)
-                .HasForeignKey(d => d.TestId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_QuestionOptionVideoToWord_Test");
         }
     }
 }

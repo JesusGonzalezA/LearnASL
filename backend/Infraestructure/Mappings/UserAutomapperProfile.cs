@@ -5,9 +5,9 @@ using Core.Entities;
 
 namespace Infraestructure.Mappings
 {
-    public class AutomapperProfile : Profile
+    public class UserAutomapperProfile : Profile
     {
-        public AutomapperProfile()
+        public UserAutomapperProfile()
         {
             CreateMap<BaseEntity, BaseDto>()
                 .ReverseMap();

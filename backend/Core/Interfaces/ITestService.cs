@@ -8,9 +8,9 @@ namespace Core.Interfaces
 {
     public interface ITestService
     {
-        Task<ITest> GetTest(TestType testType, Guid guid);
-        Task<Guid> AddTest(TestType testType, ITest test);
-        Task DeleteTest(TestType testType, Guid guid);
-        Task<IEnumerable<ITest> > GetAllTests(Guid userGuid);
+        Task<TestEntity> GetTest(Guid guid);
+        Task<Guid> AddTest(TestEntity test);
+        Task DeleteTest(Guid guid);
+        Task<IEnumerable<TestEntity> > GetAllTests(Guid userGuid);
     }
 }

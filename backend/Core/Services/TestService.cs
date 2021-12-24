@@ -18,37 +18,29 @@ namespace Core.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Guid> AddTest(TestType testType, ITest test)
+        public async Task<Guid> AddTest(TestEntity test)
         {
-            Guid guid = await AddTestToRepository(testType, test);
-
-            foreach(IQuestion question in test.Questions)
-            {
-                question.TestId = guid;
-            }
-
-            await UpdateTestInRepository(testType, test);
-
+            Guid guid = await _unitOfWork.TestRepository.Add(test);
             return guid;
         }
 
-        public async Task DeleteTest(TestType testType, Guid guid)
+        public async Task DeleteTest(Guid guid)
         {
-            ITest test = await GetTestFromRepository(testType, guid);
+            TestEntity test = await _unitOfWork.TestRepository.GetById(guid);
 
             if (test == null)
             {
                 throw new BusinessException("Test does not exist");
             }
 
-            await DeleteTestFromRepository(testType, guid);
+            await _unitOfWork.TestRepository.Delete(guid);
         }
 
-        public async Task<ITest> GetTest(TestType testType, Guid guid)
+        public async Task<TestEntity> GetTest(Guid guid)
         {
-            ITest test = await GetTestFromRepository(testType, guid);
+            TestEntity test = await _unitOfWork.TestRepository.GetById(guid);
 
-            if ( test == null )
+            if (test == null)
             {
                 throw new BusinessException("Test does not exist");
             }
@@ -56,102 +48,13 @@ namespace Core.Services
             return test;
         }
 
-        private async Task<Guid> AddTestToRepository(TestType testType, ITest test)
+        public async Task<IEnumerable<TestEntity> > GetAllTests(Guid userGuid)
         {
-            Guid guid;
+            IEnumerable<TestEntity> AllTests = await _unitOfWork.TestRepository.GetAll();
 
-            switch (testType)
-            {
-                case TestType.OptionWordToVideoEntity:
-                case TestType.OptionWordToVideoEntity_Error:
-                    guid = await _unitOfWork.TestOptionWordToVideoRepository.Add((TestOptionWordToVideoEntity)test);
-                    break;
+            IEnumerable<TestEntity> testsFromUser = AllTests.Where(test => test.UserId == userGuid);
 
-                case TestType.OptionVideoToWordEntity:
-                case TestType.OptionVideoToWordEntity_Error:
-                    guid = await _unitOfWork.TestOptionVideoToWordRepository.Add((TestOptionVideoToWordEntity)test);
-                    break;
-
-                default:
-                    throw new BusinessException("Invalid test type");
-            }
-
-            return guid;
-        }
-
-        private async Task UpdateTestInRepository(TestType testType, ITest test)
-        {
-            switch (testType)
-            {
-                case TestType.OptionWordToVideoEntity:
-                case TestType.OptionWordToVideoEntity_Error:
-                    await _unitOfWork.TestOptionWordToVideoRepository.Update((TestOptionWordToVideoEntity)test);
-                    break;
-
-                case TestType.OptionVideoToWordEntity:
-                case TestType.OptionVideoToWordEntity_Error:
-                    await _unitOfWork.TestOptionVideoToWordRepository.Update((TestOptionVideoToWordEntity)test);
-                    break;
-
-                default:
-                    throw new BusinessException("Invalid test type");
-            }
-        }
-
-        private async Task DeleteTestFromRepository(TestType testType, Guid guid)
-        {
-            switch (testType)
-            {
-                case TestType.OptionWordToVideoEntity:
-                case TestType.OptionWordToVideoEntity_Error:
-                    await _unitOfWork.TestOptionWordToVideoRepository.Delete(guid);
-                    break;
-
-                case TestType.OptionVideoToWordEntity:
-                case TestType.OptionVideoToWordEntity_Error:
-                    await _unitOfWork.TestOptionVideoToWordRepository.Delete(guid);
-                    break;
-
-                default:
-                    throw new BusinessException("Invalid test type");
-            }
-        }
-
-        private async Task<ITest> GetTestFromRepository(TestType testType, Guid guid)
-        {
-            ITest test;
-
-            switch (testType)
-            {
-                case TestType.OptionWordToVideoEntity:
-                case TestType.OptionWordToVideoEntity_Error:
-                    test = await _unitOfWork.TestOptionWordToVideoRepository.GetById(guid);
-                    break;
-
-                case TestType.OptionVideoToWordEntity:
-                case TestType.OptionVideoToWordEntity_Error:
-                    test = await _unitOfWork.TestOptionVideoToWordRepository.GetById(guid);
-                    break;
-
-                default:
-                    throw new BusinessException("Invalid test type");
-            }
-
-            return test;
-        }
-
-        public async Task<IEnumerable<ITest> > GetAllTests(Guid userGuid)
-        {
-            IEnumerable<ITest> testsOptionWordToVideo
-                = await _unitOfWork.TestOptionWordToVideoRepository.GetAll();
-            IEnumerable<ITest> testsOptionVideoToWord
-                = await _unitOfWork.TestOptionVideoToWordRepository.GetAll();
-
-            IEnumerable<ITest> allTests = testsOptionVideoToWord
-                .Concat(testsOptionWordToVideo)
-                .Where(test => test.UserId == userGuid);
-
-            return allTests;
+            return testsFromUser;
         }
     }
 }

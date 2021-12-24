@@ -1,10 +1,10 @@
 ﻿using System;
+using Core.Contracts.Common;
+
 namespace Core.Contracts.OutComing.Tests
 {
-    public class PopulatedQuestionDto
+    public class BasePopulatedQuestionDto : BaseDto
     {
-        public PopulatedQuestionDto()
-        {
-        }
+       
     }
 }

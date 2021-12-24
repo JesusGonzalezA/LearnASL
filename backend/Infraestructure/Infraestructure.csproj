@@ -24,12 +24,10 @@
     <None Remove="FluentValidation.AspNetCore" />
     <None Remove="Factories\" />
     <None Remove="Factories\QuestionFactories\" />
-    <None Remove="Factories\TestFactories\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Repositories\" />
     <Folder Include="Data\" />
-    <Folder Include="Data\Configurations\" />
     <Folder Include="Services\" />
     <Folder Include="Options\" />
     <Folder Include="Mappings\" />
@@ -37,7 +35,7 @@
     <Folder Include="Validators\" />
     <Folder Include="Factories\" />
     <Folder Include="Factories\QuestionFactories\" />
-    <Folder Include="Factories\TestFactories\" />
+    <Folder Include="Data\Configurations\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />

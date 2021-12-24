@@ -27,7 +27,6 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using Core.Contracts.Incoming;
 using Infraestructure.Validators;
-using Newtonsoft.Json.Converters;
 using System.Text.Json.Serialization;
 
 namespace Api
@@ -104,8 +103,8 @@ namespace Api
         {
             var mapperConfig = new MapperConfiguration(m =>
             {
-                m.AddProfile(new AutomapperProfile());
-                m.AddProfile(new TestsAutomapperProfile());
+                m.AddProfile(new UserAutomapperProfile());
+                m.AddProfile(new TestAutomapperProfile());
             });
 
             IMapper mapper = mapperConfig.CreateMapper();
@@ -161,16 +160,15 @@ namespace Api
 
             services.AddScoped<IEmailService, EmailService>();
             services.AddSingleton<IPasswordService, PasswordService>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IQuestionGeneratorService, QuestionGeneratorService>();
 
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITestService, TestService>();
-
-            services.AddScoped<ITokenService, TokenService>();
-            services.AddScoped<ITokenService, TokenService>();
-            services.AddScoped<ITestGenerator, TestGenerator>();
+            services.AddScoped<IQuestionService, QuestionService>();
         }
 
         private void ConfigureLogger(IServiceCollection services)

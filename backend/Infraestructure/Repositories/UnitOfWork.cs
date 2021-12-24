@@ -10,13 +10,10 @@ namespace Infraestructure.Repositories
         private readonly DatabaseContext _context;
         private readonly IUserRepository _userRepository;
 
+        private readonly IBaseRepository<TestEntity> _testRepository;
         private readonly IBaseRepository<QuestionOptionWordToVideoEntity> _questionOptionWordToVideoRepository;
-        private readonly IBaseRepository<TestOptionWordToVideoEntity> _testOptionWordToVideoRepository;
-
         private readonly IBaseRepository<QuestionOptionVideoToWordEntity> _questionOptionVideoToWordRepository;
-        private readonly IBaseRepository<TestOptionVideoToWordEntity> _testOptionVideoToWordRepository;
-
-
+        
         public UnitOfWork(DatabaseContext context)
         {
             _context = context;
@@ -24,18 +21,14 @@ namespace Infraestructure.Repositories
 
         public IUserRepository UserRepository => _userRepository ?? new UserRepository(_context);
 
+        public IBaseRepository<TestEntity> TestRepository
+                => _testRepository ?? new BaseRepository<TestEntity>(_context);
+
         public IBaseRepository<QuestionOptionWordToVideoEntity> QuestionOptionWordToVideoRepository
                 => _questionOptionWordToVideoRepository ?? new BaseRepository<QuestionOptionWordToVideoEntity>(_context);
 
-        public IBaseRepository<TestOptionWordToVideoEntity> TestOptionWordToVideoRepository
-                => _testOptionWordToVideoRepository ?? new BaseRepository<TestOptionWordToVideoEntity>(_context);
-
         public IBaseRepository<QuestionOptionVideoToWordEntity> QuestionOptionVideoToWordRepository
                 => _questionOptionVideoToWordRepository ?? new BaseRepository<QuestionOptionVideoToWordEntity>(_context);
-
-        public IBaseRepository<TestOptionVideoToWordEntity> TestOptionVideoToWordRepository
-                => _testOptionVideoToWordRepository ?? new BaseRepository<TestOptionVideoToWordEntity>(_context);
-
 
         public void Dispose()
         {

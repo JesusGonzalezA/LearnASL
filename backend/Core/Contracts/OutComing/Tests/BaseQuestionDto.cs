@@ -1,10 +1,7 @@
-﻿using System;
+﻿using Core.Contracts.Common;
+
 namespace Core.Contracts.OutComing.Tests
 {
-    public class BaseQuestionDto
-    {
-        public BaseQuestionDto()
-        {
-        }
-    }
+    public class BaseQuestionDto : BaseDto
+    {}
 }

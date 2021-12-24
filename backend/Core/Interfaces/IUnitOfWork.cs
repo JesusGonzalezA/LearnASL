@@ -8,12 +8,11 @@ namespace Core.Interfaces
     {
         IUserRepository UserRepository { get; }
 
+        IBaseRepository<TestEntity> TestRepository { get; }
+
         IBaseRepository<QuestionOptionWordToVideoEntity> QuestionOptionWordToVideoRepository { get; }
-        IBaseRepository<TestOptionWordToVideoEntity> TestOptionWordToVideoRepository { get; }
-
         IBaseRepository<QuestionOptionVideoToWordEntity> QuestionOptionVideoToWordRepository { get; }
-        IBaseRepository<TestOptionVideoToWordEntity> TestOptionVideoToWordRepository { get; }
-
+       
         void SaveChanges();
         Task SaveChangesAsync();
     }

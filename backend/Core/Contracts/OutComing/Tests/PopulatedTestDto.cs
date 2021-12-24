@@ -1,10 +1,11 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
 namespace Core.Contracts.OutComing.Tests
 {
-    public class PopulatedTestDto
+    public class PopulatedTestDto : TestDto
     {
-        public PopulatedTestDto()
-        {
-        }
+        [Required]
+        public new IEnumerable<BasePopulatedQuestionDto> Questions { get; set; } 
     }
 }

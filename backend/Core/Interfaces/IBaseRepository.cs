@@ -7,7 +7,7 @@ namespace Core.Interfaces
 {
     public interface IBaseRepository<T> where T : BaseEntity
     {
-        Task<IEnumerable<T> > GetAll();
+        Task<IEnumerable<T>> GetAll();
         Task<T> GetById(Guid id);
         Task<Guid> Add(T entity);
         Task Delete(Guid id);

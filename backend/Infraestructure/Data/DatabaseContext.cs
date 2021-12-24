@@ -10,11 +10,16 @@ namespace Infraestructure.Data
     public class DatabaseContext : DbContext
     {
         public virtual DbSet<UserEntity> Users { get; set; }
-        public virtual DbSet<TestOptionWordToVideoEntity> TestsOptionWordToVideo { get; set; }
+
+        public virtual DbSet<TestEntity> Tests { get; set; }
+        public virtual DbSet<QuestionOptionVideoToWordEntity> QuestionsOptionVideoToWord { get; set; }
         public virtual DbSet<QuestionOptionWordToVideoEntity> QuestionsOptionWordToVideo { get; set; }
 
-        public virtual DbSet<TestOptionVideoToWordEntity> TestsOptionVideoToWord { get; set; }
-        public virtual DbSet<QuestionOptionVideoToWordEntity> QuestionsOptionVideoToWord { get; set; }
+        //public virtual DbSet<TestOptionWordToVideoEntity> TestsOptionWordToVideo { get; set; }
+        //public virtual DbSet<QuestionOptionWordToVideoEntity> QuestionsOptionWordToVideo { get; set; }
+
+        //public virtual DbSet<TestOptionVideoToWordEntity> TestsOptionVideoToWord { get; set; }
+        //public virtual DbSet<QuestionOptionVideoToWordEntity> QuestionsOptionVideoToWord { get; set; }
 
         public DatabaseContext()
         {}
@@ -30,11 +35,15 @@ namespace Infraestructure.Data
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());
 
-            modelBuilder.ApplyConfiguration(new TestOptionWordToVideoConfiguration());
+            modelBuilder.ApplyConfiguration(new TestConfiguration());
+            modelBuilder.ApplyConfiguration(new QuestionOptionVideoToWordConfiguration());
             modelBuilder.ApplyConfiguration(new QuestionOptionWordToVideoConfiguration());
 
-            modelBuilder.ApplyConfiguration(new TestOptionVideoToWordConfiguration());
-            modelBuilder.ApplyConfiguration(new QuestionOptionVideoToWordConfiguration());
+            //modelBuilder.ApplyConfiguration(new QuestionOptionWordToVideoConfiguration());
+            //modelBuilder.ApplyConfiguration(new TestOptionWordToVideoConfiguration());
+
+            //modelBuilder.ApplyConfiguration(new QuestionOptionVideoToWordConfiguration());
+            //modelBuilder.ApplyConfiguration(new TestOptionVideoToWordConfiguration());
         }
 
         public override int SaveChanges()

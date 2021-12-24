@@ -1,11 +1,12 @@
 ﻿using System;
 using Core.Entities.Tests;
+using Core.Enums;
 
 namespace Infraestructure.Factories.QuestionFactories
 {
     public class QuestionOptionWordToVideoFactory : QuestionFactory
     {
-        public override QuestionOptionWordToVideoEntity CreateQuestion()
+        public override QuestionOptionWordToVideoEntity CreateQuestion(Guid testId, Difficulty difficulty)
         {
             return new QuestionOptionWordToVideoEntity
             {
@@ -16,7 +17,7 @@ namespace Infraestructure.Factories.QuestionFactories
                 PossibleAnswer3 = "",
                 UserAnswer = null,
                 CorrectAnswer = "",
-                TestId = Guid.Empty
+                TestId = testId
             };
         }
     }

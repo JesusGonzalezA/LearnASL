@@ -4,16 +4,16 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infraestructure.Data.Configurations
 {
-    public class QuestionOptionVideoToWordConfiguration : BaseQuestionConfiguration<QuestionOptionVideoToWordEntity>
+    public class QuestionOptionWordToVideoConfiguration : BaseQuestionConfiguration<QuestionOptionWordToVideoEntity>
     {
-        public QuestionOptionVideoToWordConfiguration()
+        public QuestionOptionWordToVideoConfiguration()
         {}
 
-        public override void Configure(EntityTypeBuilder<QuestionOptionVideoToWordEntity> builder)
+        public override void Configure(EntityTypeBuilder<QuestionOptionWordToVideoEntity> builder)
         {
             base.Configure(builder);
 
-            builder.Property(p => p.VideoToGuess)
+            builder.Property(p => p.WordToGuess)
                     .HasMaxLength(20)
                     .IsRequired();
             builder.Property(p => p.PossibleAnswer0)

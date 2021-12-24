@@ -1,31 +1,37 @@
 ﻿using AutoMapper;
+using Core.Contracts.Common;
+using Core.Contracts.Incoming;
 using Core.Contracts.OutComing.Tests;
+using Core.Entities;
 using Core.Entities.Tests;
 
 namespace Infraestructure.Mappings
 {
-    public class TestsAutomapperProfile : Profile
+    public class TestAutomapperProfile : Profile
     {
-        public TestsAutomapperProfile()
+        public TestAutomapperProfile()
         {
-            CreateMap<ISimpleTestDto, ITest>()
-                .ReverseMap();
-            CreateMap<ITestDto, ITest>()
-                .ReverseMap();
-            CreateMap<IQuestion, IQuestionDto>()
-                .ReverseMap();
+            CreateMap<TestCreateDto, TestEntity>();
 
-            CreateMap<TestOptionWordToVideoEntity, TestOptionWordToVideoDto>()
-                .IncludeBase<ITest, ITestDto>();
-            CreateMap<QuestionOptionWordToVideoEntity, QuestionOptionWordToVideoDto>()
-                .IncludeBase<IQuestion, IQuestionDto>()
-                .ForMember(dto => dto.CorrectAnswer, value => value.MapFrom(entity => (entity.UserAnswer == null)? null : entity.CorrectAnswer ));
+            // Unpopulated
+            CreateMap<TestEntity, TestDto>()
+                .IncludeBase<BaseEntity, BaseDto>();
 
-            CreateMap<TestOptionVideoToWordEntity, TestOptionVideoToWordDto>()
-                .IncludeBase<ITest, ITestDto>();
+            CreateMap<BaseQuestionEntity, BaseQuestionDto>()
+                .IncludeBase<BaseEntity, BaseDto>();
+
+            // Populated
+            CreateMap<TestEntity, PopulatedTestDto>()
+                .IncludeBase<BaseEntity, BaseDto>();
+
+            CreateMap<BaseQuestionEntity, BasePopulatedQuestionDto>()
+                .IncludeBase<BaseEntity, BaseDto>();
+
             CreateMap<QuestionOptionVideoToWordEntity, QuestionOptionVideoToWordDto>()
-                .IncludeBase<IQuestion, IQuestionDto>()
-                .ForMember(dto => dto.CorrectAnswer, value => value.MapFrom(entity => (entity.UserAnswer == null) ? null : entity.CorrectAnswer));
+                .IncludeBase<BaseQuestionEntity, BasePopulatedQuestionDto>();
+
+            CreateMap<QuestionOptionWordToVideoEntity, QuestionOptionWordToVideoDto>()
+                .IncludeBase<BaseQuestionEntity, BasePopulatedQuestionDto>();
         }
     }
 }

@@ -1,26 +1,25 @@
 ﻿using System;
 using Core.Entities.Tests;
 using Core.Enums;
-using Infraestructure.Factories.TestFactories;
+using Infraestructure.Factories.QuestionFactories;
 using Infraestructure.Interfaces;
 
 namespace Infraestructure.Services
 {
-    public class TestGenerator : ITestGenerator
+    public class QuestionGeneratorService : IQuestionGeneratorService
     {
-        public ITest CreateTest(TestType testType, Difficulty difficulty, int numberOfQuestions)
+        public BaseQuestionEntity CreateQuestion(TestType testType, Difficulty difficulty, Guid testId)
         {
-            TestFactory testFactory = testType switch
+            QuestionFactory questionFactory = testType switch
             {
-                TestType.OptionWordToVideoEntity => new TestOptionWordToVideoFactory(),
-                TestType.OptionWordToVideoEntity_Error => new TestOptionWordToVideo_Error_Factory(),
-                TestType.OptionVideoToWordEntity => new TestOptionVideoToWordFactory(),
-                TestType.OptionVideoToWordEntity_Error => new TestOptionVideoToWord_Error_Factory(),
+                TestType.OptionWordToVideoEntity => new QuestionOptionWordToVideoFactory(),
+                TestType.OptionWordToVideoEntity_Error => new QuestionOptionWordToVideo_Error_Factory(),
+                TestType.OptionVideoToWordEntity => new QuestionOptionVideoToWordFactory(),
+                TestType.OptionVideoToWordEntity_Error => new QuestionOptionVideoToWord_Error_Factory(),
                 _ => throw new Exception("Unable to create factory. Invalid test type"),
             };
 
-            ITest test = testFactory.CreateTest(difficulty, numberOfQuestions);
-            return test;
+            return questionFactory.CreateQuestion(testId, difficulty);
         }
     }
 }
