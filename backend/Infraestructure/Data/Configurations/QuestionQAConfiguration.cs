@@ -14,8 +14,7 @@ namespace Infraestructure.Data.Configurations
 
             builder.Property(p => p.WordToGuess)
                     .IsRequired();
-            builder.Property(p => p.VideoUser)
-                    .IsRequired();
+            builder.Property(p => p.VideoUser);
             builder.Property(p => p.IsCorrect)
                     .IsRequired();
         }

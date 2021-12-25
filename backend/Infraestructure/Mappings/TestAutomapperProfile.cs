@@ -38,6 +38,12 @@ namespace Infraestructure.Mappings
 
             CreateMap<QuestionOptionWordToVideoEntity, QuestionOptionWordToVideoDto>()
                 .IncludeBase<BaseQuestionEntity, BasePopulatedQuestionDto>();
+
+            CreateMap<QuestionQAEntity, QuestionQADto>()
+                .IncludeBase<BaseQuestionEntity, BasePopulatedQuestionDto>();
+
+            CreateMap<QuestionMimicEntity, QuestionMimicDto>()
+                .IncludeBase<BaseQuestionEntity, BasePopulatedQuestionDto>();
         }
     }
 }

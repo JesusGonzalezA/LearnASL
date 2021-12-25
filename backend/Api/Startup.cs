@@ -187,6 +187,8 @@ namespace Api
 
         private void ConfigureSwagger(IServiceCollection services)
         {
+            services.AddSwaggerGenNewtonsoftSupport();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc

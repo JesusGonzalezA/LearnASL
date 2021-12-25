@@ -12,7 +12,9 @@ namespace Core.Interfaces
 
         IBaseRepository<QuestionOptionWordToVideoEntity> QuestionOptionWordToVideoRepository { get; }
         IBaseRepository<QuestionOptionVideoToWordEntity> QuestionOptionVideoToWordRepository { get; }
-       
+        IBaseRepository<QuestionMimicEntity> QuestionMimicRepository { get; }
+        IBaseRepository<QuestionQAEntity> QuestionQARepository { get; }
+
         void SaveChanges();
         Task SaveChangesAsync();
     }

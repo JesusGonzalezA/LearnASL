@@ -16,8 +16,7 @@ namespace Infraestructure.Data.Configurations
                     .IsRequired();
             builder.Property(p => p.VideoHelp)
                     .IsRequired();
-            builder.Property(p => p.VideoUser)
-                    .IsRequired();
+            builder.Property(p => p.VideoUser);
             builder.Property(p => p.IsCorrect)
                     .IsRequired();
         }

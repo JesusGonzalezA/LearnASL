@@ -13,7 +13,9 @@ namespace Infraestructure.Repositories
         private readonly IBaseRepository<TestEntity> _testRepository;
         private readonly IBaseRepository<QuestionOptionWordToVideoEntity> _questionOptionWordToVideoRepository;
         private readonly IBaseRepository<QuestionOptionVideoToWordEntity> _questionOptionVideoToWordRepository;
-        
+        private readonly IBaseRepository<QuestionMimicEntity> _questionMimicRepository;
+        private readonly IBaseRepository<QuestionQAEntity> _questionQARepository;
+
         public UnitOfWork(DatabaseContext context)
         {
             _context = context;
@@ -29,6 +31,12 @@ namespace Infraestructure.Repositories
 
         public IBaseRepository<QuestionOptionVideoToWordEntity> QuestionOptionVideoToWordRepository
                 => _questionOptionVideoToWordRepository ?? new BaseRepository<QuestionOptionVideoToWordEntity>(_context);
+
+        public IBaseRepository<QuestionMimicEntity> QuestionMimicRepository
+                => _questionMimicRepository ?? new BaseRepository<QuestionMimicEntity>(_context);
+
+        public IBaseRepository<QuestionQAEntity> QuestionQARepository
+                => _questionQARepository ?? new BaseRepository<QuestionQAEntity>(_context);
 
         public void Dispose()
         {
