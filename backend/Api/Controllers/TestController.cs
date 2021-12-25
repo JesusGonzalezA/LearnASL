@@ -49,41 +49,25 @@ namespace Api.Controllers
         [HttpGet("{guid}")]
         [ProducesResponseType(typeof(TestDto), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        public async Task<IActionResult> Get(Guid guid)
+        public async Task<IActionResult> Get(Guid guid, [FromQuery] bool populated)
         {
             UserEntity userEntity = await _userService.GetUserByEmail(EmailOfCurrentUser);
-            TestEntity test = await _testService.GetTest(guid);
+            TestEntity test = await GetTest(guid, userEntity.Id);
             IEnumerable<BaseQuestionEntity> questions = await _questionService.GetQuestions(test);
 
-            if (!test.UserId.Equals(userEntity.Id))
+            if (populated)
             {
-                throw new ControllerException("You are not authorized to get this test.");
-            }
+                PopulatedTestDto testDto = _mapper.Map<PopulatedTestDto>(test);
+                testDto.Questions = _mapper.Map<IEnumerable<BasePopulatedQuestionDto>>(questions);
 
-            TestDto testDto = _mapper.Map<TestDto>(test);
-            testDto.Questions = _mapper.Map<IEnumerable<BaseQuestionDto>>(questions);
-
-            return Ok(testDto);
-        }
-
-        [HttpGet("{guid}/populated")]
-        [ProducesResponseType(typeof(PopulatedTestDto), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        public async Task<IActionResult> GetPopulated(Guid guid)
-        {
-            UserEntity userEntity = await _userService.GetUserByEmail(EmailOfCurrentUser);
-            TestEntity test = await _testService.GetTest(guid);
-            IEnumerable<BaseQuestionEntity> questions = await _questionService.GetQuestions(test);
-
-            if (!test.UserId.Equals(userEntity.Id))
+                return Ok(testDto);
+            } else
             {
-                throw new ControllerException("You are not authorized to get this test.");
+                TestDto testDto = _mapper.Map<TestDto>(test);
+                testDto.Questions = _mapper.Map<IEnumerable<BaseQuestionDto>>(questions);
+
+                return Ok(testDto);
             }
-
-            PopulatedTestDto testDto = _mapper.Map<PopulatedTestDto>(test);
-            testDto.Questions = _mapper.Map<IEnumerable<BasePopulatedQuestionDto> >(questions);
-
-            return Ok(testDto);
         }
 
         [HttpGet("")]
@@ -141,6 +125,18 @@ namespace Api.Controllers
 
             await _testService.DeleteTest(guid);
             return Ok();
+        }
+
+        private async Task<TestEntity> GetTest(Guid testId, Guid userId)
+        {
+            TestEntity test = await _testService.GetTest(testId);
+
+            if (!test.UserId.Equals(userId))
+            {
+                throw new ControllerException("You are not authorized to get this test.");
+            }
+
+            return test;
         }
     }
 }
