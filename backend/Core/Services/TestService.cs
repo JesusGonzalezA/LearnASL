@@ -4,11 +4,9 @@ using System.Threading.Tasks;
 using Core.Entities.Tests;
 using Core.Exceptions;
 using Core.Interfaces;
-using System.Linq;
 using Core.CustomEntities;
 using Microsoft.Extensions.Options;
 using Core.QueryFilters;
-using Core.Enums;
 using Core.Extensions;
 
 namespace Core.Services
