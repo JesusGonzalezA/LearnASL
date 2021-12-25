@@ -11,7 +11,8 @@ namespace Infraestructure.Validators
                 .GreaterThan(0);
 
             RuleFor(filter => filter.PageSize)
-                .GreaterThan(0);
+                .GreaterThan(0)
+                .LessThanOrEqualTo(15);
 
             RuleFor(filter => filter.Difficulty)
                 .IsInEnum()
