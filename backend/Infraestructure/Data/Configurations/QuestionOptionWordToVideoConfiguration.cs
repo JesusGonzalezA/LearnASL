@@ -1,5 +1,4 @@
-﻿using System;
-using Core.Entities.Tests;
+﻿using Core.Entities.Tests;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infraestructure.Data.Configurations

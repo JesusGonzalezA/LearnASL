@@ -7,6 +7,12 @@ namespace Core.Enums
         OptionWordToVideoEntity,
 
         OptionVideoToWordEntity_Error,
-        OptionVideoToWordEntity
+        OptionVideoToWordEntity,
+
+        Mimic_Error,
+        Mimic,
+
+        QA_Error,
+        QA
     }
 }

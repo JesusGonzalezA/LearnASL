@@ -1,5 +1,4 @@
-﻿using System;
-using Core.Entities.Tests;
+﻿using Core.Entities.Tests;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infraestructure.Data.Configurations
@@ -14,7 +13,6 @@ namespace Infraestructure.Data.Configurations
             base.Configure(builder);
 
             builder.Property(p => p.VideoToGuess)
-                    .HasMaxLength(20)
                     .IsRequired();
             builder.Property(p => p.PossibleAnswer0)
                     .HasMaxLength(20)

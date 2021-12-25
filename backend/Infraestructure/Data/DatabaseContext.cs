@@ -14,12 +14,8 @@ namespace Infraestructure.Data
         public virtual DbSet<TestEntity> Tests { get; set; }
         public virtual DbSet<QuestionOptionVideoToWordEntity> QuestionsOptionVideoToWord { get; set; }
         public virtual DbSet<QuestionOptionWordToVideoEntity> QuestionsOptionWordToVideo { get; set; }
-
-        //public virtual DbSet<TestOptionWordToVideoEntity> TestsOptionWordToVideo { get; set; }
-        //public virtual DbSet<QuestionOptionWordToVideoEntity> QuestionsOptionWordToVideo { get; set; }
-
-        //public virtual DbSet<TestOptionVideoToWordEntity> TestsOptionVideoToWord { get; set; }
-        //public virtual DbSet<QuestionOptionVideoToWordEntity> QuestionsOptionVideoToWord { get; set; }
+        public virtual DbSet<QuestionQAEntity> QuestionsQA { get; set; }
+        public virtual DbSet<QuestionMimicEntity> QuestionsMimic { get; set; }
 
         public DatabaseContext()
         {}
@@ -38,12 +34,8 @@ namespace Infraestructure.Data
             modelBuilder.ApplyConfiguration(new TestConfiguration());
             modelBuilder.ApplyConfiguration(new QuestionOptionVideoToWordConfiguration());
             modelBuilder.ApplyConfiguration(new QuestionOptionWordToVideoConfiguration());
-
-            //modelBuilder.ApplyConfiguration(new QuestionOptionWordToVideoConfiguration());
-            //modelBuilder.ApplyConfiguration(new TestOptionWordToVideoConfiguration());
-
-            //modelBuilder.ApplyConfiguration(new QuestionOptionVideoToWordConfiguration());
-            //modelBuilder.ApplyConfiguration(new TestOptionVideoToWordConfiguration());
+            modelBuilder.ApplyConfiguration(new QuestionMimicConfiguration());
+            modelBuilder.ApplyConfiguration(new QuestionQaConfiguration());
         }
 
         public override int SaveChanges()
