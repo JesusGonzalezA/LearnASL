@@ -107,7 +107,7 @@ namespace Api.Controllers
         [HttpPost("")]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        public async Task<IActionResult> Create(int numberOfQuestions, [FromBody] TestCreateDto testCreateDto)
+        public async Task<IActionResult> Create([FromQuery] TestCreateDto testCreateDto)
         {
             UserEntity userEntity = await _userService.GetUserByEmail(EmailOfCurrentUser);
             TestEntity test = _mapper.Map<TestEntity>(testCreateDto);
@@ -118,7 +118,7 @@ namespace Api.Controllers
 
             // Create the questions
             List<BaseQuestionEntity> questions = new();
-            for(int i=0; i<numberOfQuestions; ++i)
+            for(int i=0; i<testCreateDto.NumberOfQuestions; ++i)
                 questions.Add(_questionGeneratorService.CreateQuestion(test.TestType, test.Difficulty, test.Id));
             
             await _questionService.AddQuestions(test.TestType, questions);

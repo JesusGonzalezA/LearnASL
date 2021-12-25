@@ -97,6 +97,7 @@ namespace Api
 
             services.AddTransient<IValidator<LoginDto>, LoginDtoValidator>();
             services.AddTransient<IValidator<TestQueryFilterDto>, TestQueryFilterDtoValidator>();
+            services.AddTransient<IValidator<TestCreateDto>, TestCreateDtoValidator>();
         }
       
         private void ConfigureAutomapper(IServiceCollection services)

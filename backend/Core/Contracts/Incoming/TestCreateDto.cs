@@ -6,9 +6,10 @@ namespace Core.Contracts.Incoming
     public class TestCreateDto
     {
         [Required]
-        public TestType TestType { get; set; }
+        public int NumberOfQuestions { get; set; }
 
-        [Required]
-        public Difficulty Difficulty { get; set; }
+        public TestType? TestType { get; set; }
+
+        public Difficulty? Difficulty { get; set; }
     }
 }
