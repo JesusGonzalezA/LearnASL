@@ -8,21 +8,26 @@ using System.Linq;
 using Core.CustomEntities;
 using Microsoft.Extensions.Options;
 using Core.QueryFilters;
+using Core.Enums;
+using Core.Extensions;
 
 namespace Core.Services
 {
     public class TestService : ITestService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IQuestionService _questionService;
         private readonly PaginationOptions _paginationOptions;
 
         public TestService
         (
             IUnitOfWork unitOfWork,
+            IQuestionService questionService,
             IOptions<PaginationOptions> paginationOptions
         )
         {
             _unitOfWork = unitOfWork;
+            _questionService = questionService;
             _paginationOptions = paginationOptions.Value;
         }
 
@@ -56,33 +61,49 @@ namespace Core.Services
             return test;
         }
 
-        public async Task<PagedList<TestEntity> > GetAllTests(TestQueryFilter filters)
+        public async Task<PagedList<TestWithQuestions> > GetAllTests(TestQueryFilter filters)
         {
             filters.PageNumber = filters.PageNumber == 0 ? _paginationOptions.DefaultPageNumber : filters.PageNumber;
             filters.PageSize = filters.PageSize == 0 ? _paginationOptions.DefaultPageSize : filters.PageSize;
 
             IEnumerable<TestEntity> tests = await _unitOfWork.TestRepository.GetAll();
 
-            tests = tests.Where(test => test.UserId == filters.UserId);
-
-            if (filters.TestType != null)
-            {
-                tests = tests.Where(test => test.TestType == filters.TestType);
-            }
-
-            if (filters.Difficulty != null)
-            {
-                tests = tests.Where(test => test.Difficulty == filters.Difficulty);
-            }
-
-            PagedList<TestEntity> pagedTests = PagedList<TestEntity>.Create
+            IEnumerable<TestEntity> filtererdTests = tests.Filter(filters);
+            IList<TestWithQuestions> testsWithQuestions = await PopulateTestsWithQuestions(filtererdTests);
+            
+            PagedList<TestWithQuestions> pagedTests = PagedList<TestWithQuestions>.Create
             (
-                tests,
+                testsWithQuestions,
                 filters.PageNumber,
                 filters.PageSize
             );
 
             return pagedTests;
+        }
+
+        private async Task<IList<TestWithQuestions> > PopulateTestsWithQuestions(IEnumerable<TestEntity> tests)
+        {
+            IList<TestWithQuestions> testsWithQuestions = new List<TestWithQuestions>();
+
+            foreach (TestEntity test in tests)
+            {
+                IEnumerable<BaseQuestionEntity> questions = await _questionService.GetQuestions(test);
+                TestWithQuestions testWithQuestions = new TestWithQuestions()
+                {
+                    Id = test.Id,
+                    CreatedOn = test.CreatedOn,
+                    ModifiedOn = test.ModifiedOn,
+                    UserId = test.UserId,
+                    User = test.User,
+                    Difficulty = test.Difficulty,
+                    TestType = test.TestType,
+                    Questions = questions
+                };
+
+                testsWithQuestions.Add(testWithQuestions);
+            }
+
+            return testsWithQuestions;
         }
     }
 }

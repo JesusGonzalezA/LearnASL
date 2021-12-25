@@ -1,7 +1,7 @@
 ﻿
 namespace Core.CustomEntities
 {
-    public class Metadata
+    public class Metadata<T>
     {
         public int TotalCount { get; set; }
         public int PageSize { get; set; }
@@ -9,5 +9,15 @@ namespace Core.CustomEntities
         public int TotalPages { get; set; }
         public bool HasNextPage { get; set; }
         public bool HasPreviousPage { get; set; }
+
+        public Metadata(PagedList<T> pagedList)
+        {
+            TotalCount = pagedList.TotalCount;
+            PageSize = pagedList.PageSize;
+            CurrentPage = pagedList.CurrentPage;
+            TotalPages = pagedList.TotalPages;
+            HasNextPage = pagedList.HasNextPage;
+            HasPreviousPage = pagedList.HasPreviousPage;
+        }
     }
 }

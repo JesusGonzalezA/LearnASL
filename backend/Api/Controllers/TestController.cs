@@ -9,7 +9,6 @@ using Core.Contracts.OutComing.Tests;
 using Core.CustomEntities;
 using Core.Entities;
 using Core.Entities.Tests;
-using Core.Enums;
 using Core.Exceptions;
 using Core.Interfaces;
 using Core.QueryFilters;
@@ -97,27 +96,10 @@ namespace Api.Controllers
             TestQueryFilter filters = _mapper.Map<TestQueryFilter>(filtersDto);
             filters.UserId = userEntity.Id;
 
-            PagedList<TestEntity> pagedListOfTests = await _testService.GetAllTests(filters);
+            PagedList<TestWithQuestions> pagedListOfTests = await _testService.GetAllTests(filters);
             List<TestDto> testsDto = _mapper.Map<List<TestDto>>(pagedListOfTests);
 
-            for (int i=0; i<testsDto.Count; ++i)
-            {
-                TestEntity test = pagedListOfTests.ElementAt(i);
-                TestDto testDto = testsDto.ElementAt(i);
-
-                IEnumerable<BaseQuestionEntity> questions = await _questionService.GetQuestions(test);
-                testDto.Questions = _mapper.Map<IEnumerable<BaseQuestionDto>>(questions);
-            }
-
-            Metadata metadata = new Metadata
-            {
-                TotalCount = pagedListOfTests.TotalCount,
-                PageSize = pagedListOfTests.PageSize,
-                CurrentPage = pagedListOfTests.CurrentPage,
-                TotalPages = pagedListOfTests.TotalPages,
-                HasNextPage = pagedListOfTests.HasNextPage,
-                HasPreviousPage = pagedListOfTests.HasPreviousPage
-            };
+            Metadata<TestWithQuestions> metadata = new Metadata<TestWithQuestions>(pagedListOfTests);
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
 
             return Ok(testsDto);

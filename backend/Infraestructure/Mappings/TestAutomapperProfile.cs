@@ -23,6 +23,9 @@ namespace Infraestructure.Mappings
             CreateMap<BaseQuestionEntity, BaseQuestionDto>()
                 .IncludeBase<BaseEntity, BaseDto>();
 
+            CreateMap<TestWithQuestions, TestDto>()
+                .IncludeBase<TestEntity, TestDto>();
+
             // Populated
             CreateMap<TestEntity, PopulatedTestDto>()
                 .IncludeBase<BaseEntity, BaseDto>();

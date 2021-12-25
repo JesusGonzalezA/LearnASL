@@ -94,6 +94,7 @@ namespace Api
             {
                 options.Filters.Add<ValidationFilter>();
             }).AddFluentValidation();
+
             services.AddTransient<IValidator<LoginDto>, LoginDtoValidator>();
         }
       

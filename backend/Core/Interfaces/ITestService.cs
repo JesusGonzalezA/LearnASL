@@ -11,6 +11,6 @@ namespace Core.Interfaces
         Task<TestEntity> GetTest(Guid guid);
         Task<Guid> AddTest(TestEntity test);
         Task DeleteTest(Guid guid);
-        Task<PagedList<TestEntity> > GetAllTests(TestQueryFilter filters);
+        Task<PagedList<TestWithQuestions> > GetAllTests(TestQueryFilter filters);
     }
 }
