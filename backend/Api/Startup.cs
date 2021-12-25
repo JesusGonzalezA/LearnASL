@@ -27,7 +27,6 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using Core.Contracts.Incoming;
 using Infraestructure.Validators;
-using System.Text.Json.Serialization;
 using Core.CustomEntities;
 
 namespace Api
