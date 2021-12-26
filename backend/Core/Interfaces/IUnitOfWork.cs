@@ -8,7 +8,7 @@ namespace Core.Interfaces
     {
         IUserRepository UserRepository { get; }
 
-        IBaseRepository<TestEntity> TestRepository { get; }
+        ITestRepository TestRepository { get; }
 
         IBaseRepository<QuestionOptionWordToVideoEntity> QuestionOptionWordToVideoRepository { get; }
         IBaseRepository<QuestionOptionVideoToWordEntity> QuestionOptionVideoToWordRepository { get; }

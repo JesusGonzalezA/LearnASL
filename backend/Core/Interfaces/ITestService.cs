@@ -12,5 +12,6 @@ namespace Core.Interfaces
         Task<Guid> AddTest(TestEntity test);
         Task DeleteTest(Guid guid);
         Task<PagedList<TestWithQuestions> > GetAllTests(TestQueryFilter filters);
+        Task DeleteAllTestsFromUser(Guid userId);
     }
 }

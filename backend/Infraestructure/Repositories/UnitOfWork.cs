@@ -8,9 +8,11 @@ namespace Infraestructure.Repositories
     public class UnitOfWork : IUnitOfWork
     {
         private readonly DatabaseContext _context;
+
         private readonly IUserRepository _userRepository;
 
-        private readonly IBaseRepository<TestEntity> _testRepository;
+        private readonly ITestRepository _testRepository;
+
         private readonly IBaseRepository<QuestionOptionWordToVideoEntity> _questionOptionWordToVideoRepository;
         private readonly IBaseRepository<QuestionOptionVideoToWordEntity> _questionOptionVideoToWordRepository;
         private readonly IBaseRepository<QuestionMimicEntity> _questionMimicRepository;
@@ -23,8 +25,8 @@ namespace Infraestructure.Repositories
 
         public IUserRepository UserRepository => _userRepository ?? new UserRepository(_context);
 
-        public IBaseRepository<TestEntity> TestRepository
-                => _testRepository ?? new BaseRepository<TestEntity>(_context);
+        public ITestRepository TestRepository
+                => _testRepository ?? new TestRepository(_context);
 
         public IBaseRepository<QuestionOptionWordToVideoEntity> QuestionOptionWordToVideoRepository
                 => _questionOptionWordToVideoRepository ?? new BaseRepository<QuestionOptionWordToVideoEntity>(_context);

@@ -47,6 +47,11 @@ namespace Core.Services
             await _unitOfWork.TestRepository.Delete(guid);
         }
 
+        public async Task DeleteAllTestsFromUser(Guid userId)
+        {
+            await _unitOfWork.TestRepository.DeleteAllTestsFromUser(userId);
+        }
+
         public async Task<TestEntity> GetTest(Guid guid)
         {
             TestEntity test = await _unitOfWork.TestRepository.GetById(guid);

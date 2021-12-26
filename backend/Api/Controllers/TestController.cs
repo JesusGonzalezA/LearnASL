@@ -127,6 +127,17 @@ namespace Api.Controllers
             return Ok();
         }
 
+        [HttpDelete("")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        public async Task<IActionResult> DeleteAllTestsFromUser()
+        {
+            UserEntity userEntity = await _userService.GetUserByEmail(EmailOfCurrentUser);
+
+            await _testService.DeleteAllTestsFromUser(userEntity.Id);
+            return Ok();
+        }
+
         private async Task<TestEntity> GetTest(Guid testId, Guid userId)
         {
             TestEntity test = await _testService.GetTest(testId);
