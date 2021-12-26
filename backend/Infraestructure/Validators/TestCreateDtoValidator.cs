@@ -9,6 +9,7 @@ namespace Infraestructure.Validators
         {
             RuleFor(test => test.NumberOfQuestions)
                 .GreaterThan(0)
+                .LessThanOrEqualTo(10)
                 .NotNull();
 
             RuleFor(test => test.Difficulty)
