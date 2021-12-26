@@ -14,5 +14,9 @@ namespace Core.QueryFilters
         public TestType? TestType { get; set; }
 
         public Difficulty? Difficulty { get; set; }
+
+        public DateTime? FromDate { get; set; }
+
+        public DateTime? ToDate { get; set; }
     }
 }

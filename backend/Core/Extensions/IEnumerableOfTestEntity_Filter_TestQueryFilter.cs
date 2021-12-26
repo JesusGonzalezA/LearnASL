@@ -27,6 +27,16 @@ namespace Core.Extensions
                 tests = tests.Where(test => test.Difficulty == filters.Difficulty);
             }
 
+            if (filters.FromDate != null)
+            {
+                tests = tests.Where(test => test.CreatedOn.Date >= filters.FromDate?.Date);
+            }
+
+            if (filters.ToDate != null)
+            {
+                tests = tests.Where(test => test.CreatedOn.Date <= filters.ToDate?.Date);
+            }
+
             return tests;
         }
     }

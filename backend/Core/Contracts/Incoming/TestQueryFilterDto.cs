@@ -1,4 +1,5 @@
-﻿using Core.Enums;
+﻿using System;
+using Core.Enums;
 
 namespace Core.Contracts.Incoming
 {
@@ -11,5 +12,9 @@ namespace Core.Contracts.Incoming
         public TestType? TestType { get; set; }
 
         public Difficulty? Difficulty { get; set; }
+
+        public DateTime? FromDate { get; set; }
+
+        public DateTime? ToDate { get; set; }
     }
 }
