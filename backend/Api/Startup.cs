@@ -28,6 +28,8 @@ using FluentValidation;
 using Core.Contracts.Incoming;
 using Infraestructure.Validators;
 using Core.CustomEntities;
+using Microsoft.Extensions.FileProviders;
+using System.Net;
 
 namespace Api
 {
@@ -81,6 +83,27 @@ namespace Api
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            DirectoryInfo root = new DirectoryInfo(env.ContentRootPath).Parent.Parent;
+            string pathStaticDirectory = Path.Combine(root.FullName, Configuration.GetSection("VideoServing:Directory").Value);
+            Directory.CreateDirectory(pathStaticDirectory);
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(pathStaticDirectory),
+                RequestPath = Configuration.GetSection("VideoServing:Route").Value,
+                OnPrepareResponse = ctx =>
+                    {
+                        if (!ctx.Context.User.Identity.IsAuthenticated)
+                        {
+                            ctx.Context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+
+                            ctx.Context.Response.ContentLength = 0;
+                            ctx.Context.Response.Body = Stream.Null;
+
+                            ctx.Context.Response.Headers.Add("Cache-Control", "no-store");
+                        }
+                    }
+            });
 
             app.UseEndpoints(endpoints =>
             {
