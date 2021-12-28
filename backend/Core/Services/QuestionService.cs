@@ -100,6 +100,9 @@ namespace Core.Services
                 case TestType.Mimic_Error:
                     await UpdateQuestionMimic(questionGuid, parameters.VideoUser);
                     break;
+
+                default:
+                    throw new Exception("Invalid test type");
             }
         }
 
