@@ -4,10 +4,11 @@ using System.Threading.Tasks;
 using Core.Entities.Tests;
 using Core.Exceptions;
 using Core.Interfaces;
-using Core.CustomEntities;
+using Core.Options;
 using Microsoft.Extensions.Options;
 using Core.QueryFilters;
 using Core.Extensions;
+using Core.CustomEntities;
 
 namespace Core.Services
 {

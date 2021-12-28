@@ -1,10 +1,8 @@
-﻿using System;
+﻿
 namespace Infraestructure.Interfaces
 {
-    public class IUriService
+    public interface IUriService
     {
-        public IUriService()
-        {
-        }
+        string GetVideoUri(string? filename);
     }
 }

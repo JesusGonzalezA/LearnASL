@@ -5,6 +5,8 @@ using Core.Entities.Tests;
 using Core.Enums;
 using Core.Interfaces;
 using System.Linq;
+using Core.CustomEntities;
+using Core.Exceptions;
 
 namespace Core.Services
 {
@@ -21,14 +23,14 @@ namespace Core.Services
         {
             switch (testType)
             {
-                case TestType.OptionWordToVideoEntity:
-                case TestType.OptionWordToVideoEntity_Error:
+                case TestType.OptionWordToVideo:
+                case TestType.OptionWordToVideo_Error:
                     foreach(BaseQuestionEntity question in questions)
                         await _unitOfWork.QuestionOptionWordToVideoRepository.Add((QuestionOptionWordToVideoEntity)question);
                     break;
 
-                case TestType.OptionVideoToWordEntity:
-                case TestType.OptionVideoToWordEntity_Error:
+                case TestType.OptionVideoToWord:
+                case TestType.OptionVideoToWord_Error:
                     foreach (BaseQuestionEntity question in questions)
                         await _unitOfWork.QuestionOptionVideoToWordRepository.Add((QuestionOptionVideoToWordEntity)question);
                     break;
@@ -54,10 +56,10 @@ namespace Core.Services
         {
             IEnumerable<BaseQuestionEntity> questions = test.TestType switch
             {
-                TestType.OptionWordToVideoEntity or TestType.OptionWordToVideoEntity_Error
+                TestType.OptionWordToVideo or TestType.OptionWordToVideo_Error
                     => await _unitOfWork.QuestionOptionWordToVideoRepository.GetAll(),
 
-                TestType.OptionVideoToWordEntity or TestType.OptionVideoToWordEntity_Error
+                TestType.OptionVideoToWord or TestType.OptionVideoToWord_Error
                     => await _unitOfWork.QuestionOptionVideoToWordRepository.GetAll(),
 
                 TestType.QA or TestType.QA_Error
@@ -73,6 +75,95 @@ namespace Core.Services
                 = questions.Where(question => question.TestId == test.Id);
 
             return questionsFromTest;
+        }
+
+        public async Task UpdateQuestion(TestType testType, Guid questionGuid, UpdateQuestionParameters parameters)
+        {
+            switch (testType)
+            {
+                case TestType.OptionWordToVideo:
+                case TestType.OptionWordToVideo_Error:
+                    await UpdateQuestionOptionWordToVideo(questionGuid, parameters.UserAnswer);
+                    break;
+
+                case TestType.OptionVideoToWord:
+                case TestType.OptionVideoToWord_Error:
+                    await UpdateQuestionOptionVideoToWord(questionGuid, parameters.UserAnswer);
+                    break;
+
+                case TestType.QA:
+                case TestType.QA_Error:
+                    await UpdateQuestionQA(questionGuid, parameters.VideoUser);
+                    break;
+
+                case TestType.Mimic:
+                case TestType.Mimic_Error:
+                    await UpdateQuestionMimic(questionGuid, parameters.VideoUser);
+                    break;
+            }
+        }
+
+        private async Task UpdateQuestionMimic(Guid questionGuid, string videoUser)
+        {
+            QuestionMimicEntity question = (QuestionMimicEntity)await GetQuestion(TestType.Mimic, questionGuid);
+            question.VideoUser = videoUser;
+            await _unitOfWork.QuestionMimicRepository.Update(question);
+        }
+
+        private async Task UpdateQuestionQA(Guid questionGuid, string videoUser)
+        {
+            QuestionQAEntity question = (QuestionQAEntity)await GetQuestion(TestType.QA, questionGuid);
+            question.VideoUser = videoUser;
+            await _unitOfWork.QuestionQARepository.Update(question);
+        }
+
+        private async Task UpdateQuestionOptionVideoToWord(Guid questionGuid, string userAnswer)
+        {
+            QuestionOptionVideoToWordEntity question = (QuestionOptionVideoToWordEntity)await GetQuestion(TestType.OptionVideoToWord, questionGuid);
+            question.UserAnswer = userAnswer;
+            await _unitOfWork.QuestionOptionVideoToWordRepository.Update(question);
+        }
+
+        private async Task UpdateQuestionOptionWordToVideo(Guid questionGuid, string userAnswer)
+        {
+            QuestionOptionWordToVideoEntity question = (QuestionOptionWordToVideoEntity) await GetQuestion(TestType.OptionWordToVideo, questionGuid);
+            question.UserAnswer = userAnswer;
+            await _unitOfWork.QuestionOptionWordToVideoRepository.Update(question);
+        }
+
+        public async Task<BaseQuestionEntity> GetQuestion(TestType testType, Guid guid)
+        {
+            BaseQuestionEntity question = null;
+
+            switch (testType)
+            {
+                case TestType.OptionWordToVideo:
+                case TestType.OptionWordToVideo_Error:
+                    question = await _unitOfWork.QuestionOptionWordToVideoRepository.GetById(guid);
+                    break;
+
+                case TestType.OptionVideoToWord:
+                case TestType.OptionVideoToWord_Error:
+                    question = await _unitOfWork.QuestionOptionVideoToWordRepository.GetById(guid);
+                    break;
+
+                case TestType.QA:
+                case TestType.QA_Error:
+                    question = await _unitOfWork.QuestionQARepository.GetById(guid);
+                    break;
+
+                case TestType.Mimic:
+                case TestType.Mimic_Error:
+                    question = await _unitOfWork.QuestionMimicRepository.GetById(guid);
+                    break;
+            }
+
+            if (question == null)
+            {
+                throw new BusinessException("Question does not exist");
+            }
+
+            return question;
         }
     }
 }

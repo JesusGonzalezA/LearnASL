@@ -13,7 +13,6 @@
     <None Remove="Microsoft.EntityFrameworkCore.Design" />
     <None Remove="Data\Configurations\" />
     <None Remove="Services\" />
-    <None Remove="Options\" />
     <None Remove="MailKit" />
     <None Remove="Mappings\" />
     <None Remove="Interfaces\" />
@@ -29,7 +28,6 @@
     <Folder Include="Repositories\" />
     <Folder Include="Data\" />
     <Folder Include="Services\" />
-    <Folder Include="Options\" />
     <Folder Include="Mappings\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Validators\" />

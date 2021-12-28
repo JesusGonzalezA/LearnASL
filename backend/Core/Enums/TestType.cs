@@ -3,11 +3,11 @@ namespace Core.Enums
 {
     public enum TestType
     {
-        OptionWordToVideoEntity_Error,
-        OptionWordToVideoEntity,
+        OptionWordToVideo_Error,
+        OptionWordToVideo,
 
-        OptionVideoToWordEntity_Error,
-        OptionVideoToWordEntity,
+        OptionVideoToWord_Error,
+        OptionVideoToWord,
 
         Mimic_Error,
         Mimic,
