@@ -16,5 +16,18 @@ namespace Core.Contracts.Incoming
         public DateTime? FromDate { get; set; }
 
         public DateTime? ToDate { get; set; }
+
+        public TestQueryFilterDto()
+        { }
+
+        public TestQueryFilterDto(TestQueryFilterDto other)
+        {
+            PageSize = other.PageSize;
+            PageNumber = other.PageNumber;
+            TestType = other.TestType;
+            Difficulty = other.Difficulty;
+            FromDate = other.FromDate;
+            ToDate = other.ToDate;
+        }
     }
 }

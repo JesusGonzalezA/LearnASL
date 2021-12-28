@@ -9,6 +9,8 @@ namespace Core.CustomEntities
         public int TotalPages { get; set; }
         public bool HasNextPage { get; set; }
         public bool HasPreviousPage { get; set; }
+        public string NextPageUrl { get; set; }
+        public string PreviousPageUrl { get; set; }
 
         public Metadata(PagedList<T> pagedList)
         {
@@ -18,6 +20,9 @@ namespace Core.CustomEntities
             TotalPages = pagedList.TotalPages;
             HasNextPage = pagedList.HasNextPage;
             HasPreviousPage = pagedList.HasPreviousPage;
+
+            NextPageUrl = null;
+            PreviousPageUrl = null;
         }
     }
 }

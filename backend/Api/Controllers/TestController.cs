@@ -13,6 +13,7 @@ using Core.Interfaces;
 using Core.QueryFilters;
 using Infraestructure.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -28,6 +29,7 @@ namespace Api.Controllers
         private readonly IUserService _userService;
         private readonly IQuestionGeneratorService _questionGeneratorService;
         private readonly IQuestionService _questionService;
+        private readonly IUriService _uriService;
         private readonly IMapper _mapper;
 
         public TestController
@@ -36,6 +38,7 @@ namespace Api.Controllers
             IUserService userService,
             IQuestionGeneratorService questionGeneratorService,
             IQuestionService questionService,
+            IUriService uriService,
             IMapper mapper
         )
         {
@@ -43,6 +46,7 @@ namespace Api.Controllers
             _userService = userService;
             _questionGeneratorService = questionGeneratorService;
             _questionService = questionService;
+            _uriService = uriService;
             _mapper = mapper;
         }
 
@@ -70,7 +74,7 @@ namespace Api.Controllers
             }
         }
 
-        [HttpGet("")]
+        [HttpGet("", Name = nameof(GetAll))]
         [ProducesResponseType(typeof(ICollection<TestDto>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         public async Task<IActionResult> GetAll([FromQuery] TestQueryFilterDto filtersDto)
@@ -83,6 +87,7 @@ namespace Api.Controllers
             List<TestDto> testsDto = _mapper.Map<List<TestDto>>(pagedListOfTests);
 
             Metadata<TestWithQuestions> metadata = new Metadata<TestWithQuestions>(pagedListOfTests);
+            metadata = _uriService.UpdateMetadataTests(metadata, filtersDto, Url.RouteUrl(nameof(GetAll)));
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
 
             return Ok(testsDto);
