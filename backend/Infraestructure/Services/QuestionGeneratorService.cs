@@ -12,11 +12,11 @@ namespace Infraestructure.Services
         {
             QuestionFactory questionFactory = testType switch
             {
-                TestType.OptionWordToVideoEntity => new QuestionOptionWordToVideoFactory(),
-                TestType.OptionWordToVideoEntity_Error => new QuestionOptionWordToVideo_Error_Factory(),
+                TestType.OptionWordToVideo => new QuestionOptionWordToVideoFactory(),
+                TestType.OptionWordToVideo_Error => new QuestionOptionWordToVideo_Error_Factory(),
 
-                TestType.OptionVideoToWordEntity => new QuestionOptionVideoToWordFactory(),
-                TestType.OptionVideoToWordEntity_Error => new QuestionOptionVideoToWord_Error_Factory(),
+                TestType.OptionVideoToWord => new QuestionOptionVideoToWordFactory(),
+                TestType.OptionVideoToWord_Error => new QuestionOptionVideoToWord_Error_Factory(),
 
                 TestType.QA => new QuestionQAFactory(),
                 TestType.QA_Error => new QuestionQA_Error_Factory(),

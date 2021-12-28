@@ -7,7 +7,7 @@ using Api.Filters;
 using Core.Interfaces;
 using Core.Services;
 using Infraestructure.Data;
-using Infraestructure.Options;
+using Core.Options;
 using Infraestructure.Interfaces;
 using Infraestructure.Repositories;
 using Infraestructure.Services;
@@ -27,7 +27,6 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using Core.Contracts.Incoming;
 using Infraestructure.Validators;
-using Core.CustomEntities;
 using Microsoft.Extensions.FileProviders;
 using System.Net;
 
@@ -141,6 +140,10 @@ namespace Api
                 options => Configuration.GetSection("Pagination").Bind(options)
             );
 
+            services.Configure<VideoServingOptions>(
+                options => Configuration.GetSection("VideoServing").Bind(options)
+            );
+
             services.Configure<EmailOptions>(
                 options =>
                 {
@@ -190,6 +193,14 @@ namespace Api
             services.AddSingleton<IPasswordService, PasswordService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IQuestionGeneratorService, QuestionGeneratorService>();
+            services.AddSingleton<IUriService>(provider =>
+            {
+                IHttpContextAccessor accesor = provider.GetRequiredService<IHttpContextAccessor>();
+                HttpRequest request = accesor.HttpContext.Request;
+                string absoluteUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+
+                return new UriService(absoluteUri, Configuration.GetSection("VideoServing:Route").Value);
+            });
 
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddTransient<IUnitOfWork, UnitOfWork>();

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Security.Cryptography;
-using Infraestructure.Options;
+using Core.Options;
 using Infraestructure.Interfaces;
 using Microsoft.Extensions.Options;
 
