@@ -22,19 +22,22 @@ namespace Api.Controllers
         private readonly ITokenService _tokenService;
         private readonly IEmailService _emailService;
         private readonly IPasswordService _passwordService;
+        private readonly IStoreService _storeService;
 
         public AuthController
         (
             IUserService userService,
             ITokenService tokenService,
             IEmailService emailService,
-            IPasswordService passwordService
+            IPasswordService passwordService,
+            IStoreService storeService
         )
         {
             _userService = userService;
             _tokenService = tokenService;
             _emailService = emailService;
             _passwordService = passwordService;
+            _storeService = storeService;
         }
 
         [HttpPost("login")]
@@ -94,7 +97,9 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         public async Task<IActionResult> Delete()
         {
+            UserEntity userEntity = await _userService.GetUserByEmail(EmailOfCurrentUser);
             await _userService.DeleteUser(EmailOfCurrentUser);
+            _storeService.DeleteDirectory(userEntity.Id.ToString());
             return Ok();
         }
 

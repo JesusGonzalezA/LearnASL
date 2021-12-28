@@ -193,6 +193,7 @@ namespace Api
             services.AddSingleton<IPasswordService, PasswordService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IQuestionGeneratorService, QuestionGeneratorService>();
+            services.AddScoped<IStoreService, StoreService>();
             services.AddSingleton<IUriService>(provider =>
             {
                 IHttpContextAccessor accesor = provider.GetRequiredService<IHttpContextAccessor>();

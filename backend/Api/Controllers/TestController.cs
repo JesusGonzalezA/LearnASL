@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -13,7 +14,6 @@ using Core.Interfaces;
 using Core.QueryFilters;
 using Infraestructure.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -30,6 +30,7 @@ namespace Api.Controllers
         private readonly IQuestionGeneratorService _questionGeneratorService;
         private readonly IQuestionService _questionService;
         private readonly IUriService _uriService;
+        private readonly IStoreService _storeService;
         private readonly IMapper _mapper;
 
         public TestController
@@ -39,6 +40,7 @@ namespace Api.Controllers
             IQuestionGeneratorService questionGeneratorService,
             IQuestionService questionService,
             IUriService uriService,
+            IStoreService storeService,
             IMapper mapper
         )
         {
@@ -47,6 +49,7 @@ namespace Api.Controllers
             _questionGeneratorService = questionGeneratorService;
             _questionService = questionService;
             _uriService = uriService;
+            _storeService = storeService;
             _mapper = mapper;
         }
 
@@ -129,6 +132,8 @@ namespace Api.Controllers
             }
 
             await _testService.DeleteTest(guid);
+            _storeService.DeleteDirectory(Path.Combine(test.UserId.ToString(), guid.ToString()));
+
             return Ok();
         }
 
@@ -140,6 +145,7 @@ namespace Api.Controllers
             UserEntity userEntity = await _userService.GetUserByEmail(EmailOfCurrentUser);
 
             await _testService.DeleteAllTestsFromUser(userEntity.Id);
+            _storeService.DeleteDirectory(userEntity.Id.ToString());
             return Ok();
         }
 

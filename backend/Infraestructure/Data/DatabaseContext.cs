@@ -1,18 +1,16 @@
 ﻿using System;
-using System.IO;
 using Core.Entities;
 using Core.Entities.Tests;
-using Core.Options;
 using Infraestructure.Data.Configurations;
+using Infraestructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.Extensions.Options;
 
 namespace Infraestructure.Data
 {
     public class DatabaseContext : DbContext
     {
-        private readonly VideoServingOptions _videoServingOptions;
+        private readonly IStoreService _storeService;
 
         public virtual DbSet<UserEntity> Users { get; set; }
 
@@ -28,11 +26,11 @@ namespace Infraestructure.Data
         public DatabaseContext
         (
             DbContextOptions<DatabaseContext> options,
-            IOptions<VideoServingOptions> videoServingOptions
+            IStoreService storeService
         )
             : base(options)
         {
-            _videoServingOptions = videoServingOptions.Value;
+            storeService = _storeService;
 
             ChangeTracker.Tracked += OnEntityTracked;
             ChangeTracker.StateChanged += OnEntityStateChanged;
@@ -68,31 +66,6 @@ namespace Infraestructure.Data
             {
                 entity.ModifiedOn = DateTime.UtcNow;
             }
-
-            if (e.NewState == EntityState.Deleted && e.Entry.Entity is UserEntity userEntity)
-            {
-                DirectoryInfo root = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent;
-                string userVideosDirectoryPath = Path.Combine(root.FullName, _videoServingOptions.Directory, userEntity.Id.ToString());
-                Directory.Delete(userVideosDirectoryPath, true);
-            }
-
-            if (e.NewState == EntityState.Deleted && e.Entry.Entity is TestEntity testEntity)
-            {
-                DirectoryInfo root = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent;
-                string userVideosDirectoryPath = Path.Combine(root.FullName, _videoServingOptions.Directory, testEntity.UserId.ToString());
-
-                if (Directory.Exists(userVideosDirectoryPath) )
-                {
-                    string testVideosDirectoryPath = Path.Combine(userVideosDirectoryPath, testEntity.Id.ToString());
-                    Directory.Delete(testVideosDirectoryPath, true);
-                }
-                
-            }
-        }
-
-        private void DeleteDirectory(string folderName)
-        {
-
         }
     }
 }

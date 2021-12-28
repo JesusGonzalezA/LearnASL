@@ -28,8 +28,7 @@ namespace Api.Controllers
         private readonly IUserService _userService;
         private readonly IQuestionService _questionService;
         private readonly IUriService _uriService;
-        private readonly VideoServingOptions _videoServingOptions;
-        private readonly string _rootPath;
+        private readonly IStoreService _storeService;
 
         public QuestionController
         (
@@ -37,16 +36,14 @@ namespace Api.Controllers
             IUserService userService,
             IQuestionService questionService,
             IUriService uriService,
-            IOptions<VideoServingOptions> videoServingOptions,
-            IWebHostEnvironment webHostEnvironment
+            IStoreService storeService
         )
         {
             _testService = testService;
             _userService = userService;
             _questionService = questionService;
             _uriService = uriService;
-            _videoServingOptions = videoServingOptions.Value;
-            _rootPath = webHostEnvironment.ContentRootPath;
+            _storeService = storeService;
         }
 
         [HttpPut("{guid}")]
@@ -90,18 +87,10 @@ namespace Api.Controllers
                 return null;
             }
 
-            DirectoryInfo root = new DirectoryInfo(_rootPath).Parent.Parent;
-            string pathStaticDirectory = Path.Combine(root.FullName, _videoServingOptions.Directory);
-
             string extension = Path.GetExtension(questionReplyDto.VideoUser.FileName);
             string filename = $"{userId}/{testGuid}/{questionGuid}{extension}";
-            string filePath = $"{pathStaticDirectory}/{filename}";
-            new FileInfo(filePath).Directory.Create();
-
-            using (FileStream stream = System.IO.File.Create(filePath))
-            {
-                await questionReplyDto.VideoUser.CopyToAsync(stream);
-            }
+            
+            await _storeService.SaveVideo(filename, questionReplyDto.VideoUser);
 
             return filename;
         }
