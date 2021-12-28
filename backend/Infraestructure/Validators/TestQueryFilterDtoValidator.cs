@@ -1,5 +1,5 @@
 ﻿using Core.Contracts.Incoming;
-using Core.CustomEntities;
+using Core.Options;
 using FluentValidation;
 using Microsoft.Extensions.Options;
 
