@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Microsoft.AspNetCore.Http.Extensions;
 using Core.Exceptions;
-using Api.Responses;
+using Core.Contracts.Responses;
 using System.Collections.Generic;
 
 namespace Api.Middleware

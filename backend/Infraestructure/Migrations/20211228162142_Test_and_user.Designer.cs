@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infraestructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20211224131348_NewM2")]
-    partial class NewM2
+    [Migration("20211228162142_Test_and_user")]
+    partial class Test_and_user
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,42 @@ namespace Infraestructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.12")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Core.Entities.Tests.QuestionMimicEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("TestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("VideoHelp")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VideoUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WordToGuess")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TestId");
+
+                    b.ToTable("QuestionsMimic");
+                });
 
             modelBuilder.Entity("Core.Entities.Tests.QuestionOptionVideoToWordEntity", b =>
                 {
@@ -65,8 +101,7 @@ namespace Infraestructure.Migrations
 
                     b.Property<string>("VideoToGuess")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -127,6 +162,38 @@ namespace Infraestructure.Migrations
                     b.HasIndex("TestId");
 
                     b.ToTable("QuestionsOptionWordToVideo");
+                });
+
+            modelBuilder.Entity("Core.Entities.Tests.QuestionQAEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("TestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("VideoUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WordToGuess")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TestId");
+
+                    b.ToTable("QuestionsQA");
                 });
 
             modelBuilder.Entity("Core.Entities.Tests.TestEntity", b =>
@@ -199,6 +266,18 @@ namespace Infraestructure.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Core.Entities.Tests.QuestionMimicEntity", b =>
+                {
+                    b.HasOne("Core.Entities.Tests.TestEntity", "Test")
+                        .WithMany()
+                        .HasForeignKey("TestId")
+                        .HasConstraintName("FK_Question_Test_QuestionMimicConfiguration")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Test");
+                });
+
             modelBuilder.Entity("Core.Entities.Tests.QuestionOptionVideoToWordEntity", b =>
                 {
                     b.HasOne("Core.Entities.Tests.TestEntity", "Test")
@@ -217,6 +296,18 @@ namespace Infraestructure.Migrations
                         .WithMany()
                         .HasForeignKey("TestId")
                         .HasConstraintName("FK_Question_Test_QuestionOptionWordToVideoConfiguration")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Test");
+                });
+
+            modelBuilder.Entity("Core.Entities.Tests.QuestionQAEntity", b =>
+                {
+                    b.HasOne("Core.Entities.Tests.TestEntity", "Test")
+                        .WithMany()
+                        .HasForeignKey("TestId")
+                        .HasConstraintName("FK_Question_Test_QuestionQaConfiguration")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

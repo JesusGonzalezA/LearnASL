@@ -1,5 +1,5 @@
 ﻿
-namespace Api.Responses
+namespace Core.Contracts.Responses
 {
     public class ErrorApiResponse<T>
     {

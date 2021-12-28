@@ -7,7 +7,7 @@ using System.Net;
 using Core.Entities;
 using System;
 using Microsoft.AspNetCore.Authorization;
-using Api.Responses;
+using Core.Contracts.Responses;
 using Core.Exceptions;
 using System.Collections.Generic;
 
