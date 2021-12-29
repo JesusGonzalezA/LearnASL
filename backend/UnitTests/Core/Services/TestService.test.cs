@@ -93,7 +93,6 @@ namespace Tests.Core.Services
             Assert.Empty(allTests);
         }
 
-        // Populate tests
         [Fact]
         public async Task TestService_GetAll_GetsAll()
         {
