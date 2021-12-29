@@ -10,7 +10,7 @@ using Core.Exceptions;
 
 namespace Core.Services
 {
-    public class QuestionService : IQuestionService
+    public partial class QuestionService : IQuestionService
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -106,34 +106,6 @@ namespace Core.Services
             }
         }
 
-        private async Task UpdateQuestionMimic(Guid questionGuid, string videoUser)
-        {
-            QuestionMimicEntity question = (QuestionMimicEntity)await GetQuestion(TestType.Mimic, questionGuid);
-            question.VideoUser = videoUser;
-            await _unitOfWork.QuestionMimicRepository.Update(question);
-        }
-
-        private async Task UpdateQuestionQA(Guid questionGuid, string videoUser)
-        {
-            QuestionQAEntity question = (QuestionQAEntity)await GetQuestion(TestType.QA, questionGuid);
-            question.VideoUser = videoUser;
-            await _unitOfWork.QuestionQARepository.Update(question);
-        }
-
-        private async Task UpdateQuestionOptionVideoToWord(Guid questionGuid, string userAnswer)
-        {
-            QuestionOptionVideoToWordEntity question = (QuestionOptionVideoToWordEntity)await GetQuestion(TestType.OptionVideoToWord, questionGuid);
-            question.UserAnswer = userAnswer;
-            await _unitOfWork.QuestionOptionVideoToWordRepository.Update(question);
-        }
-
-        private async Task UpdateQuestionOptionWordToVideo(Guid questionGuid, string userAnswer)
-        {
-            QuestionOptionWordToVideoEntity question = (QuestionOptionWordToVideoEntity) await GetQuestion(TestType.OptionWordToVideo, questionGuid);
-            question.UserAnswer = userAnswer;
-            await _unitOfWork.QuestionOptionWordToVideoRepository.Update(question);
-        }
-
         public async Task<BaseQuestionEntity> GetQuestion(TestType testType, Guid guid)
         {
             BaseQuestionEntity question = null;
@@ -167,6 +139,37 @@ namespace Core.Services
             }
 
             return question;
+        }
+    }
+
+    public partial class QuestionService
+    {
+        private async Task UpdateQuestionMimic(Guid questionGuid, string videoUser)
+        {
+            QuestionMimicEntity question = (QuestionMimicEntity)await GetQuestion(TestType.Mimic, questionGuid);
+            question.VideoUser = videoUser;
+            await _unitOfWork.QuestionMimicRepository.Update(question);
+        }
+
+        private async Task UpdateQuestionQA(Guid questionGuid, string videoUser)
+        {
+            QuestionQAEntity question = (QuestionQAEntity)await GetQuestion(TestType.QA, questionGuid);
+            question.VideoUser = videoUser;
+            await _unitOfWork.QuestionQARepository.Update(question);
+        }
+
+        private async Task UpdateQuestionOptionVideoToWord(Guid questionGuid, string userAnswer)
+        {
+            QuestionOptionVideoToWordEntity question = (QuestionOptionVideoToWordEntity)await GetQuestion(TestType.OptionVideoToWord, questionGuid);
+            question.UserAnswer = userAnswer;
+            await _unitOfWork.QuestionOptionVideoToWordRepository.Update(question);
+        }
+
+        private async Task UpdateQuestionOptionWordToVideo(Guid questionGuid, string userAnswer)
+        {
+            QuestionOptionWordToVideoEntity question = (QuestionOptionWordToVideoEntity)await GetQuestion(TestType.OptionWordToVideo, questionGuid);
+            question.UserAnswer = userAnswer;
+            await _unitOfWork.QuestionOptionWordToVideoRepository.Update(question);
         }
     }
 }
