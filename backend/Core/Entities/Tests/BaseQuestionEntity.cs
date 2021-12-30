@@ -1,10 +1,10 @@
 ﻿using System;
 namespace Core.Entities.Tests
 {
-    public class BaseQuestionEntity
+    public abstract class BaseQuestionEntity : BaseEntity
     {
-        public BaseQuestionEntity()
-        {
-        }
+        public Guid TestId { get; set; }
+
+        public virtual TestEntity Test { get; set; }
     }
 }

@@ -1,32 +1,16 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Reflection;
-using System.Text;
 using Api.Middleware;
-using Api.Filters;
-using Core.Interfaces;
-using Core.Services;
-using Infraestructure.Data;
-using Infraestructure.Options;
-using Infraestructure.Interfaces;
-using Infraestructure.Repositories;
-using Infraestructure.Services;
+using Infraestructure.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Serilog;
-using AutoMapper;
-using Infraestructure.Mappings;
-using FluentValidation.AspNetCore;
-using FluentValidation;
-using Core.Contracts.Incoming;
-using Infraestructure.Validators;
 
 namespace Api
 {
@@ -41,27 +25,23 @@ namespace Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            ConfigureDI(services);
-            ConfigureAutomapper(services);
-            ConfigureOptions(services);
-            ConfigureDatabase(services);
-            ConfigureLogger(services);
             ConfigureSwagger(services);
-            ConfigureAuthentication(services);
-            ConfigureValidators(services);
 
-            services.AddMvc(options =>
-            {
-                options.Filters.Add<ValidationFilter>();
-            }).AddFluentValidation(options =>
-            {
-                options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
-            });
+            services
+                .ConfigureDI(Configuration)
+                .ConfigureLogger()
+                .ConfigureAutomapper()
+                .ConfigureOptions(Configuration)
+                .ConfigureDatabase(Configuration)
+                .ConfigureAuthentication(Configuration)
+                .ConfigureValidators();
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
                 {
+                    options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
                 })
                 .ConfigureApiBehaviorOptions(options =>
                 {
@@ -87,99 +67,37 @@ namespace Api
             app.UseAuthentication();
             app.UseAuthorization();
 
+            DirectoryInfo root = new DirectoryInfo(env.ContentRootPath).Parent.Parent;
+            string pathStaticDirectory = Path.Combine(root.FullName, Configuration.GetSection("VideoServing:Directory").Value);
+            Directory.CreateDirectory(pathStaticDirectory);
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(pathStaticDirectory),
+                RequestPath = Configuration.GetSection("VideoServing:Route").Value,
+                OnPrepareResponse = ctx =>
+                    {
+                        if (!ctx.Context.User.Identity.IsAuthenticated)
+                        {
+                            ctx.Context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+
+                            ctx.Context.Response.ContentLength = 0;
+                            ctx.Context.Response.Body = Stream.Null;
+
+                            ctx.Context.Response.Headers.Add("Cache-Control", "no-store");
+                        }
+                    }
+            });
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
         }
 
-        private void ConfigureValidators(IServiceCollection services)
+        public void ConfigureSwagger(IServiceCollection services)
         {
-            services.AddMvc(options =>
-            {
-                options.Filters.Add<ValidationFilter>();
-            }).AddFluentValidation();
-            services.AddTransient<IValidator<LoginDto>, LoginDtoValidator>();
-        }
-      
-        private void ConfigureAutomapper(IServiceCollection services)
-        {
-            var mapperConfig = new MapperConfiguration(m =>
-            {
-                m.AddProfile(new AutomapperProfile());
-            });
+            services.AddSwaggerGenNewtonsoftSupport();
 
-            IMapper mapper = mapperConfig.CreateMapper();
-            services.AddSingleton(mapper);
-        }
-
-        private void ConfigureOptions(IServiceCollection services)
-        {
-            services.Configure<EmailOptions>(
-                options =>
-                {
-                    options.Host = Configuration["EmailOptions__Host"];
-                    options.UserName = Configuration["EmailOptions__UserName"];
-                    options.Password = Configuration["EmailOptions__Password"];
-                    options.Port = int.Parse(Configuration["EmailOptions__Port"]);
-                }
-            );
-            services.Configure<TokenOptions>(
-                options =>
-                {
-                    options.SecurityKey = Configuration["TokenOptions__SecurityKey"];
-                }
-            );
-            services.Configure<PasswordOptions>(
-                options =>
-                {
-                    options.Iterations = int.Parse(Configuration["PasswordOptions__Iterations"]);
-                    options.KeySize = int.Parse(Configuration["PasswordOptions__KeySize"]);
-                    options.SaltSize = int.Parse(Configuration["PasswordOptions__SaltSize"]);
-                }
-            );
-        }
-
-        private void ConfigureDatabase(IServiceCollection services)
-        {
-            string connectionString = Configuration.GetSection("DatabaseConnectionString").Value;
-
-            if (string.IsNullOrWhiteSpace(connectionString))
-            {
-                throw new ArgumentNullException(nameof(connectionString), "Connection string not found");
-            }
-
-            services.AddDbContext<DatabaseContext>(options =>
-            {
-                options.UseSqlServer(connectionString);
-            });
-        }
-
-        private void ConfigureDI(IServiceCollection services)
-        {
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-            services.AddScoped<IEmailService, EmailService>();
-            services.AddSingleton<IPasswordService, PasswordService>();
-
-            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
-
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<ITokenService, TokenService>();
-        }
-
-        private void ConfigureLogger(IServiceCollection services)
-        {
-            Log.Logger = new LoggerConfiguration()
-                   .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
-                   .CreateLogger();
-
-            services.AddSingleton(x => Log.Logger);
-        }
-
-        private void ConfigureSwagger(IServiceCollection services)
-        {
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc
@@ -189,8 +107,8 @@ namespace Api
                 );
 
                 // Set the comments path for the Swagger JSON and UI.
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                string xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
 
                 // Add auth
@@ -220,27 +138,6 @@ namespace Api
             });
         }
 
-        private void ConfigureAuthentication(IServiceCollection services)
-        {
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = "JwtBearer";
-                options.DefaultChallengeScheme = "JwtBearer";
-            })
-                .AddJwtBearer("JwtBearer", jwtBearerOptions =>
-                {
-                    jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenOptions__SecurityKey"])),
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        ValidateLifetime = true,
-                        ClockSkew = TimeSpan.FromMinutes(5)
-                    };
-                });
-        }
-
         private void UseSwagger(IApplicationBuilder app)
         {
             app.UseSwagger();
@@ -252,6 +149,7 @@ namespace Api
                     "Learn ASL API v1"
                 );
                 c.RoutePrefix = string.Empty;
+                
             });
         }
     }

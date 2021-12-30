@@ -14,6 +14,15 @@
     <None Remove="Services\" />
     <None Remove="Contracts\Common\" />
     <None Remove="Contracts\OutComing\" />
+    <None Remove="Contracts\OutComing\Tests\" />
+    <None Remove="Entities\Tests\" />
+    <None Remove="CustomEntities\" />
+    <None Remove="QueryFilters\" />
+    <None Remove="Extensions\" />
+    <None Remove="Microsoft.AspNetCore.Http" />
+    <None Remove="ValidationAttributes\" />
+    <None Remove="Options\" />
+    <None Remove="Contracts\Responses\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
@@ -23,9 +32,18 @@
     <Folder Include="Services\" />
     <Folder Include="Contracts\Common\" />
     <Folder Include="Contracts\OutComing\" />
+    <Folder Include="Contracts\OutComing\Tests\" />
+    <Folder Include="Entities\Tests\" />
+    <Folder Include="CustomEntities\" />
+    <Folder Include="QueryFilters\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="ValidationAttributes\" />
+    <Folder Include="Options\" />
+    <Folder Include="Contracts\Responses\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.14.1" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
   </ItemGroup>
 </Project>

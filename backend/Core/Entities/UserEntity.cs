@@ -1,4 +1,6 @@
-﻿
+﻿using System.Collections.Generic;
+using Core.Entities.Tests;
+
 namespace Core.Entities
 {
     public class UserEntity : BaseEntity
@@ -8,6 +10,8 @@ namespace Core.Entities
         public bool ConfirmedEmail { get; set; }
         public string? TokenPasswordRecovery { get; set; }
         public string? TokenEmailConfirmation { get; set; }
+
+        public virtual ICollection<TestEntity> Tests { get; set; }
 
         public UserEntity()
         {

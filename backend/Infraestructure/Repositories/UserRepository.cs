@@ -8,7 +8,7 @@ namespace Infraestructure.Repositories
 {
     public class UserRepository : BaseRepository<UserEntity>, IUserRepository
     {
-        public UserRepository(DatabaseContext context) : base(context) { }
+        public UserRepository(DatabaseContext context) : base(context) {}
 
         public async Task<UserEntity> GetUserByEmail(string email)
         {

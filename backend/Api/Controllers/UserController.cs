@@ -25,12 +25,12 @@ namespace Api.Controllers
         }
 
         [HttpGet("me")]
-        [Authorize]
         [ProducesResponseType(typeof(UserDto),(int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         public async Task<IActionResult> Get()
         {
             UserEntity userEntity = await _userService.GetUserByEmail(EmailOfCurrentUser);
+            
             UserDto userDto = _mapper.Map<UserDto>(userEntity);
             return Ok(userDto);
         }

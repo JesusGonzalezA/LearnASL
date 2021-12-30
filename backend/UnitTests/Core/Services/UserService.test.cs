@@ -4,22 +4,13 @@ using Core.Entities;
 using Core.Exceptions;
 using Core.Interfaces;
 using Core.Services;
-using Infraestructure.Interfaces;
 using Tests.Mocks;
 using Xunit;
 
 namespace Tests.Core.Services
 {
-    public class TestUserService
+    public partial class TestUserService
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public TestUserService()
-        {
-            _unitOfWork = MockUnitOfWork.GetMockUnitOfWork();
-        }
-
-        
         [Fact]
         public async Task UserService_GetUser()
         {
@@ -278,6 +269,16 @@ namespace Tests.Core.Services
             await userService.UpdateTokenPasswordRecovery(email, token);
 
             Assert.NotSame(oldToken, userEntity.TokenPasswordRecovery);
+        }
+    }
+
+    public partial class TestUserService
+    {
+        private readonly IUnitOfWork _unitOfWork;
+
+        public TestUserService()
+        {
+            _unitOfWork = MockUnitOfWork.GetMockUnitOfWork();
         }
     }
 }

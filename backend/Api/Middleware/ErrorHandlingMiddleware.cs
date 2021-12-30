@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Microsoft.AspNetCore.Http.Extensions;
 using Core.Exceptions;
-using Api.Responses;
+using Core.Contracts.Responses;
 using System.Collections.Generic;
 
 namespace Api.Middleware
@@ -32,7 +32,7 @@ namespace Api.Middleware
             {
                 await _next(context);
             }
-            catch(BusinessException ex)
+            catch(Exception ex) when ( ex is BusinessException || ex is ControllerException)
             {
                 await HandleBusinessExceptionAsyn(context, ex);
             }
@@ -69,7 +69,7 @@ namespace Api.Middleware
             await context.Response.WriteAsync(errorMessageAsJson);
         }
 
-        private async Task HandleBusinessExceptionAsyn(HttpContext context, BusinessException exception)
+        private async Task HandleBusinessExceptionAsyn(HttpContext context, Exception exception)
         {
             await HandleExceptionAsync
             (
