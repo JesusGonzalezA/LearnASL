@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Core.Entities;
 using Core.Entities.Tests;
 
 namespace Core.Interfaces
@@ -7,6 +8,8 @@ namespace Core.Interfaces
     public interface IUnitOfWork : IDisposable
     {
         IUserRepository UserRepository { get; }
+
+        IBaseRepository<VideoEntity> DatasetRepository { get; }
 
         ITestRepository TestRepository { get; }
 

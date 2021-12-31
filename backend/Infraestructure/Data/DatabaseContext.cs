@@ -2,7 +2,6 @@
 using Core.Entities;
 using Core.Entities.Tests;
 using Infraestructure.Data.Configurations;
-using Infraestructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -10,9 +9,9 @@ namespace Infraestructure.Data
 {
     public class DatabaseContext : DbContext
     {
-        private readonly IStoreService _storeService;
-
         public virtual DbSet<UserEntity> Users { get; set; }
+
+        public virtual DbSet<VideoEntity> Dataset { get; set; }
 
         public virtual DbSet<TestEntity> Tests { get; set; }
         public virtual DbSet<QuestionOptionVideoToWordEntity> QuestionsOptionVideoToWord { get; set; }
@@ -20,18 +19,9 @@ namespace Infraestructure.Data
         public virtual DbSet<QuestionQAEntity> QuestionsQA { get; set; }
         public virtual DbSet<QuestionMimicEntity> QuestionsMimic { get; set; }
 
-        public DatabaseContext()
-        {}
-        
-        public DatabaseContext
-        (
-            DbContextOptions<DatabaseContext> options,
-            IStoreService storeService
-        )
+        public DatabaseContext(DbContextOptions<DatabaseContext> options)
             : base(options)
         {
-            storeService = _storeService;
-
             ChangeTracker.Tracked += OnEntityTracked;
             ChangeTracker.StateChanged += OnEntityStateChanged;
         }
@@ -39,6 +29,8 @@ namespace Infraestructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+
+            modelBuilder.ApplyConfiguration(new VideoConfiguration());
 
             modelBuilder.ApplyConfiguration(new TestConfiguration());
             modelBuilder.ApplyConfiguration(new QuestionOptionVideoToWordConfiguration());
