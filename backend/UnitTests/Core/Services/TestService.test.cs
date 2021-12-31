@@ -11,8 +11,6 @@ using Core.Interfaces;
 using Core.Options;
 using Core.QueryFilters;
 using Core.Services;
-using Infraestructure.Interfaces;
-using Infraestructure.Services;
 using Microsoft.Extensions.Options;
 using Tests.Mocks;
 using Xunit;

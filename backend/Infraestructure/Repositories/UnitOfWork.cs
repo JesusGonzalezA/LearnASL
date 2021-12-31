@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Core.Entities;
 using Core.Entities.Tests;
 using Core.Interfaces;
 using Infraestructure.Data;
@@ -10,6 +11,8 @@ namespace Infraestructure.Repositories
         private readonly DatabaseContext _context;
 
         private readonly IUserRepository _userRepository;
+
+        private readonly IDatasetRepository _datasetRepository;
 
         private readonly ITestRepository _testRepository;
 
@@ -24,6 +27,9 @@ namespace Infraestructure.Repositories
         }
 
         public IUserRepository UserRepository => _userRepository ?? new UserRepository(_context);
+
+        public IDatasetRepository DatasetRepository
+                => _datasetRepository ?? new DatasetRepository(_context);
 
         public ITestRepository TestRepository
                 => _testRepository ?? new TestRepository(_context);

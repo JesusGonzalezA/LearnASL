@@ -8,6 +8,8 @@ namespace Core.Interfaces
     {
         IUserRepository UserRepository { get; }
 
+        IDatasetRepository DatasetRepository { get; }
+
         ITestRepository TestRepository { get; }
 
         IBaseRepository<QuestionOptionWordToVideoEntity> QuestionOptionWordToVideoRepository { get; }

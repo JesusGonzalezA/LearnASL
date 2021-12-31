@@ -14,20 +14,16 @@ namespace Infraestructure.Data
 
         public virtual DbSet<UserEntity> Users { get; set; }
 
+        public virtual DbSet<VideoEntity> Dataset { get; set; }
+
         public virtual DbSet<TestEntity> Tests { get; set; }
         public virtual DbSet<QuestionOptionVideoToWordEntity> QuestionsOptionVideoToWord { get; set; }
         public virtual DbSet<QuestionOptionWordToVideoEntity> QuestionsOptionWordToVideo { get; set; }
         public virtual DbSet<QuestionQAEntity> QuestionsQA { get; set; }
         public virtual DbSet<QuestionMimicEntity> QuestionsMimic { get; set; }
 
-        public DatabaseContext()
-        {}
-        
-        public DatabaseContext
-        (
-            DbContextOptions<DatabaseContext> options,
-            IStoreService storeService
-        )
+        public DatabaseContext(DbContextOptions<DatabaseContext> options)
+
             : base(options)
         {
             storeService = _storeService;
@@ -39,6 +35,8 @@ namespace Infraestructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+
+            modelBuilder.ApplyConfiguration(new VideoConfiguration());
 
             modelBuilder.ApplyConfiguration(new TestConfiguration());
             modelBuilder.ApplyConfiguration(new QuestionOptionVideoToWordConfiguration());

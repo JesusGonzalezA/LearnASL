@@ -109,9 +109,7 @@ namespace Api.Controllers
             Guid guid = await _testService.AddTest(test);
 
             // Create the questions
-            List<BaseQuestionEntity> questions = new();
-            for(int i=0; i<testCreateDto.NumberOfQuestions; ++i)
-                questions.Add(_questionGeneratorService.CreateQuestion(test.TestType, test.Difficulty, test.Id));
+            IList<BaseQuestionEntity> questions = await _questionGeneratorService.CreateQuestions(testCreateDto.NumberOfQuestions, test.TestType, test.Difficulty, test.Id);
             
             await _questionService.AddQuestions(test.TestType, questions);
 
@@ -145,7 +143,7 @@ namespace Api.Controllers
             UserEntity userEntity = await _userService.GetUserByEmail(EmailOfCurrentUser);
 
             await _testService.DeleteAllTestsFromUser(userEntity.Id);
-            _storeService.DeleteDirectory(userEntity.Id.ToString());
+            _storeService.CleanDirectory(userEntity.Id.ToString());
             return Ok();
         }
 

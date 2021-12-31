@@ -37,8 +37,8 @@ namespace Tests.Core.Services
             Assert.Empty(await questionService.GetQuestions(testEntityDB));
 
             // Add questions
-            BaseQuestionEntity question = _questionGeneratorService.CreateQuestion(testType, Difficulty.EASY, testId);
-            await questionService.AddQuestions(testType, new List<BaseQuestionEntity>() { question });
+            IList<BaseQuestionEntity> questions = await _questionGeneratorService.CreateQuestions(1, testType, Difficulty.EASY, testId);
+            await questionService.AddQuestions(testType, questions);
 
             Assert.NotEmpty(await questionService.GetQuestions(testEntityDB));
         }
@@ -60,11 +60,11 @@ namespace Tests.Core.Services
             Assert.Empty(await questionService.GetQuestions(testEntityDB));
 
             // Add questions
-            BaseQuestionEntity question = _questionGeneratorService.CreateQuestion(testType, Difficulty.EASY, testId);
-            await questionService.AddQuestions(testType, new List<BaseQuestionEntity>() { question });
+            IList<BaseQuestionEntity> questions = await _questionGeneratorService.CreateQuestions(1, testType, Difficulty.EASY, testId);
+            await questionService.AddQuestions(testType, questions);
 
             IEnumerable<BaseQuestionEntity> allQuestions = await questionService.GetQuestions(testEntityDB);
-            Assert.Contains(question, allQuestions);
+            Assert.Contains(questions.ElementAt(0), allQuestions);
         }
 
         [Theory]
@@ -84,8 +84,9 @@ namespace Tests.Core.Services
             Assert.Empty(await questionService.GetQuestions(testEntityDB));
 
             // Add questions
-            BaseQuestionEntity question = _questionGeneratorService.CreateQuestion(testType, Difficulty.EASY, testId);
-            await questionService.AddQuestions(testType, new List<BaseQuestionEntity>() { question });
+            IList<BaseQuestionEntity> questions = await _questionGeneratorService.CreateQuestions(1, testType, Difficulty.EASY, testId);
+            await questionService.AddQuestions(testType, questions);
+
             IEnumerable<BaseQuestionEntity> allQuestions = await questionService.GetQuestions(testEntityDB);
             BaseQuestionEntity questionDB = allQuestions.ToList().ElementAt(0);
 
@@ -116,8 +117,8 @@ namespace Tests.Core.Services
             Assert.Empty(await questionService.GetQuestions(testEntityDB));
 
             // Add questions
-            BaseQuestionEntity question = _questionGeneratorService.CreateQuestion(testType, Difficulty.EASY, testId);
-            await questionService.AddQuestions(testType, new List<BaseQuestionEntity>() { question });
+            IList<BaseQuestionEntity> questions = await _questionGeneratorService.CreateQuestions(1, testType, Difficulty.EASY, testId);
+            await questionService.AddQuestions(testType, questions);
 
             IEnumerable<BaseQuestionEntity> allQuestions = await questionService.GetQuestions(testEntityDB);
             BaseQuestionEntity questionDB = allQuestions.ToList().ElementAt(0);
@@ -153,7 +154,7 @@ namespace Tests.Core.Services
                 DefaultPageSize = 10,
                 MaximumPageSize = 20
             };
-            _questionGeneratorService = new QuestionGeneratorService();
+            _questionGeneratorService = new QuestionGeneratorService(_unitOfWork);
         }
 
         public static IEnumerable<object[]> AllTestTypes()
