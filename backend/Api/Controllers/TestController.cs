@@ -109,9 +109,7 @@ namespace Api.Controllers
             Guid guid = await _testService.AddTest(test);
 
             // Create the questions
-            List<BaseQuestionEntity> questions = new();
-            for(int i=0; i<testCreateDto.NumberOfQuestions; ++i)
-                questions.Add(_questionGeneratorService.CreateQuestion(test.TestType, test.Difficulty, test.Id));
+            IList<BaseQuestionEntity> questions = _questionGeneratorService.CreateQuestions(testCreateDto.NumberOfQuestions, test.TestType, test.Difficulty, test.Id);
             
             await _questionService.AddQuestions(test.TestType, questions);
 
