@@ -1,31 +1,36 @@
 ﻿using System;
-using Core.Options;
 using Infraestructure.Data;
 using Infraestructure.Repositories;
-using Infraestructure.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 
 namespace Tests.Mocks
 {
-    public static class MockUnitOfWork
+    public class MockUnitOfWork
     {
         public static UnitOfWork GetMockUnitOfWork()
         {
-            IOptions<VideoServingOptions> options = Options.Create<VideoServingOptions>(new VideoServingOptions()
-            {
-                Directory = "static",
-                Route = "/api/static"
-            });
-            DbContextOptionsBuilder<DatabaseContext> dbOptions =
+            IConfigurationRoot config = new ConfigurationBuilder()
+                    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                    .AddJsonFile("appsettings.json")
+                    .AddUserSecrets<MockUnitOfWork>()
+                    .Build();
+
+            string connectionString = config.GetSection("DatabaseConnectionString").Value;
+
+            DbContextOptionsBuilder<DatabaseContext> realDbOptions =
+                new DbContextOptionsBuilder<DatabaseContext>()
+                        .UseSqlServer(connectionString);
+            DatabaseContext realContext = new DatabaseContext(realDbOptions.Options);
+            UnitOfWork realUnitOfWork = new UnitOfWork(realContext);
+
+            DbContextOptionsBuilder<DatabaseContext> fakeDbOptions =
                 new DbContextOptionsBuilder<DatabaseContext>()
                     .UseInMemoryDatabase(Guid.NewGuid().ToString());
 
-            StoreService storeService = new StoreService(options);
+            DatabaseContext fakeContext = new DatabaseContext(fakeDbOptions.Options);
 
-            DatabaseContext context = new DatabaseContext(dbOptions.Options, storeService);
-
-            return new UnitOfWork(context);
+            return new UnitOfWork(fakeContext, realUnitOfWork.DatasetRepository);
         }
     }
 }

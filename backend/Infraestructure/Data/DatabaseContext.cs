@@ -2,7 +2,6 @@
 using Core.Entities;
 using Core.Entities.Tests;
 using Infraestructure.Data.Configurations;
-using Infraestructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -10,8 +9,6 @@ namespace Infraestructure.Data
 {
     public class DatabaseContext : DbContext
     {
-        private readonly IStoreService _storeService;
-
         public virtual DbSet<UserEntity> Users { get; set; }
 
         public virtual DbSet<VideoEntity> Dataset { get; set; }
@@ -26,8 +23,6 @@ namespace Infraestructure.Data
 
             : base(options)
         {
-            storeService = _storeService;
-
             ChangeTracker.Tracked += OnEntityTracked;
             ChangeTracker.StateChanged += OnEntityStateChanged;
         }
