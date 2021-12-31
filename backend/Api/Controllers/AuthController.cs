@@ -86,6 +86,7 @@ namespace Api.Controllers
             userEntity.TokenEmailConfirmation = _tokenService.GenerateJWTToken();
 
             Guid guid = await _userService.AddUser(userEntity);
+            _storeService.CreateUserDirectory(guid);
             await _emailService.SendEmailConfirmationEmail(userEntity.Email, userEntity.TokenEmailConfirmation);
 
             return CreatedAtAction(nameof(Register), new { guid });

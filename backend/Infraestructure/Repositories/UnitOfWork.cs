@@ -12,7 +12,7 @@ namespace Infraestructure.Repositories
 
         private readonly IUserRepository _userRepository;
 
-        private readonly IBaseRepository<VideoEntity> _datasetRepository;
+        private readonly IDatasetRepository _datasetRepository;
 
         private readonly ITestRepository _testRepository;
 
@@ -28,8 +28,8 @@ namespace Infraestructure.Repositories
 
         public IUserRepository UserRepository => _userRepository ?? new UserRepository(_context);
 
-        public IBaseRepository<VideoEntity> DatasetRepository
-                => _datasetRepository ?? new BaseRepository<VideoEntity>(_context);
+        public IDatasetRepository DatasetRepository
+                => _datasetRepository ?? new DatasetRepository(_context);
 
         public ITestRepository TestRepository
                 => _testRepository ?? new TestRepository(_context);

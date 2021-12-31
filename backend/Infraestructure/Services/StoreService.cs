@@ -19,16 +19,10 @@ namespace Infraestructure.Services
 
         public async Task SaveVideo(string filename, IFormFile video)
         {
-            DirectoryInfo root = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent;
-            string pathStaticDirectory = Path.Combine(root.FullName, _videoServingOptions.Directory);
+            string filePath = CreateDirectory(filename);
 
-            string filePath = $"{pathStaticDirectory}/{filename}";
-            Directory.CreateDirectory(Path.GetDirectoryName(filePath));
-
-            using (FileStream stream = File.Create(filePath))
-            {
-                await video.CopyToAsync(stream);
-            }
+            using FileStream stream = File.Create(filePath);
+            await video.CopyToAsync(stream);
         }
 
         public void DeleteDirectory(string directory)
@@ -40,6 +34,46 @@ namespace Infraestructure.Services
                 directory
             );
             Directory.Delete(directoryPath, true);
+        }
+
+        public void CleanDirectory(string directory)
+        {
+            DirectoryInfo root = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent;
+            string directoryPath = Path.Combine(
+                root.FullName,
+                _videoServingOptions.Directory,
+                directory
+            );
+            Directory.Delete(directoryPath, true);
+            Directory.CreateDirectory(directoryPath);
+        }
+
+        public void CreateUserDirectory(Guid userId)
+        {
+            CreateDirectory(userId.ToString(), true);
+        }
+
+        private string CreateDirectory(string directoryPath, bool isDirectory = false)
+        {
+            DirectoryInfo root = GetRootDirectory();
+            string pathStaticDirectory = Path.Combine(root.FullName, _videoServingOptions.Directory);
+
+            string directoryAbsolutePath = $"{pathStaticDirectory}/{directoryPath}";
+            if (isDirectory)
+            {
+                Directory.CreateDirectory(directoryAbsolutePath);
+            } else
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(directoryAbsolutePath));
+            }
+            
+
+            return directoryAbsolutePath;
+        }
+
+        private DirectoryInfo GetRootDirectory()
+        {
+            return new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent;
         }
     }
 }

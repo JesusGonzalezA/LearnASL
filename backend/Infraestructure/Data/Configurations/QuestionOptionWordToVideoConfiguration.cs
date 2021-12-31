@@ -16,16 +16,12 @@ namespace Infraestructure.Data.Configurations
                     .HasMaxLength(20)
                     .IsRequired();
             builder.Property(p => p.PossibleAnswer0)
-                    .HasMaxLength(20)
                     .IsRequired();
             builder.Property(p => p.PossibleAnswer1)
-                    .HasMaxLength(20)
                     .IsRequired();
             builder.Property(p => p.PossibleAnswer2)
-                    .HasMaxLength(20)
                     .IsRequired();
             builder.Property(p => p.PossibleAnswer3)
-                    .HasMaxLength(20)
                     .IsRequired();
             builder.Property(p => p.UserAnswer);
             builder.Property(p => p.CorrectAnswer)
