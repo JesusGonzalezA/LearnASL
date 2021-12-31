@@ -154,7 +154,14 @@ namespace Tests.Core.Services
                 DefaultPageSize = 10,
                 MaximumPageSize = 20
             };
-            _questionGeneratorService = new QuestionGeneratorService(_unitOfWork);
+            IOptions<VideoServingOptions> videoServingOptions = Options.Create(new VideoServingOptions()
+            {
+                Directory = "static",
+                Route = "/api/static",
+                ServerUrl = "https://localhost:62185",
+                WLASLDirectory = "WLASL2000"
+            });
+            _questionGeneratorService = new QuestionGeneratorService(_unitOfWork, videoServingOptions);
         }
 
         public static IEnumerable<object[]> AllTestTypes()
