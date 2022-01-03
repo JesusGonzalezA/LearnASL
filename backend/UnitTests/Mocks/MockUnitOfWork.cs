@@ -1,22 +1,23 @@
 using System;
+using Core.Options;
 using Infraestructure.Data;
 using Infraestructure.Repositories;
+using Infraestructure.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Tests.Mocks
 {
-    public class MockUnitOfWork
+    public static class MockUnitOfWork
     {
         public static UnitOfWork GetMockUnitOfWork()
         {
-            DbContextOptionsBuilder<DatabaseContext> fakeDbOptions =
+            DbContextOptionsBuilder<DatabaseContext> dbOptions =
                 new DbContextOptionsBuilder<DatabaseContext>()
                     .UseInMemoryDatabase(Guid.NewGuid().ToString());
+            DatabaseContext context = new DatabaseContext(dbOptions.Options);
 
-            DatabaseContext fakeContext = new DatabaseContext(fakeDbOptions.Options);
-
-            return new UnitOfWork(fakeContext);
+            return new UnitOfWork(context);
         }
     }
 }
