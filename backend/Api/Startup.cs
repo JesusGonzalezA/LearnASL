@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Security.Claims;
 using Api.Middleware;
 using Infraestructure.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -67,26 +72,7 @@ namespace Api
             app.UseAuthentication();
             app.UseAuthorization();
 
-            DirectoryInfo root = new DirectoryInfo(env.ContentRootPath).Parent.Parent;
-            string pathStaticDirectory = Path.Combine(root.FullName, Configuration.GetSection("VideoServing:Directory").Value);
-            Directory.CreateDirectory(pathStaticDirectory);
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(pathStaticDirectory),
-                RequestPath = Configuration.GetSection("VideoServing:Route").Value,
-                OnPrepareResponse = ctx =>
-                    {
-                        if (!ctx.Context.User.Identity.IsAuthenticated)
-                        {
-                            ctx.Context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-
-                            ctx.Context.Response.ContentLength = 0;
-                            ctx.Context.Response.Body = Stream.Null;
-
-                            ctx.Context.Response.Headers.Add("Cache-Control", "no-store");
-                        }
-                    }
-            });
+            UseStaticFiles(app, env);
 
             app.UseEndpoints(endpoints =>
             {
@@ -136,6 +122,56 @@ namespace Api
                     }
                 });
             });
+        }
+
+        private void UseStaticFiles(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            DirectoryInfo root = new DirectoryInfo(env.ContentRootPath).Parent.Parent;
+            string pathStaticDirectory = Path.Combine(root.FullName, Configuration.GetSection("VideoServing:Directory").Value);
+            Directory.CreateDirectory(pathStaticDirectory);
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(pathStaticDirectory),
+                RequestPath = Configuration.GetSection("VideoServing:Route").Value,
+                OnPrepareResponse = ctx =>
+                {
+                    if (!ctx.Context.User.Identity.IsAuthenticated)
+                    {
+                        ReturnUnauthorizedAndNull(ctx);
+                    }
+                    else
+                    {
+                        string WLASLDirectory = Configuration.GetSection("VideoServing:WLASLDirectory").Value;
+                        string route = Configuration.GetSection("VideoServing:Route").Value;
+
+                        // Get asked directory
+                        string path = ctx.Context.Request.Path.ToString();
+                        string askedVideoPath = path.Remove(0, route.Length + 1);
+                        int indexOfSlash = askedVideoPath.ToString().IndexOf("/");
+                        string askedDirectory = askedVideoPath.Substring(0, indexOfSlash);
+
+                        // Check if the directory is WLASL2000 or the user directory
+                        List<Claim> claims = ctx.Context.User.Claims.ToList();
+                        string id = claims.Find(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                        
+                        if (!askedDirectory.Equals(WLASLDirectory) && !askedDirectory.Equals(id))
+                        {
+                            ReturnUnauthorizedAndNull(ctx);
+                        }
+                    }
+                }
+            });
+        }
+
+        private void ReturnUnauthorizedAndNull(StaticFileResponseContext ctx)
+        {
+            ctx.Context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+
+            ctx.Context.Response.ContentLength = 0;
+            ctx.Context.Response.Body = Stream.Null;
+
+            ctx.Context.Response.Headers.Add("Cache-Control", "no-store");
         }
 
         private void UseSwagger(IApplicationBuilder app)
