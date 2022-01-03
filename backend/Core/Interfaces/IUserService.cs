@@ -9,7 +9,7 @@ namespace Core.Interfaces
         Task<UserEntity> GetUser(Guid id);
         Task<UserEntity> GetUserByEmail(string email);
         Task<Guid> AddUser(UserEntity user);
-        Task DeleteUser(string email);
+        Task DeleteUser(Guid id);
         Task<bool> CheckConfirmedUser(string email);
         Task ChangePassword(string email, string password, string token);
         Task ConfirmEmail(string email, string token);

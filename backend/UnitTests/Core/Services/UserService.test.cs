@@ -68,8 +68,8 @@ namespace Tests.Core.Services
             UserService userService = new UserService(_unitOfWork);
             UserEntity userEntity = new UserEntity(email, "test");
 
-            await userService.AddUser(userEntity);
-            await userService.DeleteUser(email);
+            Guid id = await userService.AddUser(userEntity);
+            await userService.DeleteUser(id);
         }
 
         [Theory]
@@ -80,7 +80,7 @@ namespace Tests.Core.Services
 
             await Assert.ThrowsAsync<BusinessException>(async () =>
             {
-                await userService.DeleteUser(email);
+                await userService.DeleteUser(Guid.Empty);
             });
         }
 
@@ -149,6 +149,7 @@ namespace Tests.Core.Services
             await userService.AddUser(userEntity);
 
             UserEntity userDB = await userService.GetUserByEmail(email);
+            await userService.UpdateTokenEmailConfirmation(email, "token");
             await userService.ConfirmEmail(userDB.Email, userDB.TokenEmailConfirmation);
 
             await userService.ChangeEmail(email, newEmail);

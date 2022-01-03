@@ -40,16 +40,16 @@ namespace Core.Services
             return await _unitOfWork.UserRepository.Add(user);
         }
 
-        public async Task DeleteUser(string email)
+        public async Task DeleteUser(Guid id)
         {
-            UserEntity userDB = await _unitOfWork.UserRepository.GetUserByEmail(email);
+            UserEntity userDB = await _unitOfWork.UserRepository.GetById(id);
 
             if (userDB == null)
             {
                 throw new BusinessException("User does not exist");
             }
 
-            await _unitOfWork.UserRepository.Delete(userDB.Id);
+            await _unitOfWork.UserRepository.Delete(id);
         }
 
         public async Task<bool> CheckConfirmedUser(string email)

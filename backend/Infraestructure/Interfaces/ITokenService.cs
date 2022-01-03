@@ -3,7 +3,7 @@ namespace Infraestructure.Interfaces
 {
     public interface ITokenService
     {
-        dynamic GenerateJWTToken(string email);
+        dynamic GenerateJWTToken(string email, string guid);
         string GenerateJWTToken();
     }
 }
