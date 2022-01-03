@@ -58,8 +58,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         public async Task<IActionResult> Get(Guid guid, [FromQuery] bool populated)
         {
-            UserEntity userEntity = await _userService.GetUserByEmail(EmailOfCurrentUser);
-            TestEntity test = await GetTest(guid, userEntity.Id);
+            TestEntity test = await GetTest(guid, GuidOfCurrentUser);
             IEnumerable<BaseQuestionEntity> questions = await _questionService.GetQuestions(test);
 
             if (populated)
@@ -82,9 +81,8 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         public async Task<IActionResult> GetAll([FromQuery] TestQueryFilterDto filtersDto)
         {
-            UserEntity userEntity = await _userService.GetUserByEmail(EmailOfCurrentUser);
             TestQueryFilter filters = _mapper.Map<TestQueryFilter>(filtersDto);
-            filters.UserId = userEntity.Id;
+            filters.UserId = GuidOfCurrentUser;
 
             PagedList<TestWithQuestions> pagedListOfTests = await _testService.GetAllTests(filters);
             List<TestDto> testsDto = _mapper.Map<List<TestDto>>(pagedListOfTests);
@@ -121,10 +119,9 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         public async Task<IActionResult> Delete(Guid guid)
         {
-            UserEntity userEntity = await _userService.GetUserByEmail(EmailOfCurrentUser);
             TestEntity test = await _testService.GetTest(guid);
 
-            if (!test.UserId.Equals(userEntity.Id))
+            if (!test.UserId.Equals(GuidOfCurrentUser))
             {
                 throw new ControllerException("You are not authorized to get this test.");
             }
@@ -140,10 +137,8 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         public async Task<IActionResult> DeleteAllTestsFromUser()
         {
-            UserEntity userEntity = await _userService.GetUserByEmail(EmailOfCurrentUser);
-
-            await _testService.DeleteAllTestsFromUser(userEntity.Id);
-            _storeService.CleanDirectory(userEntity.Id.ToString());
+            await _testService.DeleteAllTestsFromUser(GuidOfCurrentUser);
+            _storeService.CleanDirectory(GuidOfCurrentUser.ToString());
             return Ok();
         }
 

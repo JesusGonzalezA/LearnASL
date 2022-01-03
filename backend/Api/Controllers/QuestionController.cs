@@ -51,12 +51,11 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         public async Task<IActionResult> Reply(Guid guid, [FromQuery] QuestionReplyDto questionReplyDto)
         {
-            UserEntity userEntity = await _userService.GetUserByEmail(EmailOfCurrentUser);
             BaseQuestionEntity question = await _questionService.GetQuestion(questionReplyDto.TestType, guid);
-            TestEntity test = await GetTest(question.TestId, userEntity.Id);
+            TestEntity test = await GetTest(question.TestId, GuidOfCurrentUser);
 
             ValidateQuestionReplyDto(test.TestType, questionReplyDto);
-            string filename = await SaveQuestionVideoIfNecessary(test.TestType, userEntity.Id, test.Id, guid, questionReplyDto);
+            string filename = await SaveQuestionVideoIfNecessary(test.TestType, GuidOfCurrentUser, test.Id, guid, questionReplyDto);
             string videoUri = _uriService.GetVideoUri(filename);
 
             UpdateQuestionParameters updateQuestionParameters = new UpdateQuestionParameters()

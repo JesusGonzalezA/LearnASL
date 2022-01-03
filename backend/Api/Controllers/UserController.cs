@@ -30,7 +30,6 @@ namespace Api.Controllers
         public async Task<IActionResult> Get()
         {
             UserEntity userEntity = await _userService.GetUserByEmail(EmailOfCurrentUser);
-            
             UserDto userDto = _mapper.Map<UserDto>(userEntity);
             return Ok(userDto);
         }

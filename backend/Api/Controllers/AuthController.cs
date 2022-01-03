@@ -64,7 +64,7 @@ namespace Api.Controllers
                     throw new ControllerException("Credentials are not correct.");
                 }
 
-                return Ok(_tokenService.GenerateJWTToken(login.Email));
+                return Ok(_tokenService.GenerateJWTToken(login.Email, user.Id.ToString()));
             }
             catch(ControllerException exception)
             {
@@ -98,9 +98,8 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         public async Task<IActionResult> Delete()
         {
-            UserEntity userEntity = await _userService.GetUserByEmail(EmailOfCurrentUser);
-            await _userService.DeleteUser(EmailOfCurrentUser);
-            _storeService.DeleteDirectory(userEntity.Id.ToString());
+            await _userService.DeleteUser(GuidOfCurrentUser);
+            _storeService.DeleteDirectory(GuidOfCurrentUser.ToString());
             return Ok();
         }
 
