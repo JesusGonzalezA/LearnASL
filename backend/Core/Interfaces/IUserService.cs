@@ -15,5 +15,6 @@ namespace Core.Interfaces
         Task ConfirmEmail(string email, string token);
         Task UpdateTokenEmailConfirmation(string email, string token);
         Task UpdateTokenPasswordRecovery(string email, string token);
+        Task ChangeEmail(string oldEmail, string newEmail);
     }
 }
