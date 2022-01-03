@@ -20,11 +20,9 @@ namespace Infraestructure.Repositories
         private readonly IBaseRepository<QuestionMimicEntity> _questionMimicRepository;
         private readonly IBaseRepository<QuestionQAEntity> _questionQARepository;
 
-        public UnitOfWork(DatabaseContext context, IDatasetRepository datasetRepository = null)
+        public UnitOfWork(DatabaseContext context)
         {
             _context = context;
-
-            _datasetRepository = datasetRepository;
         }
 
         public IUserRepository UserRepository => _userRepository ?? new UserRepository(_context);
