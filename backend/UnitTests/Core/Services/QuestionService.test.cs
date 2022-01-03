@@ -37,6 +37,7 @@ namespace Tests.Core.Services
             Assert.Empty(await questionService.GetQuestions(testEntityDB));
 
             // Add questions
+            await InitializeDataset();
             IList<BaseQuestionEntity> questions = await _questionGeneratorService.CreateQuestions(1, testType, Difficulty.EASY, testId);
             await questionService.AddQuestions(testType, questions);
 
@@ -60,6 +61,7 @@ namespace Tests.Core.Services
             Assert.Empty(await questionService.GetQuestions(testEntityDB));
 
             // Add questions
+            await InitializeDataset();
             IList<BaseQuestionEntity> questions = await _questionGeneratorService.CreateQuestions(1, testType, Difficulty.EASY, testId);
             await questionService.AddQuestions(testType, questions);
 
@@ -84,6 +86,7 @@ namespace Tests.Core.Services
             Assert.Empty(await questionService.GetQuestions(testEntityDB));
 
             // Add questions
+            await InitializeDataset();
             IList<BaseQuestionEntity> questions = await _questionGeneratorService.CreateQuestions(1, testType, Difficulty.EASY, testId);
             await questionService.AddQuestions(testType, questions);
 
@@ -117,6 +120,7 @@ namespace Tests.Core.Services
             Assert.Empty(await questionService.GetQuestions(testEntityDB));
 
             // Add questions
+            await InitializeDataset();
             IList<BaseQuestionEntity> questions = await _questionGeneratorService.CreateQuestions(1, testType, Difficulty.EASY, testId);
             await questionService.AddQuestions(testType, questions);
 
@@ -213,6 +217,24 @@ namespace Tests.Core.Services
             };
 
             return testEntity;
+        }
+
+        private async Task InitializeDataset()
+        {
+            for(int i=0; i<5; ++i)
+            {
+                VideoEntity video = new VideoEntity()
+                {
+                    VideoFilename = i.ToString(),
+                    Word = i.ToString(),
+                    Difficulty = Difficulty.EASY,
+                    Index = i
+                };
+
+                await _unitOfWork.DatasetRepository.Add(video);
+            }
+
+
         }
     }
 }
