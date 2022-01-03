@@ -104,6 +104,19 @@ namespace Api.Controllers
             return Ok();
         }
 
+        [HttpPut("")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        public async Task<IActionResult> ChangeEmail([FromBody] ChangeEmailDto changeEmailDto)
+        {
+            if (EmailOfCurrentUser.Equals(changeEmailDto.Email))
+                throw new ControllerException("The new email should be different.");
+
+            await _userService.ChangeEmail(EmailOfCurrentUser, changeEmailDto.Email);
+            await StartEmailConfirmationProcess(changeEmailDto.Email);
+            return Ok();
+        }
+
         [HttpPut("password-recovery")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
@@ -140,11 +153,15 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         public async Task<IActionResult> StartEmailConfirmation(string email)
         {
-            string token = _tokenService.GenerateJWTToken();
-            await _userService.UpdateTokenEmailConfirmation(email, token);
-            await _emailService.SendEmailConfirmationEmail(email, token);
+            await StartEmailConfirmationProcess(email);
             return Ok();
         }
 
+        private async Task StartEmailConfirmationProcess(string email)
+        {
+            string token = _tokenService.GenerateJWTToken();
+            await _userService.UpdateTokenEmailConfirmation(email, token);
+            await _emailService.SendEmailConfirmationEmail(email, token);
+        }
     }
 }

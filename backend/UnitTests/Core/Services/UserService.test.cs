@@ -113,7 +113,49 @@ namespace Tests.Core.Services
             });
         }
 
-        
+        [Fact]
+        public async Task UserService_ChangeEmail_ThrowsBEUserDoesNotExist()
+        {
+            UserService userService = new UserService(_unitOfWork);
+
+            await Assert.ThrowsAsync<BusinessException>(async () =>
+            {
+                await userService.ChangeEmail("", "");
+            });
+        }
+
+        [Theory]
+        [InlineData("test@mail.com")]
+        public async Task UserService_ChangeEmail_ThrowsBEUserAlreadyInUse(string email)
+        {
+            UserService userService = new UserService(_unitOfWork);
+            UserEntity userEntity = new UserEntity(email, "test");
+
+            await userService.AddUser(userEntity);
+
+            await Assert.ThrowsAsync<BusinessException>(async () =>
+            {
+                await userService.ChangeEmail(email, email);
+            });
+        }
+
+        [Theory]
+        [InlineData("test@mail.com", "new@mail.com")]
+        public async Task UserService_ChangeEmail_ChangesEmailCorrectly(string email, string newEmail)
+        {
+            UserService userService = new UserService(_unitOfWork);
+            UserEntity userEntity = new UserEntity(email, "test");
+
+            await userService.AddUser(userEntity);
+
+            UserEntity userDB = await userService.GetUserByEmail(email);
+            await userService.ConfirmEmail(userDB.Email, userDB.TokenEmailConfirmation);
+
+            await userService.ChangeEmail(email, newEmail);
+            Assert.Equal(userDB.Email, newEmail);
+            Assert.False(userDB.ConfirmedEmail);
+        }
+
         [Theory]
         [InlineData("test@mail.com")]
         public async Task UserService_ChangePassword_ThrowsBEUserDoesNotExist(string email)

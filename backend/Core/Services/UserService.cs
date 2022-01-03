@@ -116,6 +116,7 @@ namespace Core.Services
             {
                 throw new BusinessException("User does not exist");
             }
+
             if (user.ConfirmedEmail)
             {
                 throw new BusinessException("Email already confirmed");
@@ -135,6 +136,25 @@ namespace Core.Services
             }
 
             user.TokenPasswordRecovery = token;
+            await _unitOfWork.UserRepository.Update(user);
+        }
+
+        public async Task ChangeEmail(string oldEmail, string newEmail)
+        {
+            UserEntity user = await _unitOfWork.UserRepository.GetUserByEmail(oldEmail);
+
+            if (user == null)
+            {
+                throw new BusinessException("User does not exist");
+            }
+
+            if (await _unitOfWork.UserRepository.GetUserByEmail(newEmail) != null)
+            {
+                throw new BusinessException("Email already in use");
+            }
+
+            user.Email = newEmail;
+            user.ConfirmedEmail = false;
             await _unitOfWork.UserRepository.Update(user);
         }
     }
