@@ -6,7 +6,7 @@ using System.Net;
 using System.Reflection;
 using System.Security.Claims;
 using Api.Middleware;
-using Infraestructure.Extensions;
+using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;

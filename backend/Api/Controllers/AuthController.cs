@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Infraestructure.Interfaces;
+using Infrastructure.Interfaces;
 using Core.Interfaces;
 using System.Threading.Tasks;
 using Core.Contracts.Incoming;

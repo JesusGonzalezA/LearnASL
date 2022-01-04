@@ -10,7 +10,7 @@ using Core.Enums;
 using Core.Exceptions;
 using Core.Interfaces;
 using Core.Options;
-using Infraestructure.Interfaces;
+using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
