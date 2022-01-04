@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Core.QueryFilters;
 using Core.Extensions;
 using Core.CustomEntities;
+using System.Linq;
 
 namespace Core.Services
 {
@@ -65,15 +66,15 @@ namespace Core.Services
             return test;
         }
 
-        public async Task<PagedList<TestWithQuestions> > GetAllTests(TestQueryFilter filters)
+        public PagedList<TestWithQuestions> GetAllTests(TestQueryFilter filters)
         {
             filters.PageNumber = filters.PageNumber == 0 ? _paginationOptions.DefaultPageNumber : filters.PageNumber;
             filters.PageSize = filters.PageSize == 0 ? _paginationOptions.DefaultPageSize : filters.PageSize;
 
-            IEnumerable<TestEntity> tests = await _unitOfWork.TestRepository.GetAll();
+            IQueryable<TestEntity> tests = _unitOfWork.TestRepository.GetAllAsQueryable();
 
-            IEnumerable<TestEntity> filtererdTests = tests.Filter(filters);
-            IList<TestWithQuestions> testsWithQuestions = await PopulateTestsWithQuestions(filtererdTests);
+            IEnumerable<TestEntity> filteredTests = tests.Filter(filters).ToList();
+            IList<TestWithQuestions> testsWithQuestions = PopulateTestsWithQuestions(filteredTests);
             
             PagedList<TestWithQuestions> pagedTests = PagedList<TestWithQuestions>.Create
             (
@@ -85,13 +86,13 @@ namespace Core.Services
             return pagedTests;
         }
 
-        private async Task<IList<TestWithQuestions> > PopulateTestsWithQuestions(IEnumerable<TestEntity> tests)
+        private IList<TestWithQuestions> PopulateTestsWithQuestions(IEnumerable<TestEntity> tests)
         {
             IList<TestWithQuestions> testsWithQuestions = new List<TestWithQuestions>();
 
             foreach (TestEntity test in tests)
             {
-                IEnumerable<BaseQuestionEntity> questions = await _questionService.GetQuestions(test);
+                IEnumerable<BaseQuestionEntity> questions = _questionService.GetQuestions(test);
                 TestWithQuestions testWithQuestions = new TestWithQuestions()
                 {
                     Id = test.Id,

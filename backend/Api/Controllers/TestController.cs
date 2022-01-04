@@ -59,7 +59,7 @@ namespace Api.Controllers
         public async Task<IActionResult> Get(Guid guid, [FromQuery] bool populated)
         {
             TestEntity test = await GetTest(guid, GuidOfCurrentUser);
-            IEnumerable<BaseQuestionEntity> questions = await _questionService.GetQuestions(test);
+            IEnumerable<BaseQuestionEntity> questions = _questionService.GetQuestions(test);
 
             if (populated)
             {
@@ -79,12 +79,12 @@ namespace Api.Controllers
         [HttpGet("", Name = nameof(GetAll))]
         [ProducesResponseType(typeof(ICollection<TestDto>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        public async Task<IActionResult> GetAll([FromQuery] TestQueryFilterDto filtersDto)
+        public ActionResult GetAll([FromQuery] TestQueryFilterDto filtersDto)
         {
             TestQueryFilter filters = _mapper.Map<TestQueryFilter>(filtersDto);
             filters.UserId = GuidOfCurrentUser;
 
-            PagedList<TestWithQuestions> pagedListOfTests = await _testService.GetAllTests(filters);
+            PagedList<TestWithQuestions> pagedListOfTests = _testService.GetAllTests(filters);
             List<TestDto> testsDto = _mapper.Map<List<TestDto>>(pagedListOfTests);
 
             Metadata<TestWithQuestions> metadata = new Metadata<TestWithQuestions>(pagedListOfTests);

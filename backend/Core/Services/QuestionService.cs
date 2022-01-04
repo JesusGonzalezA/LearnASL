@@ -29,13 +29,13 @@ namespace Core.Services
             }
         }
 
-        public async Task<IEnumerable<BaseQuestionEntity> > GetQuestions(TestEntity test)
+        public IEnumerable<BaseQuestionEntity> GetQuestions(TestEntity test)
         {
             dynamic questionRepository = GetQuestionRepository(test.TestType);
-            IEnumerable<BaseQuestionEntity> questions = await questionRepository.GetAll();
+            IQueryable<BaseQuestionEntity> questions = questionRepository.GetAllAsQueryable();
 
             IEnumerable<BaseQuestionEntity> questionsFromTest
-                = questions.Where(question => question.TestId == test.Id);
+                = questions.Where(question => question.TestId == test.Id).ToList();
 
             return questionsFromTest;
         }

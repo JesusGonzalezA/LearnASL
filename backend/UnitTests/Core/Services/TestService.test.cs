@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Core.CustomEntities;
 using Core.Entities;
@@ -27,7 +28,7 @@ namespace Tests.Core.Services
             TestEntity testEntity = await CreateTestEntity(userId);
 
             TestQueryFilter filters = new TestQueryFilter() { UserId = userId };
-            PagedList<TestWithQuestions> allTests = await testService.GetAllTests(filters);
+            PagedList<TestWithQuestions> allTests = testService.GetAllTests(filters);
             Assert.Empty(allTests);
 
             Guid testGuid = await testService.AddTest(testEntity);
@@ -81,12 +82,12 @@ namespace Tests.Core.Services
             await testService.AddTest(await CreateTestEntity(userId));
 
             TestQueryFilter filters = new TestQueryFilter() { UserId = userId };
-            PagedList<TestWithQuestions> allTests = await testService.GetAllTests(filters);
+            PagedList<TestWithQuestions> allTests = testService.GetAllTests(filters);
 
             Assert.NotEmpty(allTests);
 
             await testService.DeleteAllTestsFromUser(userId);
-            allTests = await testService.GetAllTests(filters);
+            allTests = testService.GetAllTests(filters);
 
             Assert.Empty(allTests);
         }
@@ -118,11 +119,11 @@ namespace Tests.Core.Services
 
             // Get tests
             TestQueryFilter filters = new TestQueryFilter() { UserId = userId };
-            IEnumerable<TestEntity> allTests = await _unitOfWork.TestRepository.GetAll();
+            IQueryable<TestEntity> allTests = _unitOfWork.TestRepository.GetAllAsQueryable();
             allTests = allTests.Filter(filters);
 
             PagedList<TestEntity> allTestsPaged = PagedList<TestEntity>.Create(allTests, _paginationOptions.DefaultPageNumber, _paginationOptions.DefaultPageSize);
-            PagedList<TestWithQuestions> allTestsPagedWithQuestions = await testService.GetAllTests(filters);
+            PagedList<TestWithQuestions> allTestsPagedWithQuestions = testService.GetAllTests(filters);
 
             Assert.Equal(allTestsPaged.TotalCount, allTestsPagedWithQuestions.TotalCount);
 
