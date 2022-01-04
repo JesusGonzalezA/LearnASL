@@ -33,7 +33,11 @@ namespace Infraestructure.Services
                 _videoServingOptions.Directory,
                 directory
             );
-            Directory.Delete(directoryPath, true);
+
+            if (Directory.Exists(directoryPath))
+            {
+                Directory.Delete(directoryPath, true);
+            }
         }
 
         public void CleanDirectory(string directory)
@@ -44,8 +48,12 @@ namespace Infraestructure.Services
                 _videoServingOptions.Directory,
                 directory
             );
-            Directory.Delete(directoryPath, true);
-            Directory.CreateDirectory(directoryPath);
+
+            if (Directory.Exists(directoryPath))
+            {
+                Directory.Delete(directoryPath, true);
+                Directory.CreateDirectory(directoryPath);
+            }
         }
 
         public void CreateUserDirectory(Guid userId)
