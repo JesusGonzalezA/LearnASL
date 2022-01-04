@@ -6,12 +6,12 @@ using Core.QueryFilters;
 
 namespace Core.Extensions
 {
-    public static class IEnumerableOfTestEntity_Filter_TestQueryFilter
+    public static class IQueryableOfTestEntity_Filter_TestQueryFilter
     {
-        public static IEnumerable<TestEntity>
+        public static IQueryable<TestEntity>
         Filter
         (
-            this IEnumerable<TestEntity> tests,
+            this IQueryable<TestEntity> tests,
             TestQueryFilter filters
         )
         {
@@ -29,12 +29,12 @@ namespace Core.Extensions
 
             if (filters.FromDate != null)
             {
-                tests = tests.Where(test => test.CreatedOn.Date >= filters.FromDate?.Date);
+                tests = tests.Where(test => test.CreatedOn.Date >= filters.FromDate.Value.Date);
             }
 
             if (filters.ToDate != null)
             {
-                tests = tests.Where(test => test.CreatedOn.Date <= filters.ToDate?.Date);
+                tests = tests.Where(test => test.CreatedOn.Date <= filters.ToDate.Value.Date);
             }
 
             return tests;

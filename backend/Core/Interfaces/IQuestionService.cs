@@ -10,7 +10,7 @@ namespace Core.Interfaces
     public interface IQuestionService
     {
         Task AddQuestions(TestType testType, IEnumerable<BaseQuestionEntity> questions);
-        Task<IEnumerable<BaseQuestionEntity> > GetQuestions(TestEntity test);
+        IEnumerable<BaseQuestionEntity> GetQuestions(TestEntity test);
         Task<BaseQuestionEntity> GetQuestion(TestType testType, Guid guid);
         Task UpdateQuestion(TestType testType, Guid questionGuid, UpdateQuestionParameters parameters);
     }

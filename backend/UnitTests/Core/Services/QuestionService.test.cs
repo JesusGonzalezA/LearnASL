@@ -34,14 +34,14 @@ namespace Tests.Core.Services
             Guid testId = await testService.AddTest(testEntity);
             TestEntity testEntityDB = await testService.GetTest(testId);
 
-            Assert.Empty(await questionService.GetQuestions(testEntityDB));
+            Assert.Empty(questionService.GetQuestions(testEntityDB));
 
             // Add questions
             await InitializeDataset();
             IList<BaseQuestionEntity> questions = await _questionGeneratorService.CreateQuestions(1, testType, Difficulty.EASY, testId);
             await questionService.AddQuestions(testType, questions);
 
-            Assert.NotEmpty(await questionService.GetQuestions(testEntityDB));
+            Assert.NotEmpty(questionService.GetQuestions(testEntityDB));
         }
 
         [Theory]
@@ -58,14 +58,14 @@ namespace Tests.Core.Services
             Guid testId = await testService.AddTest(testEntity);
             TestEntity testEntityDB = await testService.GetTest(testId);
 
-            Assert.Empty(await questionService.GetQuestions(testEntityDB));
+            Assert.Empty(questionService.GetQuestions(testEntityDB));
 
             // Add questions
             await InitializeDataset();
             IList<BaseQuestionEntity> questions = await _questionGeneratorService.CreateQuestions(1, testType, Difficulty.EASY, testId);
             await questionService.AddQuestions(testType, questions);
 
-            IEnumerable<BaseQuestionEntity> allQuestions = await questionService.GetQuestions(testEntityDB);
+            IEnumerable<BaseQuestionEntity> allQuestions = questionService.GetQuestions(testEntityDB);
             Assert.Contains(questions.ElementAt(0), allQuestions);
         }
 
@@ -83,14 +83,14 @@ namespace Tests.Core.Services
             Guid testId = await testService.AddTest(testEntity);
             TestEntity testEntityDB = await testService.GetTest(testId);
 
-            Assert.Empty(await questionService.GetQuestions(testEntityDB));
+            Assert.Empty(questionService.GetQuestions(testEntityDB));
 
             // Add questions
             await InitializeDataset();
             IList<BaseQuestionEntity> questions = await _questionGeneratorService.CreateQuestions(1, testType, Difficulty.EASY, testId);
             await questionService.AddQuestions(testType, questions);
 
-            IEnumerable<BaseQuestionEntity> allQuestions = await questionService.GetQuestions(testEntityDB);
+            IEnumerable<BaseQuestionEntity> allQuestions = questionService.GetQuestions(testEntityDB);
             BaseQuestionEntity questionDB = allQuestions.ToList().ElementAt(0);
 
             // Update
@@ -117,14 +117,14 @@ namespace Tests.Core.Services
             Guid testId = await testService.AddTest(testEntity);
             TestEntity testEntityDB = await testService.GetTest(testId);
 
-            Assert.Empty(await questionService.GetQuestions(testEntityDB));
+            Assert.Empty(questionService.GetQuestions(testEntityDB));
 
             // Add questions
             await InitializeDataset();
             IList<BaseQuestionEntity> questions = await _questionGeneratorService.CreateQuestions(1, testType, Difficulty.EASY, testId);
             await questionService.AddQuestions(testType, questions);
 
-            IEnumerable<BaseQuestionEntity> allQuestions = await questionService.GetQuestions(testEntityDB);
+            IEnumerable<BaseQuestionEntity> allQuestions = questionService.GetQuestions(testEntityDB);
             BaseQuestionEntity questionDB = allQuestions.ToList().ElementAt(0);
 
             Assert.Equal(questionDB, await questionService.GetQuestion(testType, questionDB.Id));

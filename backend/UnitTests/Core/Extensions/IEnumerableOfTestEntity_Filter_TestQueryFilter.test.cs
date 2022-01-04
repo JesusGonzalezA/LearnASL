@@ -46,8 +46,8 @@ namespace Tests.Core.Extensions
                 await testService.AddTest(test);
             }
 
-            allTests = await _unitOfWork.TestRepository.GetAll();
-            allTests = allTests.Filter(filters);
+            IQueryable<TestEntity> allTestsQuery = _unitOfWork.TestRepository.GetAllAsQueryable();
+            allTests = allTestsQuery.Filter(filters);
             Assert.Equal(testEntities, allTests);
 
             // Filter by type
@@ -56,8 +56,8 @@ namespace Tests.Core.Extensions
                 .Where(test => test.TestType == filters.TestType)
                 .ToList();
 
-            allTests = await _unitOfWork.TestRepository.GetAll();
-            allTests = allTests.Filter(filters);
+            allTestsQuery = _unitOfWork.TestRepository.GetAllAsQueryable();
+            allTests = allTestsQuery.Filter(filters);
             Assert.Equal(allTests, mimicTests);
             filters.TestType = null;
 
@@ -67,8 +67,8 @@ namespace Tests.Core.Extensions
                 .Where(test => test.Difficulty == Difficulty.EASY)
                 .ToList();
 
-            allTests = await _unitOfWork.TestRepository.GetAll();
-            allTests = allTests.Filter(filters);
+            allTestsQuery = _unitOfWork.TestRepository.GetAllAsQueryable();
+            allTests = allTestsQuery.Filter(filters);
             Assert.Equal(allTests, easyTests);
         }
     }

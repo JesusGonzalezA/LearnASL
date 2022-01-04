@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Core.Entities;
 using Core.Interfaces;
@@ -22,6 +23,11 @@ namespace Infraestructure.Repositories
         public async Task<IEnumerable<T> > GetAll()
         {
             return await _entities.ToListAsync();
+        }
+
+        public IQueryable<T> GetAllAsQueryable()
+        {
+            return _entities;
         }
 
         public async Task<T> GetById(Guid id)
