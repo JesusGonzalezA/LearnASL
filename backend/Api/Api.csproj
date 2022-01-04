@@ -47,10 +47,10 @@
     <ProjectReference Include="..\Core\Core.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\Infraestructure\Infraestructure.csproj">
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\Infraestructure\Infraestructure.csproj">
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>

@@ -1,8 +1,8 @@
 using System;
 using Core.Options;
-using Infraestructure.Data;
-using Infraestructure.Repositories;
-using Infraestructure.Services;
+using Infrastructure.Data;
+using Infrastructure.Repositories;
+using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
