@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using Core.Contracts.Incoming;
@@ -29,14 +30,16 @@ namespace Api.Controllers
         }
 
         [HttpGet("/use-of-the-app")]
-        [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<int>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         public async Task<IActionResult> GetUseOfTheApp([FromQuery] StatsQueryFilterUseOfTheAppDto filtersDto)
         {
             StatsQueryFilterUseOfTheApp filters = _mapper.Map<StatsQueryFilterUseOfTheApp>(filtersDto);
             filters.UserId = GuidOfCurrentUser;
 
-            return Ok();
+            IEnumerable<int> monthlyUseOfTheAppByUser = _statsService.GetMonthlyUseOfTheAppByUser(filters);
+
+            return Ok(monthlyUseOfTheAppByUser);
         }
     }
 }
