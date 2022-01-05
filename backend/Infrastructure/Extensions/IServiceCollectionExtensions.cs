@@ -49,6 +49,7 @@ namespace Infrastructure.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITestService, TestService>();
             services.AddScoped<IQuestionService, QuestionService>();
+            services.AddScoped<IStatsService, StatsService>();
 
             return services;
         }
