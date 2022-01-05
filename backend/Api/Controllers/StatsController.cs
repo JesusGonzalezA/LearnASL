@@ -41,5 +41,25 @@ namespace Api.Controllers
 
             return Ok(monthlyUseOfTheAppByUser);
         }
+
+        [HttpGet("/best-streak")]
+        [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        public async Task<IActionResult> GetBestStreak()
+        {
+            int bestStreak = _statsService.GetBestStreak(GuidOfCurrentUser);
+
+            return Ok(bestStreak);
+        }
+
+        [HttpGet("/current-streak")]
+        [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        public async Task<IActionResult> GetCurrentStreak()
+        {
+            int currentStreak = _statsService.GetCurrentStreak(GuidOfCurrentUser);
+
+            return Ok(currentStreak);
+        }
     }
 }

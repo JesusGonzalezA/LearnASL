@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core.Entities.Tests;
+using Core.Extensions;
 using Core.Interfaces;
 using Core.QueryFilters;
 
@@ -14,6 +15,42 @@ namespace Core.Services
         public StatsService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+        }
+
+        public int GetBestStreak(Guid userId)
+        {
+            IQueryable<TestEntity> tests = _unitOfWork.TestRepository.GetAllAsQueryable();
+            IEnumerable<DateTime> dates = tests.
+                Select(test => test.CreatedOn.Date)
+                .Distinct();
+
+            List<int> groupOfStreaks = dates
+                .GroupWhile((date1, date2) => (date1.AddDays(1) == date2))
+                .Select(x => x.Count())
+                .ToList();
+
+            if (groupOfStreaks == null)
+                return 0;
+
+            return groupOfStreaks.Max();
+        }
+
+        public int GetCurrentStreak(Guid userId)
+        {
+            IQueryable<TestEntity> tests = _unitOfWork.TestRepository.GetAllAsQueryable();
+            IEnumerable<DateTime> dates = tests.
+                Select(test => test.CreatedOn.Date)
+                .Distinct();
+
+            IEnumerable<DateTime> lastStreak = dates
+                .GroupWhile((date1, date2) => (date1.AddDays(1) == date2))
+                .Last()
+                .ToList();
+
+            if (!lastStreak.Contains(DateTime.Now.Date))
+                return 0;
+
+            return lastStreak.Count();
         }
 
         public IEnumerable<int> GetMonthlyUseOfTheAppByUser(StatsQueryFilterUseOfTheApp filter)
