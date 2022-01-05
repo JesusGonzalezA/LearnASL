@@ -71,6 +71,7 @@ namespace Infrastructure.Extensions
             {
                 m.AddProfile(new UserAutomapperProfile());
                 m.AddProfile(new TestAutomapperProfile());
+                m.AddProfile(new StatsAutomapperProfile());
             });
 
             IMapper mapper = mapperConfig.CreateMapper();
@@ -127,6 +128,7 @@ namespace Infrastructure.Extensions
             services.AddTransient<IValidator<TestQueryFilterDto>, TestQueryFilterDtoValidator>();
             services.AddTransient<IValidator<TestCreateDto>, TestCreateDtoValidator>();
             services.AddTransient<IValidator<ChangeEmailDto>, ChangeEmailDtoValidator>();
+            services.AddTransient <IValidator<StatsQueryFilterUseOfTheAppDto>, StatsQueryFilterUseOfTheAppValidator>();
 
             return services;
         }
