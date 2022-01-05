@@ -16,7 +16,7 @@ using Xunit;
 
 namespace Tests.Core.Extensions
 {
-    public partial class TestIEnumerableOfTestEntity_Filter_TestQueryFilter
+    public partial class TestIEnumerableOfTestEntityExtensions
     {
         [Fact]
         public async Task Extensions_FilterTests_FiltersCorrectly()
@@ -73,12 +73,12 @@ namespace Tests.Core.Extensions
         }
     }
 
-    public partial class TestIEnumerableOfTestEntity_Filter_TestQueryFilter
+    public partial class TestIEnumerableOfTestEntityExtensions
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly PaginationOptions _paginationOptions;
 
-        public TestIEnumerableOfTestEntity_Filter_TestQueryFilter()
+        public TestIEnumerableOfTestEntityExtensions()
         {
             _unitOfWork = MockUnitOfWork.GetMockUnitOfWork();
             _paginationOptions = new PaginationOptions()
