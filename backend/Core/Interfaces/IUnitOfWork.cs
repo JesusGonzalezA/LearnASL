@@ -11,7 +11,7 @@ namespace Core.Interfaces
 
         IDatasetRepository DatasetRepository { get; }
 
-        IBaseRepository<LearntWordEntity> LearntWordRepository { get; }
+        ILearntWordRepository LearntWordRepository { get; }
 
         ITestRepository TestRepository { get; }
 

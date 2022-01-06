@@ -21,7 +21,8 @@ namespace Infrastructure.Factories.QuestionFactories
                 TestId = testId,
                 WordToGuess = toGuess.Word,
                 VideoUser = null,
-                IsCorrect = false
+                IsCorrect = false,
+                DatasetItemId = toGuess.Id
             };
         }
     }

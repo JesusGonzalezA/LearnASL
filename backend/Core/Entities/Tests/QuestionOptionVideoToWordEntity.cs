@@ -10,5 +10,12 @@ namespace Core.Entities.Tests
         public string PossibleAnswer3 { get; set; }
         public string UserAnswer { get; set; }
         public string CorrectAnswer { get; set; }
+
+        public override bool IsQuestionCorrect()
+        {
+            if (UserAnswer == null) return false;
+
+            return CorrectAnswer.Equals(UserAnswer);
+        }
     }
 }

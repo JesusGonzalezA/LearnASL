@@ -7,5 +7,10 @@ namespace Core.Entities.Tests
         public string VideoHelp { get; set; }
         public string VideoUser { get; set; }
         public bool IsCorrect { get; set; }
+
+        public override bool IsQuestionCorrect()
+        {
+            return IsCorrect;
+        }
     }
 }

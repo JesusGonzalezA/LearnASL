@@ -25,7 +25,8 @@ namespace Infrastructure.Factories.QuestionFactories
                 PossibleAnswer3 = possibleAnswers[3]?.Word,
                 UserAnswer = null,
                 CorrectAnswer = toGuess.Word,
-                TestId = testId
+                TestId = testId,
+                DatasetItemId = toGuess.Id
             };
         }
     }

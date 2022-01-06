@@ -19,6 +19,7 @@ namespace Infrastructure.Factories.QuestionFactories
             return new QuestionMimicEntity
             {
                 TestId = testId,
+                DatasetItemId = toGuess.Id,
                 WordToGuess = toGuess.Word,
                 VideoUser = null,
                 VideoHelp = $"{BaseDirVideos}/{toGuess.VideoFilename}",

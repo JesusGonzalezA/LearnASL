@@ -25,7 +25,8 @@ namespace Infrastructure.Factories.QuestionFactories
                 PossibleAnswer3 = $"{BaseDirVideos}/{possibleAnswers[3]?.VideoFilename}",
                 UserAnswer = null,
                 CorrectAnswer = $"{BaseDirVideos}/{toGuess.VideoFilename}",
-                TestId = testId
+                TestId = testId,
+                DatasetItemId = toGuess.Id
             };
         }
     }
