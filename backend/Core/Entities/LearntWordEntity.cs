@@ -2,7 +2,7 @@
 
 namespace Core.Entities
 {
-    public class LearntWord : BaseEntity
+    public class LearntWordEntity : BaseEntity
     {
         public Guid DatasetItemEntityId { get; set; }
         public Guid UserId { get; set; }
