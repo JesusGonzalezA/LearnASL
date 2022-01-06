@@ -13,6 +13,8 @@ namespace Infrastructure.Data
 
         public virtual DbSet<DatasetItemEntity> Dataset { get; set; }
 
+        public virtual DbSet<LearntWordEntity> LearntWords { get; set; }
+
         public virtual DbSet<TestEntity> Tests { get; set; }
         public virtual DbSet<QuestionOptionVideoToWordEntity> QuestionsOptionVideoToWord { get; set; }
         public virtual DbSet<QuestionOptionWordToVideoEntity> QuestionsOptionWordToVideo { get; set; }
@@ -32,6 +34,8 @@ namespace Infrastructure.Data
             modelBuilder.ApplyConfiguration(new UserConfiguration());
 
             modelBuilder.ApplyConfiguration(new DatasetItemConfiguration());
+
+            modelBuilder.ApplyConfiguration(new LearntWordConfiguration());
 
             modelBuilder.ApplyConfiguration(new TestConfiguration());
             modelBuilder.ApplyConfiguration(new QuestionOptionVideoToWordConfiguration());
