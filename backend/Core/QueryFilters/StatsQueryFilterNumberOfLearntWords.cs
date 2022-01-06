@@ -8,6 +8,7 @@ namespace Core.QueryFilters
         [Required]
         public Guid UserId { get; set; }
 
+        [Required]
         public int Year { get; set; }
 
         public int Month { get; set; }

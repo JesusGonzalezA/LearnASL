@@ -65,7 +65,7 @@ namespace Api.Controllers
         [HttpGet("/number-of-learnt-words")]
         [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        public async Task<IActionResult> GetNumberOfWordsLearntByUser()
+        public async Task<IActionResult> GetNumberOfWordsLearntByUser(StatsQueryFilterNumberOfLearntWordsDto filterDto)
         {
             int numberOfWords = await _statsService.GetNumberOfWordsLearntByUser(GuidOfCurrentUser);
 
