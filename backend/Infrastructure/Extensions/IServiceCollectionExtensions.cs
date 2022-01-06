@@ -130,6 +130,7 @@ namespace Infrastructure.Extensions
             services.AddTransient<IValidator<ChangeEmailDto>, ChangeEmailDtoValidator>();
             services.AddTransient <IValidator<StatsQueryFilterUseOfTheAppDto>, StatsQueryFilterUseOfTheAppDtoValidator>();
             services.AddTransient<IValidator<StatsQueryFilterNumberOfLearntWordsDto>, StatsQueryFilterNumberOfLearntWordsDtoValidator>();
+            services.AddTransient<IValidator<StatsQueryFilterSuccessRateDto>, StatsQueryFilterSuccessRateDtoValidator>();
 
             return services;
         }

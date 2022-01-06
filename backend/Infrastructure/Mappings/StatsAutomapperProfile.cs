@@ -10,6 +10,7 @@ namespace Infrastructure.Mappings
         {
             CreateMap<StatsQueryFilterUseOfTheAppDto, StatsQueryFilterUseOfTheApp>();
             CreateMap<StatsQueryFilterNumberOfLearntWordsDto, StatsQueryFilterNumberOfLearntWords>();
+            CreateMap<StatsQueryFilterSuccessRateDto, StatsQueryFilterSuccessRate>();
         }
     }
 }

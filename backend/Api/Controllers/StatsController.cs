@@ -84,5 +84,18 @@ namespace Api.Controllers
 
             return Ok(percent);
         }
+
+        [HttpGet("/success-rate")]
+        [ProducesResponseType(typeof(double), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        public async Task<IActionResult> GetSuccessRate([FromQuery] StatsQueryFilterSuccessRateDto filtersDto)
+        {
+            StatsQueryFilterSuccessRate filters = _mapper.Map<StatsQueryFilterSuccessRate>(filtersDto);
+            filters.UserId = GuidOfCurrentUser;
+
+            double rate = await _statsService.GetSuccessRate(GuidOfCurrentUser);
+
+            return Ok(rate);
+        }
     }
 }

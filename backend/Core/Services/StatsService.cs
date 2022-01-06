@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core.Entities;
 using Core.Entities.Tests;
 using Core.Extensions;
 using Core.Interfaces;
@@ -73,32 +74,46 @@ namespace Core.Services
 
         public int GetNumberOfWordsLearntByUser(Guid userId, StatsQueryFilterNumberOfLearntWords filter = null)
         {
-            DateTime from = new DateTime(filter.Year, filter.Month ?? 1, filter.Day ?? 1);
-            DateTime to;
+            IQueryable<LearntWordEntity> learntWords = _unitOfWork
+                    .LearntWordRepository
+                    .GetAllAsQueryable()
+                    .Where(l => l.UserId == userId);
 
-            if (filter.Day.HasValue)
+            if (filter != null)
             {
-                to = from.AddDays(1);
-            }
-            else if (filter.Month.HasValue)
-            {   
-                to = from.AddMonths(1);
-            }
-            else
-            {
-                to = from.AddYears(1);
+                DateTime from = new DateTime(filter.Year, filter.Month ?? 1, filter.Day ?? 1);
+                DateTime to;
+
+                if (filter.Day.HasValue)
+                {
+                    to = from.AddDays(1);
+                }
+                else if (filter.Month.HasValue)
+                {
+                    to = from.AddMonths(1);
+                }
+                else
+                {
+                    to = from.AddYears(1);
+                }
+
+                learntWords = learntWords
+                    .Where(l => l.CreatedOn >= from)
+                    .Where(l => l.CreatedOn < to);
             }
 
-            return _unitOfWork
-                .LearntWordRepository
-                .GetAllAsQueryable()
-                .Where(l => l.UserId == userId)
-                .Where(l => l.CreatedOn >= from)
-                .Where(l => l.CreatedOn < to)
-                .Count();
+            return learntWords.Count();
         }
 
         public async Task<double> GetPercentOfWordsLearntByUser(Guid userId)
+        {
+            int sizeOfDataset = await _unitOfWork.DatasetRepository.GetSizeOfDataset();
+            int numberOfWordsLearntByUser = GetNumberOfWordsLearntByUser(userId);
+
+            return (double)numberOfWordsLearntByUser / sizeOfDataset;
+        }
+
+        public async Task<double> GetSuccessRate(Guid userId)
         {
             int sizeOfDataset = await _unitOfWork.DatasetRepository.GetSizeOfDataset();
             int numberOfWordsLearntByUser = GetNumberOfWordsLearntByUser(userId);
