@@ -71,15 +71,37 @@ namespace Core.Services
             return days;
         }
 
-        public async Task<int> GetNumberOfWordsLearntByUser(Guid userId)
+        public int GetNumberOfWordsLearntByUser(Guid userId, StatsQueryFilterNumberOfLearntWords filter = null)
         {
-            return await _unitOfWork.LearntWordRepository.GetNumberOfWordsLearntByUser(userId);
+            DateTime from = new DateTime(filter.Year, filter.Month ?? 1, filter.Day ?? 1);
+            DateTime to;
+
+            if (filter.Day.HasValue)
+            {
+                to = from.AddDays(1);
+            }
+            else if (filter.Month.HasValue)
+            {   
+                to = from.AddMonths(1);
+            }
+            else
+            {
+                to = from.AddYears(1);
+            }
+
+            return _unitOfWork
+                .LearntWordRepository
+                .GetAllAsQueryable()
+                .Where(l => l.UserId == userId)
+                .Where(l => l.CreatedOn >= from)
+                .Where(l => l.CreatedOn < to)
+                .Count();
         }
 
         public async Task<double> GetPercentOfWordsLearntByUser(Guid userId)
         {
             int sizeOfDataset = await _unitOfWork.DatasetRepository.GetSizeOfDataset();
-            int numberOfWordsLearntByUser = await GetNumberOfWordsLearntByUser(userId);
+            int numberOfWordsLearntByUser = GetNumberOfWordsLearntByUser(userId);
 
             return (double)numberOfWordsLearntByUser / sizeOfDataset;
         }

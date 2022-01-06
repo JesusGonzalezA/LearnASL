@@ -65,12 +65,12 @@ namespace Api.Controllers
         [HttpGet("/number-of-learnt-words")]
         [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        public async Task<IActionResult> GetNumberOfWordsLearntByUser([FromQuery] StatsQueryFilterNumberOfLearntWordsDto filtersDto)
+        public IActionResult GetNumberOfWordsLearntByUser([FromQuery] StatsQueryFilterNumberOfLearntWordsDto filtersDto)
         {
             StatsQueryFilterNumberOfLearntWords filters = _mapper.Map<StatsQueryFilterNumberOfLearntWords>(filtersDto);
             filters.UserId = GuidOfCurrentUser;
 
-            int numberOfWords = await _statsService.GetNumberOfWordsLearntByUser(GuidOfCurrentUser);
+            int numberOfWords = _statsService.GetNumberOfWordsLearntByUser(GuidOfCurrentUser, filters);
 
             return Ok(numberOfWords);
         }
