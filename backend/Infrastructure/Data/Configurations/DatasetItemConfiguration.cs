@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Data.Configurations
 {
-    public class VideoConfiguration : IEntityTypeConfiguration<VideoEntity>
+    public class DatasetItemConfiguration : IEntityTypeConfiguration<DatasetItemEntity>
     {
-        public VideoConfiguration()
+        public DatasetItemConfiguration()
         { }
 
-        public void Configure(EntityTypeBuilder<VideoEntity> builder)
+        public void Configure(EntityTypeBuilder<DatasetItemEntity> builder)
         {
             builder.HasKey(k => k.Id);
 

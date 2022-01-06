@@ -49,6 +49,7 @@ namespace Infrastructure.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITestService, TestService>();
             services.AddScoped<IQuestionService, QuestionService>();
+            services.AddScoped<IStatsService, StatsService>();
 
             return services;
         }
@@ -70,6 +71,7 @@ namespace Infrastructure.Extensions
             {
                 m.AddProfile(new UserAutomapperProfile());
                 m.AddProfile(new TestAutomapperProfile());
+                m.AddProfile(new StatsAutomapperProfile());
             });
 
             IMapper mapper = mapperConfig.CreateMapper();
@@ -126,6 +128,9 @@ namespace Infrastructure.Extensions
             services.AddTransient<IValidator<TestQueryFilterDto>, TestQueryFilterDtoValidator>();
             services.AddTransient<IValidator<TestCreateDto>, TestCreateDtoValidator>();
             services.AddTransient<IValidator<ChangeEmailDto>, ChangeEmailDtoValidator>();
+            services.AddTransient <IValidator<StatsQueryFilterUseOfTheAppDto>, StatsQueryFilterUseOfTheAppDtoValidator>();
+            services.AddTransient<IValidator<StatsQueryFilterNumberOfLearntWordsDto>, StatsQueryFilterNumberOfLearntWordsDtoValidator>();
+            services.AddTransient<IValidator<StatsQueryFilterSuccessRateDto>, StatsQueryFilterSuccessRateDtoValidator>();
 
             return services;
         }

@@ -4,14 +4,16 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220106113011_LearntWords")]
+    partial class LearntWords
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,9 +91,6 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("DatasetItemId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("bit");
 
@@ -114,8 +113,6 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DatasetItemId");
-
                     b.HasIndex("TestId");
 
                     b.ToTable("QuestionsMimic");
@@ -133,9 +130,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid>("DatasetItemId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -172,8 +166,6 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DatasetItemId");
-
                     b.HasIndex("TestId");
 
                     b.ToTable("QuestionsOptionVideoToWord");
@@ -191,9 +183,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid>("DatasetItemId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -227,8 +216,6 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DatasetItemId");
-
                     b.HasIndex("TestId");
 
                     b.ToTable("QuestionsOptionWordToVideo");
@@ -242,9 +229,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid>("DatasetItemId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("bit");
@@ -263,8 +247,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DatasetItemId");
 
                     b.HasIndex("TestId");
 
@@ -364,13 +346,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.Tests.QuestionMimicEntity", b =>
                 {
-                    b.HasOne("Core.Entities.DatasetItemEntity", "DatasetItem")
-                        .WithMany()
-                        .HasForeignKey("DatasetItemId")
-                        .HasConstraintName("FK_Question_DatasetItem_QuestionMimicConfiguration")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Core.Entities.Tests.TestEntity", "Test")
                         .WithMany()
                         .HasForeignKey("TestId")
@@ -378,20 +353,11 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DatasetItem");
-
                     b.Navigation("Test");
                 });
 
             modelBuilder.Entity("Core.Entities.Tests.QuestionOptionVideoToWordEntity", b =>
                 {
-                    b.HasOne("Core.Entities.DatasetItemEntity", "DatasetItem")
-                        .WithMany()
-                        .HasForeignKey("DatasetItemId")
-                        .HasConstraintName("FK_Question_DatasetItem_QuestionOptionVideoToWordConfiguration")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Core.Entities.Tests.TestEntity", "Test")
                         .WithMany()
                         .HasForeignKey("TestId")
@@ -399,20 +365,11 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DatasetItem");
-
                     b.Navigation("Test");
                 });
 
             modelBuilder.Entity("Core.Entities.Tests.QuestionOptionWordToVideoEntity", b =>
                 {
-                    b.HasOne("Core.Entities.DatasetItemEntity", "DatasetItem")
-                        .WithMany()
-                        .HasForeignKey("DatasetItemId")
-                        .HasConstraintName("FK_Question_DatasetItem_QuestionOptionWordToVideoConfiguration")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Core.Entities.Tests.TestEntity", "Test")
                         .WithMany()
                         .HasForeignKey("TestId")
@@ -420,28 +377,17 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DatasetItem");
-
                     b.Navigation("Test");
                 });
 
             modelBuilder.Entity("Core.Entities.Tests.QuestionQAEntity", b =>
                 {
-                    b.HasOne("Core.Entities.DatasetItemEntity", "DatasetItem")
-                        .WithMany()
-                        .HasForeignKey("DatasetItemId")
-                        .HasConstraintName("FK_Question_DatasetItem_QuestionQaConfiguration")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Core.Entities.Tests.TestEntity", "Test")
                         .WithMany()
                         .HasForeignKey("TestId")
                         .HasConstraintName("FK_Question_Test_QuestionQaConfiguration")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("DatasetItem");
 
                     b.Navigation("Test");
                 });

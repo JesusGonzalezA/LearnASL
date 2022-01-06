@@ -19,8 +19,8 @@ namespace Infrastructure.Factories.QuestionFactories
         public abstract BaseQuestionEntity CreateQuestion(
             Guid testId,
             Difficulty difficulty,
-            VideoEntity toGuess,
-            IList<VideoEntity> possibleAnswers = null
+            DatasetItemEntity toGuess,
+            IList<DatasetItemEntity> possibleAnswers = null
         );
     }
 }

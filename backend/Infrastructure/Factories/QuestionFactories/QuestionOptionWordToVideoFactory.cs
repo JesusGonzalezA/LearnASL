@@ -12,8 +12,8 @@ namespace Infrastructure.Factories.QuestionFactories
         (
             Guid testId,
             Difficulty difficulty,
-            VideoEntity toGuess,
-            IList<VideoEntity>? possibleAnswers
+            DatasetItemEntity toGuess,
+            IList<DatasetItemEntity>? possibleAnswers
         )
         {
             return new QuestionOptionWordToVideoEntity
@@ -25,7 +25,8 @@ namespace Infrastructure.Factories.QuestionFactories
                 PossibleAnswer3 = $"{BaseDirVideos}/{possibleAnswers[3]?.VideoFilename}",
                 UserAnswer = null,
                 CorrectAnswer = $"{BaseDirVideos}/{toGuess.VideoFilename}",
-                TestId = testId
+                TestId = testId,
+                DatasetItemId = toGuess.Id
             };
         }
     }

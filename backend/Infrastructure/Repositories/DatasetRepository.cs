@@ -10,11 +10,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
-    public class DatasetRepository : BaseRepository<VideoEntity>, IDatasetRepository
+    public class DatasetRepository : BaseRepository<DatasetItemEntity>, IDatasetRepository
     {
         public DatasetRepository(DatabaseContext context) : base(context) { }
 
-        public async Task<IList<VideoEntity> > GetVideosFromDataset(int numberOfVideos, Difficulty difficulty)
+        public async Task<int> GetSizeOfDataset()
+        {
+            return await _entities.CountAsync();
+        }
+
+        public async Task<IList<DatasetItemEntity> > GetVideosFromDataset(int numberOfVideos, Difficulty difficulty)
         {
             return await _entities
                     .Where(video => video.Difficulty == difficulty)
@@ -23,7 +28,7 @@ namespace Infrastructure.Repositories
                     .ToListAsync();
         }
 
-        public async Task<IList<VideoEntity>> GetVideosFromDataset(int numberOfVideos, string skipWord)
+        public async Task<IList<DatasetItemEntity>> GetVideosFromDataset(int numberOfVideos, string skipWord)
         {
             return await _entities
                     .Where(video => !video.Word.Equals(skipWord))

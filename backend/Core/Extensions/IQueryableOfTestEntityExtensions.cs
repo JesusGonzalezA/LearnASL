@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Core.Entities.Tests;
 using Core.QueryFilters;
 
 namespace Core.Extensions
 {
-    public static class IQueryableOfTestEntity_Filter_TestQueryFilter
+    public static class IQueryableOfTestEntityExtensions
     {
         public static IQueryable<TestEntity>
         Filter

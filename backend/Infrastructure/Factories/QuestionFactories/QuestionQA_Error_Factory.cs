@@ -12,8 +12,8 @@ namespace Infrastructure.Factories.QuestionFactories
         (
             Guid testId,
             Difficulty difficulty,
-            VideoEntity toGuess,
-            IList<VideoEntity>? possibleAnswers
+            DatasetItemEntity toGuess,
+            IList<DatasetItemEntity>? possibleAnswers
         )
         {
             return new QuestionQAEntity
@@ -21,7 +21,8 @@ namespace Infrastructure.Factories.QuestionFactories
                 TestId = testId,
                 WordToGuess = toGuess.Word,
                 VideoUser = null,
-                IsCorrect = false
+                IsCorrect = false,
+                DatasetItemId = toGuess.Id
             };
         }
     }

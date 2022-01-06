@@ -16,12 +16,20 @@ namespace Infrastructure.Data.Configurations
 
             builder.Property(p => p.TestId)
                     .IsRequired();
+            builder.Property(p => p.DatasetItemId)
+                    .IsRequired();
 
             builder.HasOne(d => d.Test)
                 .WithMany()
                 .HasForeignKey(d => d.TestId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Question_Test_" + GetType().Name);
+
+            builder.HasOne(d => d.DatasetItem)
+                .WithMany()
+                .HasForeignKey(d => d.DatasetItemId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_Question_DatasetItem_" + GetType().Name);
         }
     }
 }

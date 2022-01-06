@@ -2,7 +2,7 @@
 
 namespace Core.Entities
 {
-    public class VideoEntity : BaseEntity
+    public class DatasetItemEntity : BaseEntity
     {
         public int Index { get; set; }
         public string Word { get; set; }

@@ -223,7 +223,7 @@ namespace Tests.Core.Services
         {
             for(int i=0; i<5; ++i)
             {
-                VideoEntity video = new VideoEntity()
+                DatasetItemEntity video = new DatasetItemEntity()
                 {
                     VideoFilename = i.ToString(),
                     Word = i.ToString(),

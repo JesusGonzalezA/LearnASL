@@ -7,6 +7,7 @@ using Core.Interfaces;
 using System.Linq;
 using Core.CustomEntities;
 using Core.Exceptions;
+using Core.Entities;
 
 namespace Core.Services
 {
@@ -44,6 +45,23 @@ namespace Core.Services
         {
             dynamic updatedQuestion = await GetUpdatedQuestion(testType, questionGuid, parameters);
             dynamic repository = GetQuestionRepository(testType);
+
+            if (updatedQuestion.IsQuestionCorrect())
+            {
+                Guid userId = updatedQuestion.Test.UserId;
+                Guid datasetItemId = updatedQuestion.DatasetItem.Id;
+
+                LearntWordEntity learntWordEntity = await _unitOfWork.LearntWordRepository.Get(userId, datasetItemId);
+
+                if (learntWordEntity == null)
+                {
+                    await _unitOfWork.LearntWordRepository.Add(new LearntWordEntity()
+                    {
+                        UserId = userId,
+                        DatasetItemEntityId = datasetItemId
+                    });
+                }
+            }
 
             await repository.Update(updatedQuestion);
         }

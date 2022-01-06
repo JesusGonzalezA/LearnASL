@@ -4,17 +4,13 @@ using System.Net;
 using System.Threading.Tasks;
 using Core.Contracts.Incoming;
 using Core.CustomEntities;
-using Core.Entities;
 using Core.Entities.Tests;
 using Core.Enums;
 using Core.Exceptions;
 using Core.Interfaces;
-using Core.Options;
 using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace Api.Controllers
 {
@@ -25,7 +21,6 @@ namespace Api.Controllers
     public class QuestionController : BaseController
     {
         private readonly ITestService _testService;
-        private readonly IUserService _userService;
         private readonly IQuestionService _questionService;
         private readonly IUriService _uriService;
         private readonly IStoreService _storeService;
@@ -33,14 +28,12 @@ namespace Api.Controllers
         public QuestionController
         (
             ITestService testService,
-            IUserService userService,
             IQuestionService questionService,
             IUriService uriService,
             IStoreService storeService
         )
         {
             _testService = testService;
-            _userService = userService;
             _questionService = questionService;
             _uriService = uriService;
             _storeService = storeService;

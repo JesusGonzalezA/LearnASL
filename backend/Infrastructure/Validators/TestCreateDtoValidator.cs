@@ -15,14 +15,12 @@ namespace Infrastructure.Validators
             RuleFor(test => test.Difficulty)
                 .NotNull();
             RuleFor(test => test.Difficulty)
-                .IsInEnum()
-                .When(test => test.Difficulty.HasValue);
+                .IsInEnum();
 
             RuleFor(test => test.TestType)
                 .NotNull();
             RuleFor(test => test.TestType)
-                .IsInEnum()
-                .When(test => test.TestType.HasValue);
+                .IsInEnum();
         }
     }
 }

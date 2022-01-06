@@ -5,9 +5,10 @@ using Core.Enums;
 
 namespace Core.Interfaces
 {
-    public interface IDatasetRepository : IBaseRepository<VideoEntity>
+    public interface IDatasetRepository : IBaseRepository<DatasetItemEntity>
     {
-        Task<IList<VideoEntity> > GetVideosFromDataset(int numberOfVideos, Difficulty difficulty);
-        Task<IList<VideoEntity>> GetVideosFromDataset(int numberOfVideos, string skipWord);
+        Task<IList<DatasetItemEntity> > GetVideosFromDataset(int numberOfVideos, Difficulty difficulty);
+        Task<IList<DatasetItemEntity> > GetVideosFromDataset(int numberOfVideos, string skipWord);
+        Task<int> GetSizeOfDataset();
     }
 }

@@ -12,13 +12,14 @@ namespace Infrastructure.Factories.QuestionFactories
         (
             Guid testId,
             Difficulty difficulty,
-            VideoEntity toGuess,
-            IList<VideoEntity>? possibleAnswers
+            DatasetItemEntity toGuess,
+            IList<DatasetItemEntity>? possibleAnswers
         )
         {
             return new QuestionMimicEntity
             {
                 TestId = testId,
+                DatasetItemId = toGuess.Id,
                 WordToGuess = toGuess.Word,
                 VideoUser = null,
                 VideoHelp = $"{BaseDirVideos}/{toGuess.VideoFilename}",

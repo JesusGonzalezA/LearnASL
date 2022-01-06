@@ -13,6 +13,8 @@ namespace Infrastructure.Repositories
 
         private readonly IDatasetRepository _datasetRepository;
 
+        private readonly ILearntWordRepository _learntWordRepository;
+
         private readonly ITestRepository _testRepository;
 
         private readonly IBaseRepository<QuestionOptionWordToVideoEntity> _questionOptionWordToVideoRepository;
@@ -31,6 +33,9 @@ namespace Infrastructure.Repositories
 
         public IDatasetRepository DatasetRepository
                 => _datasetRepository ?? new DatasetRepository(_context);
+
+        public ILearntWordRepository LearntWordRepository
+                => _learntWordRepository ?? new LearntWordRepository(_context);
 
         public ITestRepository TestRepository
                 => _testRepository ?? new TestRepository(_context);
