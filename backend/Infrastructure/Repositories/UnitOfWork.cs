@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Core.Entities;
 using Core.Entities.Tests;
 using Core.Interfaces;
 using Infrastructure.Data;
@@ -12,6 +13,8 @@ namespace Infrastructure.Repositories
         private readonly IUserRepository _userRepository;
 
         private readonly IDatasetRepository _datasetRepository;
+
+        private readonly IBaseRepository<LearntWordEntity> _learntWordRepository;
 
         private readonly ITestRepository _testRepository;
 
@@ -31,6 +34,9 @@ namespace Infrastructure.Repositories
 
         public IDatasetRepository DatasetRepository
                 => _datasetRepository ?? new DatasetRepository(_context);
+
+        public IBaseRepository<LearntWordEntity> LearntWordRepository
+                => _learntWordRepository ?? new BaseRepository<LearntWordEntity>(_context);
 
         public ITestRepository TestRepository
                 => _testRepository ?? new TestRepository(_context);

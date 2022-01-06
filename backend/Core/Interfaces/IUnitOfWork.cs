@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Core.Entities;
 using Core.Entities.Tests;
 
 namespace Core.Interfaces
@@ -9,6 +10,8 @@ namespace Core.Interfaces
         IUserRepository UserRepository { get; }
 
         IDatasetRepository DatasetRepository { get; }
+
+        IBaseRepository<LearntWordEntity> LearntWordRepository { get; }
 
         ITestRepository TestRepository { get; }
 
