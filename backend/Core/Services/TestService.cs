@@ -66,15 +66,9 @@ namespace Core.Services
             return test;
         }
 
-        public PagedList<TestWithQuestions> GetAllTests(TestQueryFilter filters)
+        public PagedList<TestWithQuestions> GetAllTestsPaged(TestQueryFilter filters)
         {
-            filters.PageNumber = filters.PageNumber == 0 ? _paginationOptions.DefaultPageNumber : filters.PageNumber;
-            filters.PageSize = filters.PageSize == 0 ? _paginationOptions.DefaultPageSize : filters.PageSize;
-
-            IQueryable<TestEntity> tests = _unitOfWork.TestRepository.GetAllAsQueryable();
-
-            IEnumerable<TestEntity> filteredTests = tests.Filter(filters).ToList();
-            IList<TestWithQuestions> testsWithQuestions = PopulateTestsWithQuestions(filteredTests);
+            IList<TestWithQuestions> testsWithQuestions = GetAllTests(filters);
             
             PagedList<TestWithQuestions> pagedTests = PagedList<TestWithQuestions>.Create
             (
@@ -84,6 +78,16 @@ namespace Core.Services
             );
 
             return pagedTests;
+        }
+
+        public IList<TestWithQuestions> GetAllTests(TestQueryFilter filters)
+        {
+            IQueryable<TestEntity> tests = _unitOfWork.TestRepository.GetAllAsQueryable();
+
+            IEnumerable<TestEntity> filteredTests = tests.Filter(filters).ToList();
+            IList<TestWithQuestions> testsWithQuestions = PopulateTestsWithQuestions(filteredTests);
+
+            return testsWithQuestions;
         }
 
         private IList<TestWithQuestions> PopulateTestsWithQuestions(IEnumerable<TestEntity> tests)

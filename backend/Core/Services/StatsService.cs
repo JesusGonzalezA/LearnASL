@@ -10,13 +10,15 @@ using Core.QueryFilters;
 
 namespace Core.Services
 {
-    public class StatsService : IStatsService
+    public partial class StatsService : IStatsService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ITestService _testService;
 
-        public StatsService(IUnitOfWork unitOfWork)
+        public StatsService(IUnitOfWork unitOfWork, ITestService testService)
         {
             _unitOfWork = unitOfWork;
+            _testService = testService;
         }
 
         public int GetBestStreak(Guid userId)
@@ -81,25 +83,11 @@ namespace Core.Services
 
             if (filter != null)
             {
-                DateTime from = new DateTime(filter.Year, filter.Month ?? 1, filter.Day ?? 1);
-                DateTime to;
-
-                if (filter.Day.HasValue)
-                {
-                    to = from.AddDays(1);
-                }
-                else if (filter.Month.HasValue)
-                {
-                    to = from.AddMonths(1);
-                }
-                else
-                {
-                    to = from.AddYears(1);
-                }
+                Tuple<DateTime, DateTime> interval = CalculateInterval(filter);
 
                 learntWords = learntWords
-                    .Where(l => l.CreatedOn >= from)
-                    .Where(l => l.CreatedOn < to);
+                    .Where(l => l.CreatedOn >= interval.Item1)
+                    .Where(l => l.CreatedOn < interval.Item2);
             }
 
             return learntWords.Count();
@@ -113,12 +101,82 @@ namespace Core.Services
             return (double)numberOfWordsLearntByUser / sizeOfDataset;
         }
 
-        public async Task<double> GetSuccessRate(Guid userId)
+        public double GetSuccessRate(StatsQueryFilterSuccessRate filter)
         {
-            int sizeOfDataset = await _unitOfWork.DatasetRepository.GetSizeOfDataset();
-            int numberOfWordsLearntByUser = GetNumberOfWordsLearntByUser(userId);
+            Tuple<DateTime, DateTime> interval = CalculateInterval(filter);
 
-            return (double)numberOfWordsLearntByUser / sizeOfDataset;
+            TestQueryFilter testFilter = new TestQueryFilter()
+            {
+                UserId = filter.UserId,
+                Difficulty = filter.Difficulty,
+                FromDate = interval.Item1,
+                ToDate = interval.Item2,
+            };
+            IList<TestWithQuestions> tests = _testService.GetAllTests(testFilter);
+
+            int totalQuestions = 0;
+            int totalRightQuestions = 0;
+            foreach(TestWithQuestions test in tests)
+            {
+                totalQuestions += test.Questions.Count();
+
+                foreach(BaseQuestionEntity question in test.Questions)
+                {
+                    if(question.IsQuestionCorrect())
+                    {
+                        totalRightQuestions++;
+                    }
+                }
+            }
+
+            if (totalQuestions == 0) return 0;
+
+            return (double)totalRightQuestions / totalQuestions;
+        }
+    }
+
+    public partial class StatsService
+    {
+        private Tuple<DateTime, DateTime> CalculateInterval(StatsQueryFilterSuccessRate filter)
+        {
+            DateTime from = new DateTime(filter.Year, filter.Month ?? 1, filter.Day ?? 1);
+            DateTime to;
+
+            if (filter.Day.HasValue)
+            {
+                to = from.AddDays(1);
+            }
+            else if (filter.Month.HasValue)
+            {
+                to = from.AddMonths(1);
+            }
+            else
+            {
+                to = from.AddYears(1);
+            }
+
+            return new Tuple<DateTime, DateTime>(from, to);
+        }
+
+        private Tuple<DateTime, DateTime> CalculateInterval(StatsQueryFilterNumberOfLearntWords filter)
+        {
+            DateTime from = new DateTime(filter.Year, filter.Month ?? 1, filter.Day ?? 1);
+            DateTime to;
+
+            if (filter.Day.HasValue)
+            {
+                to = from.AddDays(1);
+            }
+            else if (filter.Month.HasValue)
+            {
+                to = from.AddMonths(1);
+            }
+            else
+            {
+                to = from.AddYears(1);
+            }
+
+            return new Tuple<DateTime, DateTime>(from, to);
         }
     }
 }

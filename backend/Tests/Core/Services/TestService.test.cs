@@ -28,7 +28,7 @@ namespace Tests.Core.Services
             TestEntity testEntity = await CreateTestEntity(userId);
 
             TestQueryFilter filters = new TestQueryFilter() { UserId = userId };
-            PagedList<TestWithQuestions> allTests = testService.GetAllTests(filters);
+            PagedList<TestWithQuestions> allTests = testService.GetAllTestsPaged(filters);
             Assert.Empty(allTests);
 
             Guid testGuid = await testService.AddTest(testEntity);
@@ -82,12 +82,12 @@ namespace Tests.Core.Services
             await testService.AddTest(await CreateTestEntity(userId));
 
             TestQueryFilter filters = new TestQueryFilter() { UserId = userId };
-            PagedList<TestWithQuestions> allTests = testService.GetAllTests(filters);
+            PagedList<TestWithQuestions> allTests = testService.GetAllTestsPaged(filters);
 
             Assert.NotEmpty(allTests);
 
             await testService.DeleteAllTestsFromUser(userId);
-            allTests = testService.GetAllTests(filters);
+            allTests = testService.GetAllTestsPaged(filters);
 
             Assert.Empty(allTests);
         }
@@ -123,7 +123,7 @@ namespace Tests.Core.Services
             allTests = allTests.Filter(filters);
 
             PagedList<TestEntity> allTestsPaged = PagedList<TestEntity>.Create(allTests, _paginationOptions.DefaultPageNumber, _paginationOptions.DefaultPageSize);
-            PagedList<TestWithQuestions> allTestsPagedWithQuestions = testService.GetAllTests(filters);
+            PagedList<TestWithQuestions> allTestsPagedWithQuestions = testService.GetAllTestsPaged(filters);
 
             Assert.Equal(allTestsPaged.TotalCount, allTestsPagedWithQuestions.TotalCount);
 

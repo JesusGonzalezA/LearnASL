@@ -84,7 +84,7 @@ namespace Api.Controllers
             TestQueryFilter filters = _mapper.Map<TestQueryFilter>(filtersDto);
             filters.UserId = GuidOfCurrentUser;
 
-            PagedList<TestWithQuestions> pagedListOfTests = _testService.GetAllTests(filters);
+            PagedList<TestWithQuestions> pagedListOfTests = _testService.GetAllTestsPaged(filters);
             List<TestDto> testsDto = _mapper.Map<List<TestDto>>(pagedListOfTests);
 
             Metadata<TestWithQuestions> metadata = new Metadata<TestWithQuestions>(pagedListOfTests);

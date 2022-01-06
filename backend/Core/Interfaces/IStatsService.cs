@@ -10,7 +10,7 @@ namespace Core.Interfaces
         IEnumerable<int> GetMonthlyUseOfTheAppByUser(StatsQueryFilterUseOfTheApp filter);
         int GetNumberOfWordsLearntByUser(Guid userId, StatsQueryFilterNumberOfLearntWords filter);
         Task<double> GetPercentOfWordsLearntByUser(Guid userId);
-        Task<double> GetSuccessRate(Guid userId);
+        double GetSuccessRate(StatsQueryFilterSuccessRate filter);
         int GetBestStreak(Guid userId);
         int GetCurrentStreak(Guid userId);
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Core.Enums;
 
 namespace Core.QueryFilters
 {
@@ -14,5 +15,7 @@ namespace Core.QueryFilters
         public int? Month { get; set; }
 
         public int? Day { get; set; }
+
+        public Difficulty? Difficulty { get; set; }
     }
 }
