@@ -8,9 +8,6 @@ namespace Infrastructure.Validators
     {
         public StatsQueryFilterNumberOfLearntWordsDtoValidator()
         {
-            RuleFor(filter => filter.Year)
-                .LessThanOrEqualTo(DateTime.Now.Year);
-
             RuleFor(filter => filter.Month)
                 .NotNull()
                 .When(filter => filter.Day.HasValue);
@@ -32,7 +29,7 @@ namespace Infrastructure.Validators
             try
             {
                 DateTime date = new DateTime(filter.Year, filter.Month ?? 1, filter.Day ?? 1);
-                return true;
+                return date <= DateTime.Now;
             }
             catch(ArgumentOutOfRangeException)
             {

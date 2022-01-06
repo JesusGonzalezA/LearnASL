@@ -8,9 +8,6 @@ namespace Infrastructure.Validators
     {
         public StatsQueryFilterSuccessRateDtoValidator()
         {
-            RuleFor(filter => filter.Year)
-                .LessThanOrEqualTo(DateTime.Now.Year);
-
             RuleFor(filter => filter.Month)
                 .NotNull()
                 .When(filter => filter.Day.HasValue);
@@ -25,6 +22,10 @@ namespace Infrastructure.Validators
                     .Must(HasCorrectValue)
                     .WithMessage("The date is incorrect.");
             });
+
+            RuleFor(filter => filter.Difficulty)
+                .IsInEnum()
+                .When(filter => filter.Difficulty.HasValue);
         }
 
         private bool HasCorrectValue(StatsQueryFilterSuccessRateDto filter)
@@ -32,7 +33,7 @@ namespace Infrastructure.Validators
             try
             {
                 DateTime date = new DateTime(filter.Year, filter.Month ?? 1, filter.Day ?? 1);
-                return true;
+                return date <= DateTime.Now;
             }
             catch(ArgumentOutOfRangeException)
             {
