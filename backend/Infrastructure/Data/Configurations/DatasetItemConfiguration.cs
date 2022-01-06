@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Data.Configurations
 {
-    public class VideoConfiguration : IEntityTypeConfiguration<DatasetItemEntity>
+    public class DatasetItemConfiguration : IEntityTypeConfiguration<DatasetItemEntity>
     {
-        public VideoConfiguration()
+        public DatasetItemConfiguration()
         { }
 
         public void Configure(EntityTypeBuilder<DatasetItemEntity> builder)

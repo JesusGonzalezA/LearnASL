@@ -31,7 +31,7 @@ namespace Infrastructure.Data
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());
 
-            modelBuilder.ApplyConfiguration(new VideoConfiguration());
+            modelBuilder.ApplyConfiguration(new DatasetItemConfiguration());
 
             modelBuilder.ApplyConfiguration(new TestConfiguration());
             modelBuilder.ApplyConfiguration(new QuestionOptionVideoToWordConfiguration());
