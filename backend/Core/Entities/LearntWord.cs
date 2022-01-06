@@ -1,10 +1,13 @@
 ﻿using System;
+
 namespace Core.Entities
 {
-    public class LearntWord
+    public class LearntWord : BaseEntity
     {
-        public LearntWord()
-        {
-        }
+        public Guid DatasetItemEntityId { get; set; }
+        public Guid UserId { get; set; }
+
+        public virtual DatasetItemEntity DatasetItem { get; set; }
+        public virtual UserEntity User { get; set; }
     }
 }
