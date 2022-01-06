@@ -13,8 +13,11 @@ namespace Infrastructure.Validators
 
             RuleFor(filter => filter.Month)
                 .NotNull()
-                .InclusiveBetween(1, 12)
                 .When(filter => filter.Day.HasValue);
+
+            RuleFor(filter => filter.Month)
+                .InclusiveBetween(1, 12)
+                .When(filter => filter.Month.HasValue);
 
             When(filter => filter.Day.HasValue, () =>
             {
