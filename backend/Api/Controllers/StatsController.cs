@@ -32,7 +32,7 @@ namespace Api.Controllers
         [HttpGet("/use-of-the-app")]
         [ProducesResponseType(typeof(IEnumerable<int>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        public async Task<IActionResult> GetUseOfTheApp([FromQuery] StatsQueryFilterUseOfTheAppDto filtersDto)
+        public IActionResult GetUseOfTheApp([FromQuery] StatsQueryFilterUseOfTheAppDto filtersDto)
         {
             StatsQueryFilterUseOfTheApp filters = _mapper.Map<StatsQueryFilterUseOfTheApp>(filtersDto);
             filters.UserId = GuidOfCurrentUser;
@@ -45,7 +45,7 @@ namespace Api.Controllers
         [HttpGet("/best-streak")]
         [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        public async Task<IActionResult> GetBestStreak()
+        public IActionResult GetBestStreak()
         {
             int bestStreak = _statsService.GetBestStreak(GuidOfCurrentUser);
 
@@ -55,11 +55,31 @@ namespace Api.Controllers
         [HttpGet("/current-streak")]
         [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        public async Task<IActionResult> GetCurrentStreak()
+        public IActionResult GetCurrentStreak()
         {
             int currentStreak = _statsService.GetCurrentStreak(GuidOfCurrentUser);
 
             return Ok(currentStreak);
+        }
+
+        [HttpGet("/number-of-learnt-words")]
+        [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        public async Task<IActionResult> GetNumberOfWordsLearntByUser()
+        {
+            int numberOfWords = await _statsService.GetNumberOfWordsLearntByUser(GuidOfCurrentUser);
+
+            return Ok(numberOfWords);
+        }
+
+        [HttpGet("/percent-learnt")]
+        [ProducesResponseType(typeof(double), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        public async Task<IActionResult> GetPercentOfWordsLearntByUser()
+        {
+            double percent = await _statsService.GetPercentOfWordsLearntByUser(GuidOfCurrentUser);
+
+            return Ok(percent);
         }
     }
 }

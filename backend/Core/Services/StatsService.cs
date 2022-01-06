@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Core.Entities.Tests;
 using Core.Extensions;
 using Core.Interfaces;
@@ -68,6 +69,19 @@ namespace Core.Services
                 .ToList();
 
             return days;
+        }
+
+        public async Task<int> GetNumberOfWordsLearntByUser(Guid userId)
+        {
+            return await _unitOfWork.LearntWordRepository.GetNumberOfWordsLearntByUser(userId);
+        }
+
+        public async Task<double> GetPercentOfWordsLearntByUser(Guid userId)
+        {
+            int sizeOfDataset = await _unitOfWork.DatasetRepository.GetSizeOfDataset();
+            int numberOfWordsLearntByUser = await GetNumberOfWordsLearntByUser(userId);
+
+            return (double)numberOfWordsLearntByUser / sizeOfDataset;
         }
     }
 }

@@ -14,6 +14,11 @@ namespace Infrastructure.Repositories
     {
         public DatasetRepository(DatabaseContext context) : base(context) { }
 
+        public async Task<int> GetSizeOfDataset()
+        {
+            return await _entities.CountAsync();
+        }
+
         public async Task<IList<DatasetItemEntity> > GetVideosFromDataset(int numberOfVideos, Difficulty difficulty)
         {
             return await _entities

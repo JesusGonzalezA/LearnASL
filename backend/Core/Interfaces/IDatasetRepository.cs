@@ -9,5 +9,6 @@ namespace Core.Interfaces
     {
         Task<IList<DatasetItemEntity> > GetVideosFromDataset(int numberOfVideos, Difficulty difficulty);
         Task<IList<DatasetItemEntity> > GetVideosFromDataset(int numberOfVideos, string skipWord);
+        Task<int> GetSizeOfDataset();
     }
 }

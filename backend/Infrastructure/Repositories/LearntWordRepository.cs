@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Core.Entities;
 using Core.Interfaces;
@@ -15,6 +16,13 @@ namespace Infrastructure.Repositories
         {
             return _entities
                 .FirstOrDefaultAsync(l => l.UserId == userId && l.DatasetItemEntityId == datasetItemId);
+        }
+
+        public async Task<int> GetNumberOfWordsLearntByUser(Guid userId)
+        {
+            return await _entities
+                    .Where(l => l.UserId == userId)
+                    .CountAsync();
         }
     }
 }
