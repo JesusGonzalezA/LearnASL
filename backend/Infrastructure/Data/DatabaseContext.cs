@@ -11,7 +11,7 @@ namespace Infrastructure.Data
     {
         public virtual DbSet<UserEntity> Users { get; set; }
 
-        public virtual DbSet<VideoEntity> Dataset { get; set; }
+        public virtual DbSet<DatasetItemEntity> Dataset { get; set; }
 
         public virtual DbSet<TestEntity> Tests { get; set; }
         public virtual DbSet<QuestionOptionVideoToWordEntity> QuestionsOptionVideoToWord { get; set; }

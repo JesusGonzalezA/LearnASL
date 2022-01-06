@@ -33,8 +33,8 @@ namespace Infrastructure.Services
             TestType testType,
             Difficulty difficulty,
             Guid testId,
-            VideoEntity toGuess,
-            IList<VideoEntity> possibleAnswers = null
+            DatasetItemEntity toGuess,
+            IList<DatasetItemEntity> possibleAnswers = null
         )
         {
             QuestionFactory questionFactory = testType switch
@@ -67,8 +67,8 @@ namespace Infrastructure.Services
             Guid testId
         )
         {
-            IList<VideoEntity> toGuessArr = await _unitOfWork.DatasetRepository.GetVideosFromDataset(numberOfQuestions, difficulty);
-            List<List<VideoEntity>> possibleAnswersArr = null;
+            IList<DatasetItemEntity> toGuessArr = await _unitOfWork.DatasetRepository.GetVideosFromDataset(numberOfQuestions, difficulty);
+            List<List<DatasetItemEntity>> possibleAnswersArr = null;
 
             if ( testType == TestType.OptionVideoToWord
                 || testType == TestType.OptionVideoToWord_Error
@@ -80,16 +80,16 @@ namespace Infrastructure.Services
 
                 for (int i = 0; i < numberOfQuestions; ++i)
                 {
-                    VideoEntity toGuess = toGuessArr.ElementAt(i);
+                    DatasetItemEntity toGuess = toGuessArr.ElementAt(i);
 
                     string skipWord = toGuess.Word;
                     int numberOfAlternatives = 4;
 
-                    IList<VideoEntity> possibleAnswers = await _unitOfWork.DatasetRepository.GetVideosFromDataset(numberOfAlternatives - 1, skipWord);
+                    IList<DatasetItemEntity> possibleAnswers = await _unitOfWork.DatasetRepository.GetVideosFromDataset(numberOfAlternatives - 1, skipWord);
                     possibleAnswers.Add(toGuess);
                     possibleAnswers = possibleAnswers.OrderBy(a => Guid.NewGuid()).ToList();
 
-                    possibleAnswersArr.Add((List<VideoEntity>)possibleAnswers);
+                    possibleAnswersArr.Add((List<DatasetItemEntity>)possibleAnswers);
                 }
             }
 

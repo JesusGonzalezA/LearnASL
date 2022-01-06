@@ -12,8 +12,8 @@ namespace Infrastructure.Factories.QuestionFactories
         (
             Guid testId,
             Difficulty difficulty,
-            VideoEntity toGuess,
-            IList<VideoEntity>? possibleAnswers
+            DatasetItemEntity toGuess,
+            IList<DatasetItemEntity>? possibleAnswers
         )
         {
             return new QuestionMimicEntity
