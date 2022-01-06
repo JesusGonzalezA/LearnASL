@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 namespace Core.Entities.Tests
 {
     public class QuestionOptionVideoToWordEntity : BaseQuestionEntity
