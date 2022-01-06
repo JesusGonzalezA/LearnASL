@@ -8,8 +8,10 @@ namespace Core.Contracts.Incoming
         [Required]
         public int NumberOfQuestions { get; set; }
 
-        public TestType? TestType { get; set; }
+        [Required]
+        public TestType TestType { get; set; }
 
-        public Difficulty? Difficulty { get; set; }
+        [Required]
+        public Difficulty Difficulty { get; set; }
     }
 }
