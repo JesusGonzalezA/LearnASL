@@ -4,9 +4,9 @@ using FluentValidation;
 
 namespace Infrastructure.Validators
 {
-    public class StatsQueryFilterUseOfTheAppValidator : AbstractValidator<StatsQueryFilterUseOfTheAppDto>
+    public class StatsQueryFilterUseOfTheAppDtoValidator : AbstractValidator<StatsQueryFilterUseOfTheAppDto>
     {
-        public StatsQueryFilterUseOfTheAppValidator()
+        public StatsQueryFilterUseOfTheAppDtoValidator()
         {
             RuleFor(filter => filter.Year)
                 .LessThanOrEqualTo(DateTime.Now.Year);
