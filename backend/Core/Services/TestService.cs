@@ -68,6 +68,9 @@ namespace Core.Services
 
         public PagedList<TestWithQuestions> GetAllTestsPaged(TestQueryFilter filters)
         {
+            filters.PageNumber = filters.PageNumber == 0 ? _paginationOptions.DefaultPageNumber : filters.PageNumber;
+            filters.PageSize = filters.PageSize == 0 ? _paginationOptions.DefaultPageSize : filters.PageSize;
+
             IList<TestWithQuestions> testsWithQuestions = GetAllTests(filters);
             
             PagedList<TestWithQuestions> pagedTests = PagedList<TestWithQuestions>.Create
