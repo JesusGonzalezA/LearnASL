@@ -9,6 +9,7 @@ namespace Infrastructure.Mappings
         public StatsAutomapperProfile()
         {
             CreateMap<StatsQueryFilterUseOfTheAppDto, StatsQueryFilterUseOfTheApp>();
+            CreateMap<StatsQueryFilterNumberOfLearntWordsDto, StatsQueryFilterNumberOfLearntWords>();
         }
     }
 }
