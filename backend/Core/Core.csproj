@@ -18,7 +18,6 @@
     <None Remove="Entities\Tests\" />
     <None Remove="CustomEntities\" />
     <None Remove="QueryFilters\" />
-    <None Remove="Extensions\" />
     <None Remove="Microsoft.AspNetCore.Http" />
     <None Remove="ValidationAttributes\" />
     <None Remove="Options\" />
@@ -36,7 +35,6 @@
     <Folder Include="Entities\Tests\" />
     <Folder Include="CustomEntities\" />
     <Folder Include="QueryFilters\" />
-    <Folder Include="Extensions\" />
     <Folder Include="ValidationAttributes\" />
     <Folder Include="Options\" />
     <Folder Include="Contracts\Responses\" />
