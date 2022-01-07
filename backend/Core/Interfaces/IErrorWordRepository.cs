@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Core.Entities;
+
 namespace Core.Interfaces
 {
-    public class IErrorWordRepository
+    public interface IErrorWordRepository : IBaseRepository<ErrorWordEntity>
     {
-        public IErrorWordRepository()
-        {
-        }
+        Task<ErrorWordEntity> Get(Guid userId, Guid datasetItemId);
     }
 }
