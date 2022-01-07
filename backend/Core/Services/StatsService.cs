@@ -23,9 +23,11 @@ namespace Core.Services
 
         public int GetBestStreak(Guid userId)
         {
-            IQueryable<TestEntity> tests = _unitOfWork.TestRepository.GetAllAsQueryable();
-            IEnumerable<DateTime> dates = tests.
-                Select(test => test.CreatedOn.Date)
+            IQueryable<TestEntity> tests = _unitOfWork.TestRepository
+                .GetAllAsQueryable()
+                .Where(test => test.UserId == userId);
+            IEnumerable<DateTime> dates = tests
+                .Select(test => test.CreatedOn.Date)
                 .Distinct();
 
             List<int> groupOfStreaks = dates
@@ -41,9 +43,11 @@ namespace Core.Services
 
         public int GetCurrentStreak(Guid userId)
         {
-            IQueryable<TestEntity> tests = _unitOfWork.TestRepository.GetAllAsQueryable();
-            IEnumerable<DateTime> dates = tests.
-                Select(test => test.CreatedOn.Date)
+            IQueryable<TestEntity> tests = _unitOfWork.TestRepository
+                .GetAllAsQueryable()
+                .Where(test => test.UserId == userId);
+            IEnumerable<DateTime> dates = tests
+                .Select(test => test.CreatedOn.Date)
                 .Distinct();
 
             IEnumerable<DateTime> lastStreak = dates
@@ -59,12 +63,13 @@ namespace Core.Services
 
         public IEnumerable<int> GetMonthlyUseOfTheAppByUser(StatsQueryFilterUseOfTheApp filter)
         {
-            IQueryable<TestEntity> tests = _unitOfWork.TestRepository.GetAllAsQueryable();
+            IQueryable<TestEntity> tests = _unitOfWork.TestRepository
+                .GetAllAsQueryable()
+                .Where(t => t.UserId == filter.UserId);
             DateTime from = new DateTime(filter.Year, filter.Month, 1);
             DateTime to = from.AddMonths(1);
 
             IList<int> days = tests
-                .Where(t => t.UserId == filter.UserId)
                 .Where(t => t.CreatedOn >= from)
                 .Where(t => t.CreatedOn < to)
                 .Select(t => t.CreatedOn.Day)

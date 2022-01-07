@@ -29,7 +29,7 @@ namespace Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("/use-of-the-app")]
+        [HttpGet("use-of-the-app")]
         [ProducesResponseType(typeof(IEnumerable<int>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         public IActionResult GetUseOfTheApp([FromQuery] StatsQueryFilterUseOfTheAppDto filtersDto)
@@ -42,7 +42,7 @@ namespace Api.Controllers
             return Ok(monthlyUseOfTheAppByUser);
         }
 
-        [HttpGet("/best-streak")]
+        [HttpGet("best-streak")]
         [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         public IActionResult GetBestStreak()
@@ -52,7 +52,7 @@ namespace Api.Controllers
             return Ok(bestStreak);
         }
 
-        [HttpGet("/current-streak")]
+        [HttpGet("current-streak")]
         [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         public IActionResult GetCurrentStreak()
@@ -62,7 +62,7 @@ namespace Api.Controllers
             return Ok(currentStreak);
         }
 
-        [HttpGet("/number-of-learnt-words")]
+        [HttpGet("number-of-learnt-words")]
         [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         public IActionResult GetNumberOfWordsLearntByUser([FromQuery] StatsQueryFilterNumberOfLearntWordsDto filtersDto)
@@ -75,7 +75,7 @@ namespace Api.Controllers
             return Ok(numberOfWords);
         }
 
-        [HttpGet("/percent-learnt")]
+        [HttpGet("percent-learnt")]
         [ProducesResponseType(typeof(double), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         public async Task<IActionResult> GetPercentOfWordsLearntByUser()
@@ -85,7 +85,7 @@ namespace Api.Controllers
             return Ok(percent);
         }
 
-        [HttpGet("/success-rate")]
+        [HttpGet("success-rate")]
         [ProducesResponseType(typeof(double), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         public IActionResult GetSuccessRate([FromQuery] StatsQueryFilterSuccessRateDto filtersDto)
