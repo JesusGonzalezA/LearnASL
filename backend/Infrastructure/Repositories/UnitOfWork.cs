@@ -14,6 +14,7 @@ namespace Infrastructure.Repositories
         private readonly IDatasetRepository _datasetRepository;
 
         private readonly ILearntWordRepository _learntWordRepository;
+        private readonly IErrorWordRepository _errorWordRepository;
 
         private readonly ITestRepository _testRepository;
 
@@ -36,6 +37,8 @@ namespace Infrastructure.Repositories
 
         public ILearntWordRepository LearntWordRepository
                 => _learntWordRepository ?? new LearntWordRepository(_context);
+        public IErrorWordRepository ErrorWordRepository
+                => _errorWordRepository ?? new ErrorWordRepository(_context);
 
         public ITestRepository TestRepository
                 => _testRepository ?? new TestRepository(_context);

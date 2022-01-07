@@ -37,8 +37,8 @@ namespace Tests.Core.Services
             Assert.Empty(questionService.GetQuestions(testEntityDB));
 
             // Add questions
-            await InitializeDataset();
-            IList<BaseQuestionEntity> questions = await _questionGeneratorService.CreateQuestions(1, testType, Difficulty.EASY, testId);
+            await InitializeDataset(userId);
+            IList<BaseQuestionEntity> questions = await _questionGeneratorService.CreateQuestions(1, testType, Difficulty.EASY, testId, userId);
             await questionService.AddQuestions(testType, questions);
 
             Assert.NotEmpty(questionService.GetQuestions(testEntityDB));
@@ -61,8 +61,8 @@ namespace Tests.Core.Services
             Assert.Empty(questionService.GetQuestions(testEntityDB));
 
             // Add questions
-            await InitializeDataset();
-            IList<BaseQuestionEntity> questions = await _questionGeneratorService.CreateQuestions(1, testType, Difficulty.EASY, testId);
+            await InitializeDataset(userId);
+            IList<BaseQuestionEntity> questions = await _questionGeneratorService.CreateQuestions(1, testType, Difficulty.EASY, testId, userId);
             await questionService.AddQuestions(testType, questions);
 
             IEnumerable<BaseQuestionEntity> allQuestions = questionService.GetQuestions(testEntityDB);
@@ -86,8 +86,8 @@ namespace Tests.Core.Services
             Assert.Empty(questionService.GetQuestions(testEntityDB));
 
             // Add questions
-            await InitializeDataset();
-            IList<BaseQuestionEntity> questions = await _questionGeneratorService.CreateQuestions(1, testType, Difficulty.EASY, testId);
+            await InitializeDataset(userId);
+            IList<BaseQuestionEntity> questions = await _questionGeneratorService.CreateQuestions(1, testType, Difficulty.EASY, testId, userId);
             await questionService.AddQuestions(testType, questions);
 
             IEnumerable<BaseQuestionEntity> allQuestions = questionService.GetQuestions(testEntityDB);
@@ -120,8 +120,8 @@ namespace Tests.Core.Services
             Assert.Empty(questionService.GetQuestions(testEntityDB));
 
             // Add questions
-            await InitializeDataset();
-            IList<BaseQuestionEntity> questions = await _questionGeneratorService.CreateQuestions(1, testType, Difficulty.EASY, testId);
+            await InitializeDataset(userId);
+            IList<BaseQuestionEntity> questions = await _questionGeneratorService.CreateQuestions(1, testType, Difficulty.EASY, testId, userId);
             await questionService.AddQuestions(testType, questions);
 
             IEnumerable<BaseQuestionEntity> allQuestions = questionService.GetQuestions(testEntityDB);
@@ -219,7 +219,7 @@ namespace Tests.Core.Services
             return testEntity;
         }
 
-        private async Task InitializeDataset()
+        private async Task InitializeDataset(Guid userId)
         {
             for(int i=0; i<5; ++i)
             {
@@ -231,10 +231,15 @@ namespace Tests.Core.Services
                     Index = i
                 };
 
-                await _unitOfWork.DatasetRepository.Add(video);
+                Guid guid = await _unitOfWork.DatasetRepository.Add(video);
+                await _unitOfWork.ErrorWordRepository.Add(new ErrorWordEntity()
+                {
+                    DatasetItemEntityId = guid,
+                    UserId = userId
+                });
             }
 
-
+            
         }
     }
 }

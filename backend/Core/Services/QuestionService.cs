@@ -46,21 +46,16 @@ namespace Core.Services
             dynamic updatedQuestion = await GetUpdatedQuestion(testType, questionGuid, parameters);
             dynamic repository = GetQuestionRepository(testType);
 
-            if (updatedQuestion.IsQuestionCorrect())
+            Guid userId = updatedQuestion.Test.UserId;
+            Guid datasetItemId = updatedQuestion.DatasetItem.Id;
+
+            if(updatedQuestion.IsQuestionCorrect())
             {
-                Guid userId = updatedQuestion.Test.UserId;
-                Guid datasetItemId = updatedQuestion.DatasetItem.Id;
-
-                LearntWordEntity learntWordEntity = await _unitOfWork.LearntWordRepository.Get(userId, datasetItemId);
-
-                if (learntWordEntity == null)
-                {
-                    await _unitOfWork.LearntWordRepository.Add(new LearntWordEntity()
-                    {
-                        UserId = userId,
-                        DatasetItemEntityId = datasetItemId
-                    });
-                }
+                await AddToLearntWordRepository(userId, datasetItemId);
+                await DeleteFromErrorWordRepository(userId, datasetItemId);
+            } else
+            {
+                await AddToErrorWordRepository(userId, datasetItemId);
             }
 
             await repository.Update(updatedQuestion);
@@ -128,6 +123,44 @@ namespace Core.Services
             }
 
             return question;
+        }
+
+        private async Task AddToErrorWordRepository(Guid userId, Guid datasetItemId)
+        {
+            ErrorWordEntity errorWordEntity = await _unitOfWork.ErrorWordRepository.Get(userId, datasetItemId);
+
+            if (errorWordEntity == null)
+            {
+                await _unitOfWork.ErrorWordRepository.Add(new ErrorWordEntity()
+                {
+                    UserId = userId,
+                    DatasetItemEntityId = datasetItemId
+                });
+            }
+        }
+
+        private async Task AddToLearntWordRepository(Guid userId, Guid datasetItemId)
+        {
+            LearntWordEntity learntWordEntity = await _unitOfWork.LearntWordRepository.Get(userId, datasetItemId);
+
+            if (learntWordEntity == null)
+            {
+                await _unitOfWork.LearntWordRepository.Add(new LearntWordEntity()
+                {
+                    UserId = userId,
+                    DatasetItemEntityId = datasetItemId
+                });
+            }
+        }
+
+        private async Task DeleteFromErrorWordRepository(Guid userId, Guid datasetItemId)
+        {
+            ErrorWordEntity errorWordEntity = await _unitOfWork.ErrorWordRepository.Get(userId, datasetItemId);
+
+            if (errorWordEntity != null)
+            {
+                await _unitOfWork.ErrorWordRepository.Delete(errorWordEntity.Id);
+            }
         }
     }
 }

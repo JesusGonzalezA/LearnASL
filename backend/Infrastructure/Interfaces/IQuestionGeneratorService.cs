@@ -8,6 +8,13 @@ namespace Infrastructure.Interfaces
 {
     public interface IQuestionGeneratorService
     {
-        public Task<IList<BaseQuestionEntity> > CreateQuestions(int numberOfQuestions, TestType testType, Difficulty difficulty, Guid testId);
+        public Task<IList<BaseQuestionEntity> > CreateQuestions
+        (
+            int numberOfQuestions,
+            TestType testType,
+            Difficulty difficulty,
+            Guid testId,
+            Guid userId
+        );
     }
 }
