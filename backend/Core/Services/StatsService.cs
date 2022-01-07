@@ -30,13 +30,13 @@ namespace Core.Services
                 .Select(test => test.CreatedOn.Date)
                 .Distinct();
 
+            if (!dates.Any())
+                return 0;
+
             List<int> groupOfStreaks = dates
                 .GroupWhile((date1, date2) => (date1.AddDays(1) == date2))
                 .Select(x => x.Count())
                 .ToList();
-
-            if (groupOfStreaks == null)
-                return 0;
 
             return groupOfStreaks.Max();
         }
@@ -50,13 +50,13 @@ namespace Core.Services
                 .Select(test => test.CreatedOn.Date)
                 .Distinct();
 
+            if (!dates.Any())
+                return 0;
+
             IEnumerable<DateTime> lastStreak = dates
                 .GroupWhile((date1, date2) => (date1.AddDays(1) == date2))
                 .Last()
                 .ToList();
-
-            if (!lastStreak.Contains(DateTime.Now.Date))
-                return 0;
 
             return lastStreak.Count();
         }
