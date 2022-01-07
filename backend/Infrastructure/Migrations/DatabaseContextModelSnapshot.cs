@@ -53,6 +53,33 @@ namespace Infrastructure.Migrations
                     b.ToTable("Dataset");
                 });
 
+            modelBuilder.Entity("Core.Entities.ErrorWordEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("DatasetItemEntityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DatasetItemEntityId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ErrorWords");
+                });
+
             modelBuilder.Entity("Core.Entities.LearntWordEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -339,6 +366,27 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Core.Entities.ErrorWordEntity", b =>
+                {
+                    b.HasOne("Core.Entities.DatasetItemEntity", "DatasetItem")
+                        .WithMany()
+                        .HasForeignKey("DatasetItemEntityId")
+                        .HasConstraintName("FK_ErrorWord_DatasetItem")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.UserEntity", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("FK_ErrorWord_User")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DatasetItem");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Core.Entities.LearntWordEntity", b =>
