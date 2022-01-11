@@ -15,7 +15,6 @@
     <None Remove="Services\" />
     <None Remove="MailKit" />
     <None Remove="Mappings\" />
-    <None Remove="Interfaces\" />
     <None Remove="AutoMapper.Extensions.Microsoft.DependencyInjection" />
     <None Remove="Validators\" />
     <None Remove="Microsoft.AspNetCore.Mvc.Core" />
@@ -38,7 +37,6 @@
     <Folder Include="Data\" />
     <Folder Include="Services\" />
     <Folder Include="Mappings\" />
-    <Folder Include="Interfaces\" />
     <Folder Include="Validators\" />
     <Folder Include="Factories\" />
     <Folder Include="Factories\QuestionFactories\" />

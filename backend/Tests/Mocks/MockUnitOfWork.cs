@@ -1,10 +1,7 @@
 using System;
-using Core.Options;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
-using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace Tests.Mocks
 {

@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Core.CustomEntities;
 using Core.Entities.Tests;
 using Core.Exceptions;
+using Core.Extensions;
 using Core.Interfaces;
 using Core.Options;
-using Microsoft.Extensions.Options;
 using Core.QueryFilters;
-using Core.Extensions;
-using Core.CustomEntities;
-using System.Linq;
+using Microsoft.Extensions.Options;
 
 namespace Core.Services
 {

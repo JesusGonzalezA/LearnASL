@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace Core.Exceptions
 {
     public class ControllerException : Exception

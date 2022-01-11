@@ -1,5 +1,5 @@
-﻿using FluentValidation;
-using Core.Contracts.Incoming;
+﻿using Core.Contracts.Incoming;
+using FluentValidation;
 
 namespace Infrastructure.Validators
 {

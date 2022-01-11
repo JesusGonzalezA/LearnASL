@@ -1,4 +1,5 @@
-﻿namespace Core.Enums
+﻿
+namespace Core.Enums
 {
     public enum Difficulty
     {
