@@ -8,7 +8,7 @@ using Core.Entities.Tests;
 using Core.Enums;
 using Core.Exceptions;
 using Core.Interfaces;
-using Infrastructure.Interfaces;
+using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

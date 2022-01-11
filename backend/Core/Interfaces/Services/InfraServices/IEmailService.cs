@@ -1,7 +1,7 @@
 ﻿
 using System.Threading.Tasks;
 
-namespace Infrastructure.Interfaces
+namespace Core.Interfaces
 {
     public interface IEmailService
     {

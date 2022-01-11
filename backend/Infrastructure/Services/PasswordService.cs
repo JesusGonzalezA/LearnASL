@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Security.Cryptography;
 using Core.Options;
-using Infrastructure.Interfaces;
+using Core.Interfaces;
 using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Services

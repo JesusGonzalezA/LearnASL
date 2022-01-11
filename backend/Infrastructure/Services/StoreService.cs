@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using Core.Options;
-using Infrastructure.Interfaces;
+using Core.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
