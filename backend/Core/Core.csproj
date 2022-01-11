@@ -22,6 +22,10 @@
     <None Remove="ValidationAttributes\" />
     <None Remove="Options\" />
     <None Remove="Contracts\Responses\" />
+    <None Remove="Interfaces\Repositories\" />
+    <None Remove="Interfaces\Services\" />
+    <None Remove="Interfaces\Services\CoreServices\" />
+    <None Remove="Interfaces\Services\InfraServices\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
@@ -38,6 +42,10 @@
     <Folder Include="ValidationAttributes\" />
     <Folder Include="Options\" />
     <Folder Include="Contracts\Responses\" />
+    <Folder Include="Interfaces\Repositories\" />
+    <Folder Include="Interfaces\Services\" />
+    <Folder Include="Interfaces\Services\CoreServices\" />
+    <Folder Include="Interfaces\Services\InfraServices\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.14.1" />

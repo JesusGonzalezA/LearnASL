@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Core.Entities.Tests;
 using Core.Enums;
 
-namespace Infrastructure.Interfaces
+namespace Core.Interfaces
 {
     public interface IQuestionGeneratorService
     {

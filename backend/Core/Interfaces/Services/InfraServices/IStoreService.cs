@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace Infrastructure.Interfaces
+namespace Core.Interfaces
 {
     public interface IStoreService
     {

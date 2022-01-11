@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Infrastructure.Interfaces;
+using Core.Interfaces;
 using Core.Options;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;

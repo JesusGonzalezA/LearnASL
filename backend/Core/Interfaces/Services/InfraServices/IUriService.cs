@@ -2,7 +2,7 @@
 using Core.CustomEntities;
 using Core.Entities.Tests;
 
-namespace Infrastructure.Interfaces
+namespace Core.Interfaces
 {
     public interface IUriService
     {

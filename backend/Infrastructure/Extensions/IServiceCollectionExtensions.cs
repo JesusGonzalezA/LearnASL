@@ -9,7 +9,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Infrastructure.Data;
 using Infrastructure.Filters;
-using Infrastructure.Interfaces;
+using Core.Interfaces;
 using Infrastructure.Mappings;
 using Infrastructure.Repositories;
 using Infrastructure.Services;

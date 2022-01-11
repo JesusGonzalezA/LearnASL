@@ -9,7 +9,7 @@ using Core.Exceptions;
 using Core.Interfaces;
 using Core.Options;
 using Infrastructure.Factories.QuestionFactories;
-using Infrastructure.Interfaces;
+using Core.Interfaces;
 using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Services
