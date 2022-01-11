@@ -9,7 +9,6 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Infrastructure.Data;
 using Infrastructure.Filters;
-using Core.Interfaces;
 using Infrastructure.Mappings;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
@@ -25,6 +24,15 @@ namespace Infrastructure.Extensions
 {
     public static class IServiceCollectionExtensions
     {
+        public static IServiceCollection ConfigureHealthChecks(this IServiceCollection services)
+        {
+            services
+                .AddHealthChecks()
+                .AddDbContextCheck<DatabaseContext>();
+
+            return services;
+        }
+
         public static IServiceCollection ConfigureDI(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

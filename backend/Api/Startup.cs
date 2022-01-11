@@ -8,8 +8,8 @@ using System.Security.Claims;
 using Api.Middleware;
 using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,7 +39,8 @@ namespace Api
                 .ConfigureOptions(Configuration)
                 .ConfigureDatabase(Configuration)
                 .ConfigureAuthentication(Configuration)
-                .ConfigureValidators();
+                .ConfigureValidators()
+                .ConfigureHealthChecks();
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
@@ -77,6 +78,11 @@ namespace Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+                endpoints.MapHealthChecks("/api/health", new HealthCheckOptions()
+                {
+                    AllowCachingResponses = false
+                });
             });
         }
 
@@ -185,7 +191,6 @@ namespace Api
                     "Learn ASL API v1"
                 );
                 c.RoutePrefix = string.Empty;
-                
             });
         }
     }
