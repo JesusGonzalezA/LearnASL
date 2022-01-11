@@ -58,7 +58,11 @@ namespace Core.Services
                 .Last()
                 .ToList();
 
-            return lastStreak.Count();
+            DateTime lastDateOfLastStreak = lastStreak.Last().Date;
+
+            return (lastDateOfLastStreak.AddDays(1) >= DateTime.Today)
+                ? lastStreak.Count()
+                : 0;                    // The streak has passed
         }
 
         public IEnumerable<int> GetMonthlyUseOfTheAppByUser(StatsQueryFilterUseOfTheApp filter)
