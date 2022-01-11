@@ -1,8 +1,8 @@
-﻿using Core.Interfaces;
+﻿using System;
 using System.Threading.Tasks;
-using System;
 using Core.Entities;
 using Core.Exceptions;
+using Core.Interfaces;
 
 namespace Core.Services
 {

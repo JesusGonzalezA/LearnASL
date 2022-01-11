@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Security.Cryptography;
-using Core.Options;
 using Core.Interfaces;
+using Core.Options;
 using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Services

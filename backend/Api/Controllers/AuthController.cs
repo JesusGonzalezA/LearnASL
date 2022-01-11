@@ -1,15 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Core.Interfaces;
-using Core.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Core.Contracts.Incoming;
-using System.Net;
-using Core.Entities;
-using System;
-using Microsoft.AspNetCore.Authorization;
 using Core.Contracts.Responses;
+using Core.Entities;
 using Core.Exceptions;
-using System.Collections.Generic;
+using Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {

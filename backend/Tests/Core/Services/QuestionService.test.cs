@@ -10,7 +10,6 @@ using Core.Exceptions;
 using Core.Interfaces;
 using Core.Options;
 using Core.Services;
-using Core.Interfaces;
 using Infrastructure.Services;
 using Microsoft.Extensions.Options;
 using Tests.Mocks;

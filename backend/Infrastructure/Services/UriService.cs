@@ -5,7 +5,6 @@ using System.Web;
 using Core.Contracts.Incoming;
 using Core.CustomEntities;
 using Core.Entities.Tests;
-using Core.QueryFilters;
 using Core.Interfaces;
 
 namespace Infrastructure.Services

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Core.CustomEntities;
+using Core.Entities;
 using Core.Entities.Tests;
 using Core.Enums;
-using Core.Interfaces;
-using System.Linq;
-using Core.CustomEntities;
 using Core.Exceptions;
-using Core.Entities;
+using Core.Interfaces;
 
 namespace Core.Services
 {

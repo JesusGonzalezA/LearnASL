@@ -1,15 +1,15 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using Serilog;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Threading.Tasks;
-using System.IO;
-using Microsoft.AspNetCore.Http.Extensions;
-using Core.Exceptions;
 using Core.Contracts.Responses;
-using System.Collections.Generic;
+using Core.Exceptions;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using Newtonsoft.Json;
+using Serilog;
 
 namespace Api.Middleware
 {

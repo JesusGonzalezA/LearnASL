@@ -1,6 +1,6 @@
-﻿using FluentValidation;
+﻿using System.Text.RegularExpressions;
 using Core.Contracts.Incoming;
-using System.Text.RegularExpressions;
+using FluentValidation;
 
 namespace Infrastructure.Validators
 {

@@ -12,7 +12,6 @@ using Core.Entities.Tests;
 using Core.Exceptions;
 using Core.Interfaces;
 using Core.QueryFilters;
-using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
