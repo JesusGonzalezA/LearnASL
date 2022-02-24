@@ -1,11 +1,11 @@
 import { Provider } from 'react-redux'
 import { store } from './redux/store'
-import { AuthScreen } from './screens/AuthScreen';
+import { AppRouter } from './routers/AppRouter'
 
 const LearnASLApp = () => {
     return (
         <Provider store={store}>
-            <AuthScreen />
+            <AppRouter />
         </Provider>
     )
 }

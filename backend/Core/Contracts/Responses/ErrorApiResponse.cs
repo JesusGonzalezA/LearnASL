@@ -5,9 +5,9 @@ namespace Core.Contracts.Responses
     {
         public ErrorApiResponse(T data)
         {
-            Errors = data;
+            errors = data;
         }
 
-        public T Errors { get; set; }
+        public T errors { get; set; }
     }
 }

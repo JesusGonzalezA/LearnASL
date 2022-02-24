@@ -21,6 +21,8 @@ namespace Api
 {
     public class Startup
     {
+        private readonly string _corsName = "WebAppCors";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -40,7 +42,8 @@ namespace Api
                 .ConfigureDatabase(Configuration)
                 .ConfigureAuthentication(Configuration)
                 .ConfigureValidators()
-                .ConfigureHealthChecks();
+                .ConfigureHealthChecks()
+                .ConfigureCors(Configuration, _corsName);
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
@@ -69,6 +72,8 @@ namespace Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(_corsName);
 
             app.UseAuthentication();
             app.UseAuthorization();

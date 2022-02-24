@@ -1,31 +1,158 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { User } from '../../models/User'
+import { createSlice } from '@reduxjs/toolkit'
+import { User } from '../../models/auth'
+import * as AuthActions from './actions'
+import { PersistenceService } from '../../services/persistenceService';
 
 export interface AuthState {
-  user: User
+  user: User,
+  status: 'idle' | 'loading' | 'failed',
+  errors: string[],
+  messages: {
+    info: string[]
+    success: string[]
+  }
 }
 
 const invalidUser : User = {
-    username: null,
-    password: ''
+    email: '',
+    id: ''
 }
 
 export const initialState: AuthState = {
-  user: invalidUser
+  user: new PersistenceService().get('user') ?? invalidUser,
+  status: 'idle',
+  errors: [],
+  messages: {
+    info: [],
+    success: []
+  }
 }
 
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<User>) => {
-        state.user = action.payload
-    },
     logout: state => {
       state.user = invalidUser
+      state.status = 'idle'
+    },
+    clearMessages: state => {
+      state.messages = { info: [], success: [] }
+      state.status = 'idle'
+    },
+    clearErrors: state => {
+      state.errors = []
+      state.status = 'idle'
+    },
+    clearError: (state, action) => {
+      state.errors = state.errors.filter(er => er !== action.payload)
+      state.status = 'idle'
+    },
+    clearInfoMessage: (state, action) => {
+      state.messages.info = state.messages.info.filter(me => me !== action.payload)
+      state.status = 'idle'
+    },
+    clearSuccessMessage: (state, action) => {
+      state.messages.success = state.messages.success.filter(me => me !== action.payload)
+      state.status = 'idle'
     }
+  },
+  extraReducers: (builder) => {
+    builder
+      // Login
+      .addCase(AuthActions.loginAsync.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(AuthActions.loginAsync.fulfilled, (state, action) => {
+        state.status = 'idle'
+        state.user = {
+            email: action.payload.data.email,
+            token: action.payload.data.access_Token
+        }
+        state.errors = []
+      })
+      .addCase(AuthActions.loginAsync.rejected, (state, action) => {
+        state.status = 'failed'
+        state.user = invalidUser
+        state.errors = (action.payload) ? action.payload.errors : ['Something went wrong']
+      })
+
+      //Register
+      .addCase(AuthActions.registerAsync.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(AuthActions.registerAsync.fulfilled, (state) => {
+        state.status = 'idle'
+        state.messages.info = ['Review your mail box to confirm your registration']
+      })
+      .addCase(AuthActions.registerAsync.rejected, (state, action) => {
+        state.status = 'failed'
+        state.user = invalidUser
+        state.errors = (action.payload) ? action.payload.errors : ['Something went wrong']
+      })
+
+      // Confirm email - start
+      .addCase(AuthActions.resendConfirmationEmailAsync.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(AuthActions.resendConfirmationEmailAsync.fulfilled, (state) => {
+        state.status = 'idle'
+        state.messages.info = ['Review your mail box to confirm your registration']
+      })
+      .addCase(AuthActions.resendConfirmationEmailAsync.rejected, (state, action) => {
+        state.status = 'failed'
+        state.errors = (action.payload) ? action.payload.errors : ['Something went wrong']
+      })
+
+      // Confirm email
+      .addCase(AuthActions.confirmEmailAsync.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(AuthActions.confirmEmailAsync.fulfilled, (state) => {
+        state.status = 'idle'
+      })
+      .addCase(AuthActions.confirmEmailAsync.rejected, (state, action) => {
+        state.status = 'failed'
+        state.errors = (action.payload) ? action.payload.errors : ['Something went wrong']
+      })
+
+      // Change password - start
+      .addCase(AuthActions.startChangePasswordAsync.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(AuthActions.startChangePasswordAsync.fulfilled, (state) => {
+        state.status = 'idle'
+        state.messages.info = ['Review your mail box to recover your password']
+      })
+      .addCase(AuthActions.startChangePasswordAsync.rejected, (state, action) => {
+        state.status = 'failed'
+        state.errors = (action.payload) ? action.payload.errors : ['Something went wrong']
+      })
+
+      // Change password
+      .addCase(AuthActions.changePasswordAsync.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(AuthActions.changePasswordAsync.fulfilled, (state) => {
+        state.status = 'idle'
+        state.messages.success = ['Password was changed successfully']
+      })
+      .addCase(AuthActions.changePasswordAsync.rejected, (state, action) => {
+        state.status = 'failed'
+        state.errors = (action.payload) ? action.payload.errors : ['Something went wrong']
+      })
+
+      // Change email
+      
   }
 })
 
-export const { login, logout } = authSlice.actions
+export const { 
+  logout, 
+  clearErrors, 
+  clearMessages,
+  clearError,
+  clearInfoMessage,
+  clearSuccessMessage
+} = authSlice.actions
 export default authSlice.reducer
