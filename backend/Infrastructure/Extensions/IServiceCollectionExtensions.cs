@@ -49,7 +49,8 @@ namespace Infrastructure.Extensions
                         builder
                             .SetIsOriginAllowed(or => new Uri(or).Host == origin)
                             .AllowAnyHeader()
-                            .AllowAnyMethod();
+                            .AllowAnyMethod()
+                            .WithExposedHeaders("X-Pagination");
                     });
                 });
 

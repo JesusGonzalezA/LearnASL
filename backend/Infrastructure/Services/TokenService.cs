@@ -19,7 +19,7 @@ namespace Infrastructure.Services
             _tokenOptions = tokenOptions.Value;
         }
 
-        public dynamic GenerateJWTToken(string email, string guid)
+        public string GenerateJWTToken(string email = null, string guid = null)
         {
             List<Claim> claims = new List<Claim>
             {
@@ -29,35 +29,23 @@ namespace Infrastructure.Services
                 new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString())
             };
 
-            JwtSecurityToken token = new JwtSecurityToken(
-                new JwtHeader(
-                    new SigningCredentials(
-                        new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(_tokenOptions.SecurityKey)
-                        ),
-                        SecurityAlgorithms.HmacSha256
-                    )
-                ),
-                new JwtPayload(claims)
-            );
-
-            var output = new
+            List<Claim> userClaims = new List<Claim>();
+            if (email != null)
             {
-                Access_Token = new JwtSecurityTokenHandler().WriteToken(token),
-                Email = email
-            };
+                userClaims.Add(new Claim(ClaimTypes.Email, email));
+            }
+            if(guid != null)
+            {
+                userClaims.Add(new Claim(ClaimTypes.NameIdentifier, guid));
+            }
 
-            return output;
+            claims.AddRange(userClaims);
+
+            return Generate(claims);
         }
 
-        public string GenerateJWTToken()
+        private string Generate(List<Claim> claims)
         {
-            List<Claim> claims = new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
-                new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString())
-            };
-
             JwtSecurityToken token = new JwtSecurityToken(
                 new JwtHeader(
                     new SigningCredentials(

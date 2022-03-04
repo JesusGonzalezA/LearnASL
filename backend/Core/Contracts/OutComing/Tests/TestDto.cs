@@ -19,5 +19,8 @@ namespace Core.Contracts.OutComing.Tests
 
         [Required]
         public IEnumerable<BaseQuestionDto> Questions { get; set; }
+
+        [Required]
+        public DateTime CreatedOn { get; set; }
     }
 }

@@ -32,7 +32,7 @@ export const ResendConfirmationEmailForm = () => {
             validationSchema={resendConfirmationEmailSchema}
             validateOnChange
         >
-            {({errors, touched, isValid, dirty, values}) => (
+            {({errors, touched, isValid, dirty}) => (
                 <Form>
                     <div>
                         <FormikField 

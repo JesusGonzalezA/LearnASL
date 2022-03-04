@@ -19,4 +19,11 @@ export class PersistenceService {
             
         }
     }
+
+    clear() {
+        try {
+            sessionStorage.clear()
+        }
+        catch (error) {}
+    }
 }

@@ -2,7 +2,8 @@ import { BaseResponse } from './base'
 
 interface LoginData {
     email: string,
-    access_Token: string
+    token: string,
+    id: string
 }
 
 export interface LoginResponse extends BaseResponse {

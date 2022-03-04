@@ -22,7 +22,7 @@ const loginAsync = createAsyncThunk<
                 }
 
                 const persistenceService = new PersistenceService()
-                persistenceService.set('user', { email: data.email, token: data.access_Token })
+                persistenceService.set('user', data)
 
                 return {
                     data

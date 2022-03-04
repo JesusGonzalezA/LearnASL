@@ -63,7 +63,8 @@ namespace Api.Controllers
                     throw new ControllerException("Credentials are not correct.");
                 }
 
-                return Ok(_tokenService.GenerateJWTToken(login.Email, user.Id.ToString()));
+                string token = _tokenService.GenerateJWTToken(login.Email, user.Id.ToString());
+                return Ok(new { token = token, email = login.Email, id = user.Id.ToString() });
             }
             catch(ControllerException exception)
             {

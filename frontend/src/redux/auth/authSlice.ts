@@ -1,7 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { AnyAction, createSlice, ThunkAction } from '@reduxjs/toolkit'
 import { User } from '../../models/auth'
 import * as AuthActions from './actions'
-import { PersistenceService } from '../../services/persistenceService';
+import { PersistenceService } from '../../services/persistenceService'
 
 export interface AuthState {
   user: User,
@@ -15,7 +15,8 @@ export interface AuthState {
 
 const invalidUser : User = {
     email: '',
-    id: ''
+    id: '',
+    token: undefined
 }
 
 export const initialState: AuthState = {
@@ -67,7 +68,8 @@ export const authSlice = createSlice({
         state.status = 'idle'
         state.user = {
             email: action.payload.data.email,
-            token: action.payload.data.access_Token
+            token: action.payload.data.token,
+            id: action.payload.data.id
         }
         state.errors = []
       })
@@ -147,8 +149,14 @@ export const authSlice = createSlice({
   }
 })
 
-export const { 
-  logout, 
+export const thunkLogout = (): ThunkAction<void, unknown, unknown, AnyAction> => {
+  return dispatch => {
+    new PersistenceService().clear()
+    dispatch(authSlice.actions.logout())
+  }
+}
+
+export const {  
   clearErrors, 
   clearMessages,
   clearError,
