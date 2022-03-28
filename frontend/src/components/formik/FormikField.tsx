@@ -31,6 +31,14 @@ export const FormikField = ({
         event.preventDefault();
     }
 
+    const getType = () => {
+        if (type === 'password'){
+            return (showPassword)? 'text' : 'password'
+        }
+        else 
+            return type    
+    }
+
     return (
         <div>
             <Field 
@@ -43,8 +51,9 @@ export const FormikField = ({
                 variant={variant} 
                 error={errorText !== undefined && touched}
                 helperText={touched && errorText}
-                type={(type==='password' && !showPassword)? 'password' : 'text'}
+                type={getType()}
                 InputProps={{
+                    ...rest.InputProps,
                     startAdornment: type==='password' && 
                     (
                         <InputAdornment position="start">

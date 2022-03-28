@@ -4,32 +4,30 @@ import { Test } from '../models/test'
 import { useAppSelector, useAppDispatch } from '../redux/hooks'
 import * as TestApi from '../api/test'
 import { CardTest } from '../components/test/CardTest'
-import { setRecentFilter, setRecentPageNumber } from '../redux/test/testSlice'
+import { setRecentFilter, setRecentPageNumber, setTotalTests } from '../redux/test/testSlice'
+import { setErrors } from '../redux/dashboard/dashboardSlice'
 
 interface Metadata {
   TotalCount: number
 }
 
 export const HomeScreen = () => {
-  const [totalTests, setTotalTests] = useState<number>(10)
+  const { filters, totalTests } = useAppSelector(state => state.test)
   const { id } = useAppSelector(state => state.auth.user)
-  const { filters } = useAppSelector(state => state.test) 
   const dispatch = useAppDispatch()
   const [recentTests, setRecentTests] = useState<Test[]>([])
 
-  const getTests = useCallback(async () => {
-    const response = await TestApi.getTests({
-      pageSize: filters.recent.pageSize, 
-      pageNumber: filters.recent.pageNumber + 1,
-      userId: id ?? ''
-    })
-    if (!response.ok) return 
-
-    const body = await response.json() as Test[]
-    const pagination = JSON.parse(response.headers.get('X-Pagination') ?? '') as Metadata
-    
-    setTotalTests(pagination.TotalCount)
-    setRecentTests(body)
+  const getTests = useCallback(async (abortController: AbortController) => {
+    const response = await TestApi.getTests
+    (
+      {
+        pageSize: filters.recent.pageSize, 
+        pageNumber: filters.recent.pageNumber + 1,
+        userId: id ?? '',
+      },
+      abortController
+    )
+    return response
   }, [id, filters.recent])
 
   const handleChangeRowsPerPage = (
@@ -49,8 +47,37 @@ export const HomeScreen = () => {
   }
 
   useEffect(() => {
-    getTests()
-  }, [filters, getTests])
+    const abortController = new AbortController()
+
+    const fetchAndSet = async () => {
+      getTests(abortController)
+        .then( async (result) => {
+          if (!result.ok)
+          {
+            const error = (result.status === 401) 
+              ? 'Your session has expired. Login again.'
+              : 'Something went wrong'
+            dispatch(setErrors([error]))
+            return
+          }
+
+          const body = await result.json() as Test[]
+          const pagination = JSON.parse(result.headers.get('X-Pagination') ?? '') as Metadata
+          
+          dispatch(setTotalTests(pagination.TotalCount))
+          setRecentTests(body)
+        })
+        .catch( (err) => {
+          dispatch(setErrors(['Something went wrong']))
+        })
+    }
+
+    fetchAndSet()
+
+    return () => {
+      abortController.abort()
+    }
+  }, [dispatch, getTests])
 
   return (
     <div>
@@ -63,7 +90,7 @@ export const HomeScreen = () => {
         ))
       }
 
-    <TablePagination
+      <TablePagination
         component="div"
         count={totalTests}
         page={filters.recent.pageNumber}

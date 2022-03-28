@@ -1,5 +1,6 @@
 
 export const initialValues = {
     testType: '',
-    difficulty: ''
+    difficulty: '',
+    numberOfQuestions: 5
 }

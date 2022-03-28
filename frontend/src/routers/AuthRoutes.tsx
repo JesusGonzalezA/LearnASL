@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { Alert } from '../components/alert'
+import { AuthAlert } from '../components/alert'
 import { useAppSelector } from '../redux/hooks'
 import { 
     ConfirmEmailScreen, 
@@ -25,7 +25,7 @@ export const AuthRoutes = () => {
 
             {
                 errors.map((error, index) => (
-                    <Alert 
+                    <AuthAlert 
                         key={index}
                         message={error}
                         type='error'
@@ -36,7 +36,7 @@ export const AuthRoutes = () => {
 
             {
                 messages.info.map((info, index) => (
-                    <Alert 
+                    <AuthAlert 
                         key={index}
                         message={info}
                         type={'info'}
@@ -47,7 +47,7 @@ export const AuthRoutes = () => {
 
             {
                 messages.success.map((suc, index) => (
-                    <Alert 
+                    <AuthAlert 
                         key={index}
                         message={suc}
                         type={'success'}

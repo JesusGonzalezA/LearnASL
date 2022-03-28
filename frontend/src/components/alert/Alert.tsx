@@ -7,7 +7,8 @@ import { clearError, clearInfoMessage, clearSuccessMessage } from '../../redux/a
 interface AlertProps {
   message: string,
   position?: SnackbarOrigin,
-  type: 'info' | 'success' | 'error'
+  type: 'info' | 'success' | 'error',
+  onClose: Function
 }
 
 const MuiAlertRef = forwardRef<
@@ -22,13 +23,15 @@ const MuiAlertRef = forwardRef<
   )
 )
 
-export const Alert = ({type, message, position}: AlertProps) => {
+export const Alert = ({type, message, position, onClose}: AlertProps) => {
   const dispatch = useAppDispatch()
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return
     }
+
+    onClose()
 
     let fn: Function = () => {}
 

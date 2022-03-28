@@ -1,5 +1,6 @@
-import { useAppSelector, useAppDispatch } from '../../redux/hooks';
-import { useState } from 'react';
+import { useState } from 'react'
+import { useAppSelector, useAppDispatch } from '../../redux/hooks'
+import { useNavigate } from 'react-router-dom'
 import { 
     AppBar as AppBarMui, 
     Container,
@@ -15,9 +16,16 @@ import {
     ListItemText
 } from '@mui/material'
 import LogoutIcon from '@mui/icons-material/Logout'
+import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn'
 import { thunkLogout } from '../../redux/auth/authSlice'
+import { thunkDeleteCurrentTest } from '../../redux/test/testSlice'
 
-export const AppBar = () => {
+interface AppBarProps {
+    isGoBackVisible: boolean
+}
+
+export const AppBar = ({isGoBackVisible} : AppBarProps) => {
+    const navigate = useNavigate()
     const { email } = useAppSelector(state => state.auth.user)
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
     const dispatch = useAppDispatch()
@@ -34,10 +42,30 @@ export const AppBar = () => {
         dispatch(thunkLogout())
     }
 
+    const handleGoBack = () => {
+        dispatch(thunkDeleteCurrentTest())
+        navigate(-1)
+    }
+
     return (
         <AppBarMui position='sticky'>
             <Container maxWidth='xl'>
                 <Toolbar disableGutters>
+                    {
+                        isGoBackVisible && 
+                        (
+                            <IconButton
+                                size="large"
+                                edge="start"
+                                color="inherit"
+                                aria-label="menu"
+                                sx={{ mr: 2 }}
+                                onClick={handleGoBack}
+                            >
+                                <KeyboardReturnIcon />
+                            </IconButton>
+                        )
+                    }
                     <Typography
                         variant='h6'
                         noWrap

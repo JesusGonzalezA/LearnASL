@@ -2,6 +2,7 @@ import { AnyAction, createSlice, ThunkAction } from '@reduxjs/toolkit'
 import { User } from '../../models/auth'
 import * as AuthActions from './actions'
 import { PersistenceService } from '../../services/persistenceService'
+import { dashboardSlice } from '../dashboard/dashboardSlice'
 
 export interface AuthState {
   user: User,
@@ -153,6 +154,7 @@ export const thunkLogout = (): ThunkAction<void, unknown, unknown, AnyAction> =>
   return dispatch => {
     new PersistenceService().clear()
     dispatch(authSlice.actions.logout())
+    dispatch(dashboardSlice.actions.clearAll())
   }
 }
 

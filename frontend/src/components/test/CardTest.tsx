@@ -5,14 +5,21 @@ import { CardActionArea, Chip } from '@mui/material'
 import { Test } from '../../models/test'
 import { difficultyToColor } from '../../helpers/difficulty'
 import { testTypeToString } from '../../helpers/testType'
+import { useNavigate } from 'react-router-dom'
 
 type CardTestProps = {
   test: Test
 }
 
 export const CardTest = ({test}: CardTestProps) => {
+  const navigate = useNavigate()
+
+  const handleOnClick = () => {
+    navigate(`/test/review/${test.id}`)
+  }
+
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 345 }} onClick={handleOnClick}>
       <CardActionArea>
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">

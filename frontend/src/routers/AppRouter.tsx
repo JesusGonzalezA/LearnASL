@@ -1,15 +1,15 @@
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
-import { DashboardRoutes } from './DashboardRoutes'
 import { PrivateRoute } from './PrivateRoute'
 import { PublicRoute } from './PublicRoute'
 import { AuthRoutes } from './AuthRoutes'
+import { DashboardRoutes } from './DashboardRoutes'
 
 export const AppRouter = () => {
     return (
         <BrowserRouter>
             <Routes>
                 <Route 
-                    path="/auth/*"
+                    path='/auth/*'
                     element={
                         <PublicRoute>
                             <AuthRoutes />
@@ -18,7 +18,7 @@ export const AppRouter = () => {
                 />
 
                 <Route 
-                    path="/*" 
+                    path='/*' 
                     element={
                         <PrivateRoute>
                             <DashboardRoutes />

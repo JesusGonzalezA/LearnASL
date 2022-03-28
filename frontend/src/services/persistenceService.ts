@@ -26,4 +26,10 @@ export class PersistenceService {
         }
         catch (error) {}
     }
+
+    delete(key : string) {
+        try {
+            sessionStorage.removeItem(key)
+        } catch (error) {}
+    }
 }
