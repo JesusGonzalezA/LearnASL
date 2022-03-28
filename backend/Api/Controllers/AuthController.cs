@@ -63,7 +63,8 @@ namespace Api.Controllers
                     throw new ControllerException("Credentials are not correct.");
                 }
 
-                return Ok(_tokenService.GenerateJWTToken(login.Email, user.Id.ToString()));
+                string token = _tokenService.GenerateJWTToken(login.Email, user.Id.ToString());
+                return Ok(new { token = token, email = login.Email, id = user.Id.ToString() });
             }
             catch(ControllerException exception)
             {
@@ -99,7 +100,7 @@ namespace Api.Controllers
         {
             await _userService.DeleteUser(GuidOfCurrentUser);
             _storeService.DeleteDirectory(GuidOfCurrentUser.ToString());
-            return Ok();
+            return Ok(new { ok = true });
         }
 
         [HttpPut("")]
@@ -112,27 +113,27 @@ namespace Api.Controllers
 
             await _userService.ChangeEmail(EmailOfCurrentUser, changeEmailDto.Email);
             await StartEmailConfirmationProcess(changeEmailDto.Email);
-            return Ok();
+            return Ok(new { ok = true });
         }
 
         [HttpPut("password-recovery")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        public async Task<IActionResult> PasswordRecovery([FromHeader] string token, [FromBody] LoginDto login)
+        public async Task<IActionResult> PasswordRecovery(string token, [FromBody] LoginDto login)
         {
             string hashedPassword = _passwordService.Hash(login.Password);
             await _userService.ChangePassword(login.Email, hashedPassword, token);
-            return Ok();
+            return Ok(new { ok = true });
         }
 
         [HttpPut("email-confirmation")]
         [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        public async Task<IActionResult> EmailConfirmation([FromHeader] string token, string email)
+        public async Task<IActionResult> EmailConfirmation(string token, string email)
         {
             await _userService.ConfirmEmail(email, token);
-            return Ok();
+            return Ok(new { ok = true });
         }
 
         [HttpPut("password-recovery/start")]
@@ -143,7 +144,7 @@ namespace Api.Controllers
             string token = _tokenService.GenerateJWTToken();
             await _userService.UpdateTokenPasswordRecovery(email, token);
             await _emailService.SendPasswordRecoveryEmail(email, token);
-            return Ok();
+            return Ok(new { ok = true});
         }
 
         [HttpPut("email-confirmation/start")]
@@ -152,7 +153,7 @@ namespace Api.Controllers
         public async Task<IActionResult> StartEmailConfirmation(string email)
         {
             await StartEmailConfirmationProcess(email);
-            return Ok();
+            return Ok(new { ok = true});
         }
 
         private async Task StartEmailConfirmationProcess(string email)

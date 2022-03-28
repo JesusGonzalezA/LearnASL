@@ -33,6 +33,30 @@ namespace Infrastructure.Extensions
             return services;
         }
 
+        public static IServiceCollection ConfigureCors(this IServiceCollection services, IConfiguration configuration, string corsName)
+        {
+            services
+                .AddCors(o =>
+                {
+                    o.AddPolicy(name: corsName, builder =>
+                    {
+                        string origin
+                            = configuration
+                               .GetSection("Frontend")
+                               .GetSection("Origin")
+                               .Value;
+
+                        builder
+                            .SetIsOriginAllowed(or => new Uri(or).Host == origin)
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .WithExposedHeaders("X-Pagination");
+                    });
+                });
+
+            return services;
+        }
+
         public static IServiceCollection ConfigureDI(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -120,6 +144,10 @@ namespace Infrastructure.Extensions
                     options.KeySize = int.Parse(configuration["PasswordOptions__KeySize"]);
                     options.SaltSize = int.Parse(configuration["PasswordOptions__SaltSize"]);
                 }
+            );
+
+            services.Configure<FrontendOptions>(
+                options => configuration.GetSection("Frontend").Bind(options)
             );
 
             return services;

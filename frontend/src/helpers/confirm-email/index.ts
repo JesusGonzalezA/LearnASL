@@ -1,0 +1,2 @@
+
+export { confirmEmailSchema } from './confirmEmailSchema'

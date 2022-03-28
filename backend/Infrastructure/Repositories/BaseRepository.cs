@@ -22,12 +22,12 @@ namespace Infrastructure.Repositories
 
         public async Task<IEnumerable<T> > GetAll()
         {
-            return await _entities.ToListAsync();
+            return await _entities.OrderByDescending(t => t.CreatedOn).ToListAsync();
         }
 
         public IQueryable<T> GetAllAsQueryable()
         {
-            return _entities;
+            return _entities.OrderByDescending(t => t.CreatedOn);
         }
 
         public async Task<T> GetById(Guid id)
