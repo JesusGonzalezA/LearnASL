@@ -20,7 +20,7 @@ const testTypes = Object.entries(TestType).map(([key]) => {
   })
 })
 
-const difficulties = Object.entries(Difficulty).map(([key]) => {
+const difficulties = Object.entries(Difficulty).filter(d => d[1] !== Difficulty.NOTDEFINED).map(([key]) => {
   const label = difficultyToString(key as Difficulty)
   return ({
     label,

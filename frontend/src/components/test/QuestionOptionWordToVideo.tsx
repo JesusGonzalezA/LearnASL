@@ -13,10 +13,11 @@ import { VideoAnswer } from './VideoAnswer'
 
 interface QuestionOptionWordToVideoProps {
     question: QuestionModel,
-    editable: boolean
+    editable: boolean,
+    setCurrentAnswer: Function
 }
 
-export const QuestionOptionWordToVideo = ({ question, editable } : QuestionOptionWordToVideoProps) => {
+export const QuestionOptionWordToVideo = ({ setCurrentAnswer, question, editable } : QuestionOptionWordToVideoProps) => {
     const { token } = useAppSelector(state => state.auth.user)
     const questions = useMemo(() => (
         [
@@ -26,7 +27,7 @@ export const QuestionOptionWordToVideo = ({ question, editable } : QuestionOptio
             question.possibleAnswer3
         ])
     , [question])
-    const [value, setValue] = useState<string>(answerToLabel(questions, question.userAnswer) ?? '')
+    const [value, setValue] = useState<string>(question.userAnswer ?? '')
     const refPossibleAnswer0 = useRef<HTMLVideoElement>(null)
     const refPossibleAnswer1 = useRef<HTMLVideoElement>(null)
     const refPossibleAnswer2 = useRef<HTMLVideoElement>(null)
@@ -40,11 +41,14 @@ export const QuestionOptionWordToVideo = ({ question, editable } : QuestionOptio
     },[question, token])
 
     useEffect(() => {
-        setValue(answerToLabel(questions, question.userAnswer) ?? '')
+        setValue(question.userAnswer ?? '')
     }, [question, questions])
 
     const handleOnChange = (ev : any, value : string) => {
-        if (editable) setValue(value)
+        if (editable) {
+            setValue(value)
+            setCurrentAnswer(value)
+        }
     }
 
     const handleComputeType = (label : string ) => {

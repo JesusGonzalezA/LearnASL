@@ -1,12 +1,18 @@
+import { createTheme, CssBaseline, ThemeProvider } from '@mui/material'
 import { Provider } from 'react-redux'
 import { store } from './redux/store'
 import { AppRouter } from './routers/AppRouter'
 
+const theme = createTheme()
+
 const LearnASLApp = () => {
     return (
-        <Provider store={store}>
-            <AppRouter />
-        </Provider>
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Provider store={store}>
+                <AppRouter />
+            </Provider>
+        </ThemeProvider>
     )
 }
 

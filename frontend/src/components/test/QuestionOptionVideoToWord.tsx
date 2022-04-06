@@ -11,11 +11,12 @@ const height = '240'
 
 interface QuestionOptionVideoToWordProps {
   question: QuestionModel,
-  editable: boolean
+  editable: boolean,
+  setCurrentAnswer: Function
 }
 
 export const QuestionOptionVideoToWord = ({
-  question, editable
+  question, editable, setCurrentAnswer
 } : QuestionOptionVideoToWordProps) => {
     const { token } = useAppSelector(state => state.auth.user)
     const [value, setValue] = useState<string>(question.userAnswer ?? '')
@@ -38,7 +39,10 @@ export const QuestionOptionVideoToWord = ({
   }, [question, questions])
 
     const handleOnChange = (ev : any, value : string) => {
-        if (editable) setValue(value)
+        if (editable) {
+          setValue(value)
+          setCurrentAnswer(value)
+        }
     }
 
     const getColor = (label : string) => {

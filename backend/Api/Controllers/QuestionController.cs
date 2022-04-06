@@ -41,7 +41,7 @@ namespace Api.Controllers
         [HttpPut("{guid}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        public async Task<IActionResult> Reply(Guid guid, [FromQuery] QuestionReplyDto questionReplyDto)
+        public async Task<IActionResult> Reply(Guid guid, [FromForm] QuestionReplyDto questionReplyDto)
         {
             BaseQuestionEntity question = await _questionService.GetQuestion(questionReplyDto.TestType, guid);
             TestEntity test = await GetTest(question.TestId, GuidOfCurrentUser);
@@ -58,7 +58,7 @@ namespace Api.Controllers
 
             await _questionService.UpdateQuestion(test.TestType, guid, updateQuestionParameters);
 
-            return Ok();
+            return Ok(updateQuestionParameters);
         }
 
         private async Task<string> SaveQuestionVideoIfNecessary

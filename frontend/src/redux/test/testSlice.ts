@@ -63,6 +63,9 @@ export const testSlice = createSlice({
     },
     setPage: (state, action) => {
       state.currentTest.page = action.payload
+    },
+    setCurrentTest: (state, action) => {
+      state.currentTest.test = action.payload
     }
   },
   extraReducers: (builder) => {
@@ -103,6 +106,19 @@ export const thunkDeleteCurrentTest = (): ThunkAction<void, unknown, unknown, An
     const persistenceService = new PersistenceService()
     persistenceService.delete('currentTest')
     dispatch(testSlice.actions.deleteCurrentTest())
+  }
+}
+
+export const thunkSetCurrentTest = (test : Test): ThunkAction<void, unknown, unknown, AnyAction> => {
+  return dispatch => {
+    const persistenceService = new PersistenceService()
+    const currentTestInPersistence = persistenceService.get('currentTest')
+    persistenceService.set('currentTest', {
+      state: currentTestInPersistence.state,
+      page: currentTestInPersistence.page,
+      test
+    })
+    dispatch(testSlice.actions.setCurrentTest(test))
   }
 }
 

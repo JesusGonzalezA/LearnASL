@@ -6,6 +6,7 @@ import {
     QuestionOptionWordToVideo,
     QuestionMimic
 } from '../../models/test'
+import { answerToLabel } from './answerToLabel'
 
 export const getNumberOfCorrectAnswersFromTest = (test? : Test) => {
     if (!test) return 0
@@ -18,7 +19,10 @@ export const getNumberOfCorrectAnswersFromTest = (test? : Test) => {
         case TestType.OptionVideoToWord || TestType.OptionVideoToWord_Error:
             return (test.questions as QuestionOptionVideoToWord[]).filter(q => q.correctAnswer === q.userAnswer).length
         case TestType.OptionWordToVideo || TestType.OptionWordToVideo_Error:
-            return (test.questions as QuestionOptionWordToVideo[]).filter(q => q.correctAnswer === q.userAnswer).length
+            return (test.questions as QuestionOptionWordToVideo[]).filter((q) => {
+                const possibleAnswers = [q.possibleAnswer0, q.possibleAnswer1, q.possibleAnswer2, q.possibleAnswer3]
+                return answerToLabel(possibleAnswers, q.correctAnswer) === q.userAnswer
+            }).length
         default: 
             return 0
     }

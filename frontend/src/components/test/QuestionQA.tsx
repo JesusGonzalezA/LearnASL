@@ -9,18 +9,28 @@ const height = '240'
 
 interface QuestionQAProps {
   question: QuestionModel,
-  editable: boolean
+  editable: boolean,
+  setCurrentAnswer: Function
 }
 
 export const QuestionQA = ({
-  question, editable
+  question, editable, setCurrentAnswer
 } : QuestionQAProps) => {
     const { token } = useAppSelector(state => state.auth.user)
     const refVideo = useRef<HTMLVideoElement>(null)
 
     useEffect(() => {
-        fetchVideoAndSet(question.videoUser ?? '', token ?? '', refVideo)
+      fetchVideoAndSet(question.videoUser ?? '', token ?? '', refVideo)
     },[question, token])
+
+    const handleFileChosen = (e : any) => {
+      const file = e.target.files[0]
+      setCurrentAnswer(file)
+      if(refVideo.current !== null) {
+        const src = URL.createObjectURL(file)
+        refVideo.current.src = src
+      }
+    }
 
     return (
         <>
@@ -28,15 +38,17 @@ export const QuestionQA = ({
                 Guess: '{ question?.wordToGuess ?? '' }'
             </Typography>
 
+            <video width={width} height={height} ref={refVideo} controls />
+
             {
               (editable) 
               ? (
-                <></>
+                <>
+                  <input type='file' onChange={handleFileChosen} value='' />
+                </>
               )
               : (
                 <>
-                  <video width={width} height={height} ref={refVideo} controls />
-
                   <p>The sign is { (question.isCorrect) ? 'correct' : 'incorrect' }</p>
                 </>
               )

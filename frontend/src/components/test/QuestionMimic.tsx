@@ -9,11 +9,12 @@ const height = '240'
 
 interface QuestionMimicProps {
   question: QuestionModel,
-  editable: boolean
+  editable: boolean,
+  setCurrentAnswer: Function
 }
 
 export const QuestionMimic = ({
-  question, editable
+  question, editable, setCurrentAnswer
 } : QuestionMimicProps) => {
     const { token } = useAppSelector(state => state.auth.user)
     const refVideoHelp = useRef<HTMLVideoElement>(null)
@@ -23,6 +24,11 @@ export const QuestionMimic = ({
         fetchVideoAndSet(question.videoHelp ?? '', token ?? '', refVideoHelp)
         fetchVideoAndSet(question.videoUser ?? '', token ?? '', refVideoUser)
     },[question, token])
+
+    const handleFileChosen = (e : any) => {
+      const file = e.target.files[0]
+      setCurrentAnswer(file)
+    }
 
     return (
         <>
@@ -36,7 +42,9 @@ export const QuestionMimic = ({
             {
               (editable) 
               ? (
-                <></>
+                <>
+                  <input type='file' onChange={handleFileChosen} />
+                </>
               )
               : (
                 <>

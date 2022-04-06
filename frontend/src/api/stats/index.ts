@@ -1,6 +1,5 @@
 import getBaseUrl from '../helpers/getBaseUrl'
-import { 
-    TestQueryFilter,
+import {
     NumberOfLearntWordsQueryFilter,
     UseOfTheAppQueryFilter,
     SuccessRateQueryFilter

@@ -38,7 +38,7 @@ namespace Infrastructure.Services
         public async Task SendEmailConfirmationEmail(string email, string token)
         {
             string link = $"{_frontendOptions.Host}/auth/email-confirmation/{email}/{token}";
-            string linkHtml = $"<a href=\"{link}\">here</a>";
+            string linkHtml = $"<a target=\"_blank\" href=\"{link}\">here</a>";
 
             MimeMessage message = CreateMessage(
                 email,
@@ -51,6 +51,7 @@ namespace Infrastructure.Services
         private async Task SendAsync(MimeMessage message)
         {
             using SmtpClient smtpClient = new SmtpClient();
+            smtpClient.CheckCertificateRevocation = false;
             smtpClient.Connect(_emailOptions.Host, _emailOptions.Port, true);
             smtpClient.Authenticate(_emailOptions.UserName, _emailOptions.Password);
             await smtpClient.SendAsync(message);
