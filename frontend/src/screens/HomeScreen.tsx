@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Typography, TablePagination } from '@mui/material'
+import { Typography, TablePagination, Skeleton, Box, Card, CardContent } from '@mui/material'
 import { Test } from '../models/test'
 import { useAppSelector, useAppDispatch } from '../redux/hooks'
 import * as TestApi from '../api/test'
@@ -16,34 +16,27 @@ export const HomeScreen = () => {
   const { id } = useAppSelector(state => state.auth.user)
   const dispatch = useAppDispatch()
   const [recentTests, setRecentTests] = useState<Test[]>([])
+  const [isLoaded, setIsLoaded] = useState<boolean>(false)
 
   const getTests = useCallback(async (abortController: AbortController) => {
-    const response = await TestApi.getTests
-    (
-      {
-        pageSize: filters.recent.pageSize, 
-        pageNumber: filters.recent.pageNumber + 1,
-        userId: id ?? '',
-      },
-      abortController
-    )
-    return response
+    return await TestApi.getTests({
+      pageSize: filters.recent.pageSize, 
+      pageNumber: filters.recent.pageNumber + 1,
+      userId: id ?? '',
+    }, abortController)
   }, [id, filters.recent])
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     dispatch(setRecentFilter({
       pageSize: parseInt(event.target.value, 10), 
       pageNumber: 0
     }))
+    setIsLoaded(false)
   }
 
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
-  ) => {
+  const handleChangePage = (e : any, newPage: number) => {
     dispatch(setRecentPageNumber(newPage))
+    setIsLoaded(false)
   }
 
   useEffect(() => {
@@ -66,8 +59,9 @@ export const HomeScreen = () => {
           
           dispatch(setTotalTests(pagination.TotalCount))
           setRecentTests(body)
+          setIsLoaded(true)
         })
-        .catch( (err) => {
+        .catch( () => {
           dispatch(setErrors(['Something went wrong']))
         })
     }
@@ -85,9 +79,28 @@ export const HomeScreen = () => {
       <Typography variant='h2' component='h2'>Recent quizs</Typography>
 
       {
-        recentTests.map(t => (
-          <CardTest test={t} key={t.id} />
-        ))
+        (!isLoaded)
+          ? (
+            Array.from({ length: filters.recent.pageSize }).map(t => (
+              <Card sx={{maxWidth: '345px', marginBottom: '10px'}}>
+                <CardContent>
+                  <Box>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                      <Skeleton animation="wave" variant="rectangular" width={'30%'} />
+                      <Skeleton animation="wave" variant="circular" width={40} height={40} />
+                    </Box> 
+                    <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                      <Skeleton animation="wave" variant="rectangular" width={'30%'} />
+                      <Skeleton animation="wave" variant="rectangular" width={'30%'} />
+                    </Box>
+                  </Box>
+                </CardContent>
+              </Card>
+            ))
+          )
+          : (
+            recentTests.map(t => ( <CardTest test={t} key={t.id} /> ))
+          )
       }
 
       <TablePagination
