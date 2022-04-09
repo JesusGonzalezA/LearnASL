@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Typography } from '@mui/material'
+import { Paper, Typography } from '@mui/material'
 import { useAppDispatch } from '../../redux/hooks'
 import * as StatsApi from '../../api/stats'
 import { setErrors } from '../../redux/dashboard/dashboardSlice'
@@ -7,6 +7,7 @@ import { setErrors } from '../../redux/dashboard/dashboardSlice'
 export const BestStreak = () => {
   const dispatch = useAppDispatch()
   const [stat, setStat] = useState<number>(0)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   const getStat = useCallback(async (abortController: AbortController) => {
     const response = await StatsApi.getBestStreak(abortController)
@@ -15,7 +16,7 @@ export const BestStreak = () => {
 
   useEffect(() => {
     const abortController = new AbortController()
-
+    setIsLoading(true)
     const fetchStat = async () => {
       getStat(abortController)
         .then( async (result) => {
@@ -30,8 +31,10 @@ export const BestStreak = () => {
 
           const body = await result.json()
           setStat(body.stat)
+          setIsLoading(false)
         })
-        .catch( (err) => {
+        .catch( () => {
+          if (abortController.signal.aborted) return
           dispatch(setErrors(['Something went wrong']))
         })
     }
@@ -44,8 +47,8 @@ export const BestStreak = () => {
   }, [dispatch, getStat, stat])
 
   return (
-    <div>
-      <Typography variant='h2' component='h2'>Best streak: { stat }</Typography>
-    </div>
+    <Paper elevation={3} sx={{ padding: 3 }}>
+      <Typography variant='h4' component='h2'>Best streak: { (isLoading)? '...' : stat }</Typography>
+    </Paper>
   )
 }

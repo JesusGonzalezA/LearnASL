@@ -41,14 +41,14 @@ const MaterialUISelectField = ({
 }: MaterialUISelectFieldProps) => {
   return (
     <FormControl 
-        fullWidth 
-        variant='standard' 
+        fullWidth
+        margin='normal'
         error={hasError}
     >
         <InputLabel required={required}>
             {label}
         </InputLabel>
-        <Select name={name} onChange={onChange} onBlur={onBlur} value={value}>
+        <Select name={name} onChange={onChange} onBlur={onBlur} value={value} label={`${label} *`}>
             {children}
         </Select>
         {

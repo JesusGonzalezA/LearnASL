@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Typography } from '@mui/material'
+import { CircularProgress, Paper, Typography } from '@mui/material'
 import { useAppDispatch } from '../../redux/hooks'
 import * as StatsApi from '../../api/stats'
 import { setErrors } from '../../redux/dashboard/dashboardSlice'
@@ -11,12 +11,15 @@ import './calendar.css'
 export const UseOfTheApp = () => {
   const dispatch = useAppDispatch()
   const [stat, setStat] = useState<number[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [queryFilter, setQueryFilter] = useState<UseOfTheAppQueryFilter>({
       year: new Date().getFullYear(),
       month: new Date().getMonth() + 1
   })
 
   const handleViewChange = (e : any) => {
+    if (e.view !== 'month') return 
+    
     const date = e.activeStartDate as Date
     const month = date.getMonth() + 1
     const year = date.getFullYear()
@@ -33,7 +36,7 @@ export const UseOfTheApp = () => {
 
   useEffect(() => {
     const abortController = new AbortController()
-
+    setIsLoading(true)
     const fetchStat = async () => {
       getStat(queryFilter, abortController)
         .then( async (result) => {
@@ -48,8 +51,10 @@ export const UseOfTheApp = () => {
 
           const body = await result.json()
           setStat(body.stat)
+          setIsLoading(false)
         })
-        .catch( (err) => {
+        .catch( () => {
+          if (abortController.signal.aborted) return
           dispatch(setErrors(['Something went wrong']))
         })
     }
@@ -62,8 +67,11 @@ export const UseOfTheApp = () => {
   }, [dispatch, getStat, queryFilter])
 
   return (
-    <div>
-        <Typography variant='h2' component='h2'>Use of the app</Typography>
+    <Paper elevation={3} sx={{ padding: 3 }}>
+        <Typography variant='h4' component='h2'>Use of the app</Typography>
+        {
+          (isLoading) && <CircularProgress />
+        }
         <Calendar 
             maxDate={new Date()}
             onActiveStartDateChange={handleViewChange}
@@ -74,6 +82,6 @@ export const UseOfTheApp = () => {
                 ) ? 'calendar__day__used' : null 
             }}
         />
-    </div>
+    </Paper>
   )
 }

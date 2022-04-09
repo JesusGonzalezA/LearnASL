@@ -1,4 +1,4 @@
-import { Card, CardActionArea, SxProps } from '@mui/material'
+import { Box, Card, CardActionArea, SxProps } from '@mui/material'
 import Radio from '@mui/material/Radio'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import { AnswerType, typeToColor, typeToRadioColor } from '../../helpers/test'
@@ -30,7 +30,9 @@ export const VideoAnswer = ({handleOnChange, refAnswer, label, type} : any) => {
                     control={<Radio color={radioColor}/>} 
                 />
             </CardActionArea>
-            <video width={width} height={height} ref={refAnswer} controls />
+            <Box sx={{ display: 'flex', justifyContent: 'center'}}>
+                <video width={width} height={height} ref={refAnswer} controls />
+            </Box>
         </Card>
     )
 }

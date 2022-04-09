@@ -19,11 +19,11 @@ export const CardTest = ({test}: CardTestProps) => {
   }
 
   return (
-    <Card sx={{ maxWidth: 345, marginBottom: '10px' }} onClick={handleOnClick}>
+    <Card sx={{ minWidth: 340, maxWidth: 360, marginBottom: '10px' }} onClick={handleOnClick}>
       <CardActionArea>
         <CardContent>
           <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Typography gutterBottom variant="h5" component="div">
+            <Typography gutterBottom variant="h6" component="div">
               { testTypeToString(test.testType) }
             </Typography>
             <Chip label={ test.difficulty } color={difficultyToColor(test.difficulty)} />
@@ -32,8 +32,8 @@ export const CardTest = ({test}: CardTestProps) => {
             <Typography variant="body1" color="text.secondary">
               Questions: { test.questions.length }
             </Typography>
-            <Typography variant="body2" color="text.secondary">
-              { new Date(test.createdOn).toLocaleDateString() } { new Date(test.createdOn).toLocaleTimeString() }
+            <Typography variant="body1" color="text.secondary">
+              { new Date(test.createdOn).toLocaleDateString() } { new Date(test.createdOn).toLocaleTimeString(undefined, {hour: '2-digit', minute:'2-digit'}) }
             </Typography>
           </Box>
         </CardContent>

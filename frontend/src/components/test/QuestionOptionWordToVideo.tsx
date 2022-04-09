@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { QuestionOptionWordToVideo as QuestionModel } from '../../models/test'
 import { useAppSelector } from '../../redux/hooks'
-import { Typography } from '@mui/material'
+import { Grid, Typography } from '@mui/material'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControl from '@mui/material/FormControl'
-import { 
-    answerToLabel, 
+import {
     computeTypeOptionWordToVideo as computeType, 
     fetchVideoAndSet 
 } from '../../helpers/test'
@@ -57,36 +56,46 @@ export const QuestionOptionWordToVideo = ({ setCurrentAnswer, question, editable
 
     return (
         <>
-            <Typography variant='h2' component='h2'>
+            <Typography variant='h5' component='h2' sx={{ alignSelf: 'flex-start', marginBottom: 3}}>
                 Guess: '{ question?.wordToGuess ?? '' }'
             </Typography>
 
             <FormControl>
                 <RadioGroup value={value} onChange={handleOnChange}>
-                    <VideoAnswer 
-                        handleOnChange={() => handleOnChange({}, 'A')}
-                        refAnswer={refPossibleAnswer0}
-                        label='A'
-                        type={handleComputeType('A')}
-                    />
-                    <VideoAnswer 
-                        handleOnChange={() => handleOnChange({}, 'B')}
-                        refAnswer={refPossibleAnswer1}
-                        label='B'
-                        type={handleComputeType('B')}
-                    />
-                    <VideoAnswer 
-                        handleOnChange={() => handleOnChange({}, 'C')}
-                        refAnswer={refPossibleAnswer2}
-                        label='C'
-                        type={handleComputeType('C')}
-                    />
-                    <VideoAnswer 
-                        handleOnChange={() => handleOnChange({}, 'D')}
-                        refAnswer={refPossibleAnswer3}
-                        label='D'
-                        type={handleComputeType('D')}
-                    />
+                    <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+                        <Grid item xs={4} sm={4} md={6}>
+                            <VideoAnswer 
+                                handleOnChange={() => handleOnChange({}, 'A')}
+                                refAnswer={refPossibleAnswer0}
+                                label='A'
+                                type={handleComputeType('A')}
+                            />
+                        </Grid>
+                        <Grid item xs={4} sm={4} md={6}>
+                            <VideoAnswer 
+                                handleOnChange={() => handleOnChange({}, 'B')}
+                                refAnswer={refPossibleAnswer1}
+                                label='B'
+                                type={handleComputeType('B')}
+                            />
+                        </Grid>
+                        <Grid item xs={4} sm={4} md={6}>
+                            <VideoAnswer 
+                                handleOnChange={() => handleOnChange({}, 'C')}
+                                refAnswer={refPossibleAnswer2}
+                                label='C'
+                                type={handleComputeType('C')}
+                            />
+                        </Grid>
+                        <Grid item xs={4} sm={4} md={6}>
+                            <VideoAnswer 
+                                handleOnChange={() => handleOnChange({}, 'D')}
+                                refAnswer={refPossibleAnswer3}
+                                label='D'
+                                type={handleComputeType('D')}
+                            />
+                        </Grid>
+                    </Grid>
                 </RadioGroup>
             </FormControl>
         </>

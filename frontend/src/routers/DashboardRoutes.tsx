@@ -49,7 +49,7 @@ export const DashboardRoutes = () => {
     return (
         <>
             <Box sx={{ pb: 7 }} ref={ref}>
-                <AppBar isGoBackVisible={isGoBackVisible}/>
+                <AppBar isGoBackVisible={isGoBackVisible} sx={{ marginBottom: '10px' }} />
                 
                 <CssBaseline />
                 <Routes>

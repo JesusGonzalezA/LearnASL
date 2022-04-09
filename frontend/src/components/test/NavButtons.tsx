@@ -1,4 +1,4 @@
-import { Button } from "@mui/material"
+import { Box, Button } from "@mui/material"
 
 interface NavButtonsProps {
     editable: boolean,
@@ -18,7 +18,7 @@ export const NavButtons = ({
     handleFinish
 } : NavButtonsProps) => {
   return (
-    <div>
+    <Box sx={{ marginTop: 3, display: 'flex', width: '80%', justifyContent: 'space-between'}}>
         <Button 
             variant='outlined'
             onClick={() => { handleOnPageChange({}, page-1) }}
@@ -60,6 +60,6 @@ export const NavButtons = ({
             )
         }
         
-    </div>
+    </Box>
   )
 }

@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { useEffect, useRef } from 'react'
 import { fetchVideoAndSet } from '../../helpers/test'
 import { QuestionMimic as QuestionModel } from '../../models/test'
@@ -32,12 +32,14 @@ export const QuestionMimic = ({
 
     return (
         <>
-            <Typography variant='h2' component='h2'>
-                Try signing: '{ question?.wordToGuess ?? '' }'
-            </Typography>
+            <Box sx={{ alignSelf: 'flex-start', marginBottom: 3}}>
+              <Typography variant='h5' component='h2'>
+                  Try signing: '{ question?.wordToGuess ?? '' }'
+              </Typography>
 
-            <p>Help video</p>
-            <video width={width} height={height} ref={refVideoHelp} controls />
+              <p>Help video</p>
+              <video width={width} height={height} ref={refVideoHelp} controls />
+            </Box>
 
             {
               (editable) 
@@ -48,6 +50,7 @@ export const QuestionMimic = ({
               )
               : (
                 <>
+                  <p>User video</p>
                   <video width={width} height={height} ref={refVideoUser} controls />
 
                   <p>The sign is { (question.isCorrect) ? 'correct' : 'incorrect' }</p>

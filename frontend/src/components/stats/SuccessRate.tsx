@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Typography } from '@mui/material'
+import { Box, CircularProgress, FormControl, FormControlLabel, FormLabel, Paper, Radio, RadioGroup, Typography } from '@mui/material'
 import { useAppDispatch } from '../../redux/hooks'
 import * as StatsApi from '../../api/stats'
 import { setErrors } from '../../redux/dashboard/dashboardSlice'
@@ -14,6 +14,7 @@ interface Filter {
 export const SuccessRate = () => {
   const dispatch = useAppDispatch()
   const [stat, setStat] = useState<number>(0)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [apiFilter, setApiFilter] = useState<Filter>({
     temporal: 'year',
     value: { year: new Date().getFullYear(), difficulty: Difficulty.NOTDEFINED }
@@ -59,6 +60,7 @@ export const SuccessRate = () => {
   }
 
     setApiFilter(newApiFilter)
+    setIsLoading(true)
   }
 
   const onChangeFilterDifficulty = (event: React.ChangeEvent<HTMLInputElement>, value: string) => {
@@ -69,6 +71,7 @@ export const SuccessRate = () => {
         difficulty: value as Difficulty
       }
     })
+    setIsLoading(true)
   }
 
   const getStat = useCallback(async (abortController: AbortController) => {
@@ -93,8 +96,10 @@ export const SuccessRate = () => {
 
           const body = await result.json()
           setStat(body.stat)
+          setIsLoading(false)
         })
-        .catch( (err) => {
+        .catch( () => {
+          if (abortController.signal.aborted) return
           dispatch(setErrors(['Something went wrong']))
         })
     }
@@ -107,40 +112,55 @@ export const SuccessRate = () => {
   }, [dispatch, getStat])
 
     return (
-        <div>
-          <Typography variant='h2' component='h2'>Success Rate: { stat }</Typography>
+      <Paper elevation={3} sx={{ padding: 3 }}>
+          <Typography variant='h4' component='h2'>Success Rate: { isLoading ? '...' :  `${Math.round(stat)} %` }</Typography>
 
-          <FormControl>
-              <FormLabel>Filter by difficulty</FormLabel>
-              <RadioGroup value={apiFilter.value.difficulty} onChange={onChangeFilterDifficulty}>
-                  <FormControlLabel value={Difficulty.NOTDEFINED} control={<Radio />} label='None' />
-                  <FormControlLabel value={Difficulty.EASY} control={<Radio />} label='Easy' />
-                  <FormControlLabel value={Difficulty.MEDIUM} control={<Radio />} label='Medium' />
-                  <FormControlLabel value={Difficulty.HARD} control={<Radio />} label='Hard' />
-              </RadioGroup>
-          </FormControl>
+          <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+            <FormControl>
+                <FormLabel>Filter by difficulty</FormLabel>
+                <RadioGroup value={apiFilter.value.difficulty} onChange={onChangeFilterDifficulty}>
+                    <FormControlLabel value={Difficulty.NOTDEFINED} control={<Radio />} label='None' />
+                    <FormControlLabel value={Difficulty.EASY} control={<Radio />} label='Easy' />
+                    <FormControlLabel value={Difficulty.MEDIUM} control={<Radio />} label='Medium' />
+                    <FormControlLabel value={Difficulty.HARD} control={<Radio />} label='Hard' />
+                </RadioGroup>
+            </FormControl>
 
-          <FormControl>
-              <FormLabel>Filter by time</FormLabel>
-              <RadioGroup value={apiFilter.temporal} onChange={onChangeFilterTemporal}>
-                  <FormControlLabel value='day' control={<Radio />} label='Day' />
-                  <FormControlLabel value='month' control={<Radio />} label='Month' />
-                  <FormControlLabel value='year' control={<Radio />} label='Year' />
-              </RadioGroup>
-          </FormControl>
-
-          <PieChart
-            style={{
-              height: '200px'
-            }}
-            label={({ dataEntry }) => Math.round(dataEntry.percentage) + '%'}
-            radius={42}
-            labelPosition={112}
-            data={[
-              { title: 'Success', value: stat, color: 'green' },
-              { title: 'Fail', value: (100.0 - stat), color: 'red' }
-            ]}
-          />
-    </div>
+            <FormControl>
+                <FormLabel>Filter by time</FormLabel>
+                <RadioGroup value={apiFilter.temporal} onChange={onChangeFilterTemporal}>
+                    <FormControlLabel value='day' control={<Radio />} label='Day' />
+                    <FormControlLabel value='month' control={<Radio />} label='Month' />
+                    <FormControlLabel value='year' control={<Radio />} label='Year' />
+                </RadioGroup>
+            </FormControl>
+          </Box>
+          
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            {
+              (isLoading)
+              ? (
+                <Box sx={{ height: 150, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <CircularProgress />
+                </Box>
+              )
+              : (
+                <PieChart
+                  style={{
+                    height: 150
+                  }}
+                  label={({ dataEntry }) => Math.round(dataEntry.percentage) + '%'}
+                  radius={42}
+                  labelPosition={112}
+                  data={[
+                    { title: 'Success', value: stat, color: 'green' },
+                    { title: 'Fail', value: (100.0 - stat), color: 'red' }
+                  ]}
+                />
+              )
+            }
+            
+          </Box>
+    </Paper>
   )
 }

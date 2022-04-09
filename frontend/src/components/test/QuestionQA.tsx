@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { useEffect, useRef } from 'react'
 import { fetchVideoAndSet } from '../../helpers/test'
 import { QuestionQA as QuestionModel } from '../../models/test'
@@ -34,12 +34,15 @@ export const QuestionQA = ({
 
     return (
         <>
-            <Typography variant='h2' component='h2'>
+            
+            <Typography variant='h5' component='h2' sx={{ alignSelf: 'flex-start', marginBottom: 3}}>
                 Guess: '{ question?.wordToGuess ?? '' }'
             </Typography>
 
-            <video width={width} height={height} ref={refVideo} controls />
-
+            <Box sx={{ marginBottom: 3 }}>
+              <video width={width} height={height} ref={refVideo} controls />
+            </Box>
+            
             {
               (editable) 
               ? (

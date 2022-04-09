@@ -16,7 +16,7 @@ export const ConfirmEmailScreen = () => {
             email: params.email ?? '',
             token: params.token ?? ''
         }))
-    }, [])
+    }, [dispatch, params])
 
     if (status === 'loading')
         return (

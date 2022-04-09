@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Typography } from '@mui/material'
+import { Box, CircularProgress, Paper, Typography } from '@mui/material'
 import { useAppDispatch } from '../../redux/hooks'
 import * as StatsApi from '../../api/stats'
 import { setErrors } from '../../redux/dashboard/dashboardSlice'
@@ -14,6 +14,7 @@ function getGreenToRed(percent : number){
 export const PercentLearnt = () => {
   const dispatch = useAppDispatch()
   const [stat, setStat] = useState<number>(0)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   const getStat = useCallback(async (abortController: AbortController) => {
     const response = await StatsApi.getPercentLearnt(abortController)
@@ -22,6 +23,7 @@ export const PercentLearnt = () => {
 
   useEffect(() => {
     const abortController = new AbortController()
+    setIsLoading(true)
 
     const fetchStat = async () => {
       getStat(abortController)
@@ -37,8 +39,10 @@ export const PercentLearnt = () => {
 
           const body = await result.json()
           setStat(body.stat)
+          setIsLoading(false)
         })
-        .catch( (err) => {
+        .catch( () => {
+          if (abortController.signal.aborted) return
           dispatch(setErrors(['Something went wrong']))
         })
     }
@@ -51,24 +55,34 @@ export const PercentLearnt = () => {
   }, [dispatch, getStat, stat])
 
   return (
-    <div>
-      <Typography variant='h2' component='h2'>Percent learnt: { stat }</Typography>
+    <Paper elevation={3} sx={{ padding: 3 }}>
+      <Typography variant='h4' component='h2'>Percent learnt</Typography>
 
-      <PieChart
-        data={[{ value: Math.round(stat), color: getGreenToRed(stat) }]}
-        style={{
-          width: '200px'
-        }}
-        totalValue={100}
-        lineWidth={20}
-        label={({ dataEntry }) => dataEntry.value}
-        labelStyle={{
-          fontSize: '25px',
-          fontFamily: 'sans-serif',
-          fill: getGreenToRed(stat),
-        }}
-        labelPosition={0}
-      />
-    </div>
+      <Box sx={{ display: 'flex', justifyContent: 'center'}} >
+        {
+          (isLoading) ? (
+            <Box sx={{ height: 200, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <CircularProgress />
+            </Box>
+          ) : (
+            <PieChart
+              data={[{ value: Math.round(stat), color: getGreenToRed(stat) }]}
+              style={{
+                width: '200px'
+              }}
+              totalValue={100}
+              lineWidth={20}
+              label={({ dataEntry }) => Math.round(dataEntry.percentage) + '%'}
+              labelStyle={{
+                fontSize: '25px',
+                fontFamily: 'sans-serif',
+                fill: getGreenToRed(stat),
+              }}
+              labelPosition={0}
+            />
+          )
+        }
+      </Box>
+    </Paper>
   )
 }

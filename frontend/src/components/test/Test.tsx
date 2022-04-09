@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { 
   Difficulty, 
   QuestionMimic as QuestionMimicModel, 
   QuestionOptionVideoToWord as QuestionOptionVideoToWordModel, 
   QuestionOptionWordToVideo as QuestionOptionWordToVideoModel, 
-  QuestionQA as QuestionQAModel, 
-  Test, 
+  QuestionQA as QuestionQAModel,
   TestInPersistence
 } from '../../models/test'
 import { setErrors } from '../../redux/dashboard/dashboardSlice'
@@ -14,8 +13,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks'
 import { getTestAsync } from '../../redux/test/actions'
 import { PersistenceService } from '../../services/persistenceService'
 import Pagination from '@mui/material/Pagination'
-import Stack from '@mui/material/Stack'
-import { Button, Chip, PaginationItem, Typography } from '@mui/material'
+import { Box, Button, Chip, Divider, PaginationItem, Typography } from '@mui/material'
 import { thunkDeleteCurrentTest, thunkSetCurrentTest, thunkSetPage } from '../../redux/test/testSlice'
 import { testTypeToString } from '../../helpers/testType'
 import { TestType } from '../../models/test'
@@ -47,7 +45,24 @@ export const TestComponent = ({editable} : ITestProps) => {
   const [page, setPage] = useState<number>(currentTest.page ?? 1)
   const [open, setOpen] = useState<boolean>(false)
   const [currentAnswer, setCurrentAnswer] = useState(null)
+  const [refTitle, setRefTitle] = useState<HTMLDivElement>()
+  const [refInfo, setRefInfo] = useState<HTMLDivElement>()
   
+  const handleRefTitle = useCallback((node) => {
+    setRefTitle(node)
+  }, [])
+
+  const handleRefInfo = useCallback((node) => {
+    setRefInfo(node)
+  }, [])
+
+  useEffect(() => {
+    if(!refTitle || !refInfo) return
+
+    const titleWidth = refTitle.offsetWidth
+    refInfo.style.width = `${titleWidth}px`
+  }, [refInfo, refTitle, currentTest.test])
+
   useEffect(() => {
     return (() => {
       dispatch(thunkDeleteCurrentTest())
@@ -175,19 +190,23 @@ export const TestComponent = ({editable} : ITestProps) => {
     if (!question) return
 
     switch(currentTest.test?.testType) {
-      case TestType.OptionWordToVideo || TestType.OptionWordToVideo_Error:
+      case TestType.OptionWordToVideo:
+      case TestType.OptionWordToVideo_Error:
         return (
           <QuestionOptionWordToVideo setCurrentAnswer={setCurrentAnswer} question={question as QuestionOptionWordToVideoModel} editable={editable} />
         )
-      case TestType.OptionVideoToWord || TestType.OptionVideoToWord_Error:
+      case TestType.OptionVideoToWord:
+      case TestType.OptionVideoToWord_Error:
         return (
           <QuestionOptionVideoToWord setCurrentAnswer={setCurrentAnswer} question={question as QuestionOptionVideoToWordModel} editable={editable} />
         )
-      case TestType.Mimic || TestType.Mimic_Error:
+      case TestType.Mimic:
+      case TestType.Mimic_Error:
         return (
           <QuestionMimic setCurrentAnswer={setCurrentAnswer} question={question as QuestionMimicModel} editable={editable} />
         )
-      case TestType.QA || TestType.QA_Error:
+      case TestType.QA:
+      case TestType.QA_Error:
         return (
           <QuestionQA setCurrentAnswer={setCurrentAnswer} question={question as QuestionQAModel} editable={editable} />
         )
@@ -196,33 +215,38 @@ export const TestComponent = ({editable} : ITestProps) => {
 
   return (
     <>
-      <Stack spacing={2}>
-        <Pagination 
-          page={page}
-          onChange={handleOnPageChange}
-          count={currentTest.test?.questions.length}
-          renderItem={ (item) => 
-            <PaginationItem 
-              {...item}
-            />
-          } 
-        />
-      </Stack>
+      <Pagination 
+        page={page}
+        onChange={handleOnPageChange}
+        count={currentTest.test?.questions.length}
+        renderItem={ (item) => 
+          <PaginationItem 
+            {...item}
+          />
+        } 
+      />
 
-      <Typography variant='h1' component='h1'>
+      <Typography sx={{ marginTop: 3 }} ref={handleRefTitle} variant='h3' component='h1'>
         { testTypeToString(currentTest.test?.testType as TestType) }
       </Typography>
 
-      <Chip 
-        label={ currentTest.test?.difficulty as Difficulty } 
-        color={difficultyToColor(currentTest.test?.difficulty as Difficulty)} 
-      />
+      <Box ref={handleRefInfo} sx={{ marginTop: 3, minWidth: 300, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', alignItems: 'center'}}>
+        <Chip 
+          label={ currentTest.test?.difficulty as Difficulty } 
+          color={difficultyToColor(currentTest.test?.difficulty as Difficulty)} 
+          />
+        { !editable &&
+          <>
+            <Button variant="outlined" startIcon={<InfoIcon />} onClick={ handleOpenModal }>
+              Show test results
+            </Button>
 
-      <Button variant="outlined" startIcon={<InfoIcon />} onClick={ handleOpenModal }>
-        Show test results
-      </Button>
-
-      <ResultsModal open={open} onClose={handleCloseModal} test={currentTest.test} />
+            <ResultsModal open={open} onClose={handleCloseModal} test={currentTest.test} /> 
+          </>
+        }
+      </Box>
+      
+      <Divider sx={{ marginTop: 3, marginBottom: 3, width: '80%' }} variant="middle" />
 
       { renderQuestion(page) }
 

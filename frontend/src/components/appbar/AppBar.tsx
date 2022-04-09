@@ -21,10 +21,11 @@ import { thunkLogout } from '../../redux/auth/authSlice'
 import { thunkDeleteCurrentTest } from '../../redux/test/testSlice'
 
 interface AppBarProps {
-    isGoBackVisible: boolean
+    isGoBackVisible: boolean,
+    sx?: any
 }
 
-export const AppBar = ({isGoBackVisible} : AppBarProps) => {
+export const AppBar = ({isGoBackVisible, sx} : AppBarProps) => {
     const navigate = useNavigate()
     const { email } = useAppSelector(state => state.auth.user)
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
@@ -48,7 +49,7 @@ export const AppBar = ({isGoBackVisible} : AppBarProps) => {
     }
 
     return (
-        <AppBarMui position='sticky'>
+        <AppBarMui position='sticky' sx={sx} >
             <Container maxWidth='xl'>
                 <Toolbar disableGutters>
                     {

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Typography, TablePagination, Skeleton, Box, Card, CardContent } from '@mui/material'
+import { Typography, TablePagination, Skeleton, Box, Card, CardContent, Grid } from '@mui/material'
 import { Test } from '../models/test'
 import { useAppSelector, useAppDispatch } from '../redux/hooks'
 import * as TestApi from '../api/test'
@@ -62,6 +62,7 @@ export const HomeScreen = () => {
           setIsLoaded(true)
         })
         .catch( () => {
+          if (abortController.signal.aborted) return
           dispatch(setErrors(['Something went wrong']))
         })
     }
@@ -74,15 +75,30 @@ export const HomeScreen = () => {
   }, [dispatch, getTests])
 
   return (
-    <div>
-      <Typography variant='h1' component='h1'>Home</Typography>
-      <Typography variant='h2' component='h2'>Recent quizs</Typography>
+    <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        width={'100vw'}
+    >
+      <Typography variant='h3' component='h1'>Recent quizs</Typography>
+
+      <TablePagination
+        component="div"
+        count={totalTests}
+        page={filters.recent.pageNumber}
+        onPageChange={handleChangePage}
+        rowsPerPage={filters.recent.pageSize}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        rowsPerPageOptions={[5, 10]}
+      />
 
       {
         (!isLoaded)
           ? (
-            Array.from({ length: filters.recent.pageSize }).map(t => (
-              <Card sx={{maxWidth: '345px', marginBottom: '10px'}}>
+            Array.from({ length: filters.recent.pageSize }).map((t, index) => (
+              <Card sx={{minWidth: 340, maxWidth: 360, marginBottom: '10px'}} key={index}>
                 <CardContent>
                   <Box>
                     <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
@@ -103,16 +119,6 @@ export const HomeScreen = () => {
           )
       }
 
-      <TablePagination
-        component="div"
-        count={totalTests}
-        page={filters.recent.pageNumber}
-        onPageChange={handleChangePage}
-        rowsPerPage={filters.recent.pageSize}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        rowsPerPageOptions={[5, 10]}
-      />
-
-    </div>
+    </Grid> 
   )
 }
