@@ -113,6 +113,7 @@ export const authSlice = createSlice({
       })
       .addCase(AuthActions.confirmEmailAsync.fulfilled, (state) => {
         state.status = 'idle'
+        state.messages.success = ['Email confirmed. You can now sign in the application']
       })
       .addCase(AuthActions.confirmEmailAsync.rejected, (state, action) => {
         state.status = 'failed'

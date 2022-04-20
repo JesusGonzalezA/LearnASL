@@ -106,9 +106,16 @@ namespace Api.Controllers
             Guid guid = await _testService.AddTest(test);
 
             // Create the questions
-            IList<BaseQuestionEntity> questions = await _questionGeneratorService.CreateQuestions(testCreateDto.NumberOfQuestions, test.TestType, test.Difficulty, test.Id, GuidOfCurrentUser);
+            try
+            {
+                IList<BaseQuestionEntity> questions = await _questionGeneratorService.CreateQuestions(testCreateDto.NumberOfQuestions, test.TestType, test.Difficulty, test.Id, GuidOfCurrentUser);
+                await _questionService.AddQuestions(test.TestType, questions);
+            } catch (BusinessException be)
+            {
+                await _testService.DeleteTest(guid);
+                throw new ControllerException(be.Message);
+            }
             
-            await _questionService.AddQuestions(test.TestType, questions);
 
             return CreatedAtAction(nameof(Create), new { guid });
         }

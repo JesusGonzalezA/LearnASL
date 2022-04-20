@@ -43,7 +43,8 @@ namespace Api
                 .ConfigureAuthentication(Configuration)
                 .ConfigureValidators()
                 .ConfigureHealthChecks()
-                .ConfigureCors(Configuration, _corsName);
+                .ConfigureCors(Configuration, _corsName)
+                .ConfigureHttpClients();
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Typography } from '@mui/material'
+import { FormControl, FormControlLabel, FormLabel, Paper, Radio, RadioGroup, Typography } from '@mui/material'
 import { useAppDispatch } from '../../redux/hooks'
 import * as StatsApi from '../../api/stats'
 import { setErrors } from '../../redux/dashboard/dashboardSlice'
@@ -17,6 +17,7 @@ interface IFilter {
 export const NewWordsLearnt = () => {
   const dispatch = useAppDispatch()
   const [stat, setStat] = useState<number>(0)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [apiFilter, setApiFilter] = useState<IFilter>({
       type: FilterType.year,
       value: { year: new Date().getFullYear() }
@@ -59,6 +60,7 @@ export const NewWordsLearnt = () => {
     }
 
     setApiFilter(newApiFilter)
+    setIsLoading(true)
   }
 
   const getStat = useCallback(async (abortController: AbortController) => {
@@ -83,8 +85,10 @@ export const NewWordsLearnt = () => {
 
           const body = await result.json()
           setStat(body.stat)
+          setIsLoading(false)
         })
-        .catch( (err) => {
+        .catch( () => {
+          if (abortController.signal.aborted) return
           dispatch(setErrors(['Something went wrong']))
         })
     }
@@ -97,17 +101,19 @@ export const NewWordsLearnt = () => {
   }, [dispatch, getStat])
 
     return (
-        <div>
-            <Typography variant='h2' component='h2'>New words learnt: { stat }</Typography>
+      <Paper elevation={3} sx={{ padding: 3 }}>
+        <Typography variant='h4' component='h2'>
+          New words learnt: { (isLoading)? '...' : stat }
+        </Typography>
 
-            <FormControl>
-                <FormLabel>Filter by</FormLabel>
-                <RadioGroup value={apiFilter.type} onChange={onChangeFilter}>
-                    <FormControlLabel value={FilterType.day} control={<Radio />} label='Day' />
-                    <FormControlLabel value={FilterType.month} control={<Radio />} label='Month' />
-                    <FormControlLabel value={FilterType.year} control={<Radio />} label='Year' />
-                </RadioGroup>
-            </FormControl>
-    </div>
+        <FormControl>
+            <FormLabel>Filter by</FormLabel>
+            <RadioGroup value={apiFilter.type} onChange={onChangeFilter}>
+                <FormControlLabel value={FilterType.day} control={<Radio />} label='Day' />
+                <FormControlLabel value={FilterType.month} control={<Radio />} label='Month' />
+                <FormControlLabel value={FilterType.year} control={<Radio />} label='Year' />
+            </RadioGroup>
+        </FormControl>
+      </Paper>
   )
 }

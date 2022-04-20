@@ -1,14 +1,14 @@
 import getBaseUrl from '../helpers/getBaseUrl'
 import { TestQueryFilter } from '../../models/queryFilters/'
 import { PersistenceService } from '../../services/persistenceService'
-import { TestCreate } from '../../models/test'
-import { TestGet } from '../../models/test/testGet'
+import { TestCreate, TestGet, TestReply } from '../../models/test'
 
 const baseURL = getBaseUrl()
 const getToken = () => {
     return new PersistenceService().get('user')?.token
 } 
 const baseEndpoint = `${baseURL}/test`
+const baseQuestionEndpoint = `${baseURL}/question`
 
 const setToUrlSearchParamsIfDefined = (params: URLSearchParams, key: string, value: string | undefined) => {
     if (value === undefined) return;
@@ -59,8 +59,27 @@ const getTest = ({id, populated} : TestGet) => {
     })
 }
 
+const replyToQuestion = ({id, testType, userAnswer, videoUser} : TestReply) => {
+    const formdata = new FormData()
+
+    videoUser && formdata.append('VideoUser', videoUser)
+    userAnswer && formdata.append('UserAnswer', userAnswer)
+    formdata.append('TestType', testType)
+
+    const params = {
+        method: 'PUT',
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        },
+        body: formdata
+    }
+
+    return fetch(`${baseQuestionEndpoint}/${id}`, params)
+}
+
 export {
     getTest,
     getTests,
-    createTest
+    createTest,
+    replyToQuestion
 }

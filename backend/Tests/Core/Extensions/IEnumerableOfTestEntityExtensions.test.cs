@@ -48,7 +48,7 @@ namespace Tests.Core.Extensions
 
             IQueryable<TestEntity> allTestsQuery = _unitOfWork.TestRepository.GetAllAsQueryable();
             allTests = allTestsQuery.Filter(filters);
-            Assert.Equal(testEntities, allTests);
+            Assert.Equal(testEntities.Count(), allTests.Count());
 
             // Filter by type
             filters.TestType = TestType.Mimic;
@@ -58,7 +58,7 @@ namespace Tests.Core.Extensions
 
             allTestsQuery = _unitOfWork.TestRepository.GetAllAsQueryable();
             allTests = allTestsQuery.Filter(filters);
-            Assert.Equal(allTests, mimicTests);
+            Assert.Equal(allTests.Count(), mimicTests.Count());
             filters.TestType = null;
 
             // Filter by difficulty
@@ -69,7 +69,7 @@ namespace Tests.Core.Extensions
 
             allTestsQuery = _unitOfWork.TestRepository.GetAllAsQueryable();
             allTests = allTestsQuery.Filter(filters);
-            Assert.Equal(allTests, easyTests);
+            Assert.Equal(allTests.Count(), easyTests.Count());
         }
     }
 

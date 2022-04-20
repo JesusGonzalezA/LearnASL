@@ -1,4 +1,4 @@
-import { Card, CardActionArea, SxProps } from '@mui/material'
+import { Box, Card, CardActionArea, SxProps } from '@mui/material'
 import Radio from '@mui/material/Radio'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import { AnswerType, typeToColor, typeToRadioColor } from '../../helpers/test'
@@ -18,9 +18,11 @@ export const VideoAnswer = ({handleOnChange, refAnswer, label, type} : any) => {
     const props : CardProps = (isOutlined)
     ? {
         variant: 'outlined',
-        sx: {border: '2px solid', borderColor: cardColor}
+        sx: {border: '2px solid', borderColor: cardColor, padding: 1}
     }
-    : {}
+    : { 
+        sx: {padding: 1}
+    }
 
     return (
         <Card {...props}>
@@ -30,7 +32,9 @@ export const VideoAnswer = ({handleOnChange, refAnswer, label, type} : any) => {
                     control={<Radio color={radioColor}/>} 
                 />
             </CardActionArea>
-            <video width={width} height={height} ref={refAnswer} controls />
+            <Box sx={{ display: 'flex', justifyContent: 'center'}}>
+                <video width={width} height={height} ref={refAnswer} controls />
+            </Box>
         </Card>
     )
 }

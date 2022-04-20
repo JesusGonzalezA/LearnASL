@@ -11,12 +11,12 @@ export const computeTypeOptionWordToVideo = (label : string, editable : boolean,
     }
 
     const answerLabel = answerToLabel(questions, question.correctAnswer)
-    const userLabel   = answerToLabel(questions, question.userAnswer)
+    const userLabel   = question.userAnswer
 
     if (label === answerLabel){
         return AnswerType.SUCCESS
     }
-
+    
     return (label === userLabel) ? AnswerType.ERROR : AnswerType.DEFAULT
 }
 

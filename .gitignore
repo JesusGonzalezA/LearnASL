@@ -455,3 +455,8 @@ $RECYCLE.BIN/
 
 ## Static files
 static
+
+## AIservice
+upload
+venv
+.env

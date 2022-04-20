@@ -62,6 +62,7 @@ namespace Infrastructure.Extensions
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IAIService, AIService>();
             services.AddSingleton<IPasswordService, PasswordService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IQuestionGeneratorService, QuestionGeneratorService>();
@@ -150,6 +151,10 @@ namespace Infrastructure.Extensions
                 options => configuration.GetSection("Frontend").Bind(options)
             );
 
+            services.Configure<AIServiceOptions>(
+                options => configuration.GetSection("AIService").Bind(options)
+            );
+
             return services;
         }
 
@@ -167,6 +172,13 @@ namespace Infrastructure.Extensions
             services.AddTransient <IValidator<StatsQueryFilterUseOfTheAppDto>, StatsQueryFilterUseOfTheAppDtoValidator>();
             services.AddTransient<IValidator<StatsQueryFilterNumberOfLearntWordsDto>, StatsQueryFilterNumberOfLearntWordsDtoValidator>();
             services.AddTransient<IValidator<StatsQueryFilterSuccessRateDto>, StatsQueryFilterSuccessRateDtoValidator>();
+
+            return services;
+        }
+
+        public static IServiceCollection ConfigureHttpClients(this IServiceCollection services)
+        {
+            services.AddHttpClient<IAIService, AIService>();
 
             return services;
         }

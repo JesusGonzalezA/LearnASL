@@ -2,7 +2,7 @@ import { BottomNavigation, BottomNavigationAction } from '@mui/material'
 import { Link } from 'react-router-dom'
 import ShowChartIcon from '@mui/icons-material/ShowChart'
 import HomeIcon from '@mui/icons-material/Home'
-import AddCircleIcon from '@mui/icons-material/AddCircle'
+import QuizIcon from '@mui/icons-material/Quiz'
 import PersonIcon from '@mui/icons-material/Person'
 
 interface BottomBarNavProps {
@@ -20,11 +20,11 @@ export const BottomBarNav = ({value, onChange}: BottomBarNavProps) => {
             icon={<HomeIcon />} 
         />
         <BottomNavigationAction 
-            label='New test'
+            label='Start a test'
             component={Link}
             to='/test/new'
             value='/test/new'
-            icon={<AddCircleIcon />} 
+            icon={<QuizIcon />} 
         />
         <BottomNavigationAction 
             label='Stats' 

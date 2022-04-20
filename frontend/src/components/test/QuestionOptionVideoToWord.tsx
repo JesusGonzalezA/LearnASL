@@ -1,4 +1,4 @@
-import { FormControl, FormControlLabel, Paper, Radio, RadioGroup, Typography } from '@mui/material'
+import { Box, FormControl, FormControlLabel, Grid, Paper, Radio, RadioGroup, Typography } from '@mui/material'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { fetchVideoAndSet } from '../../helpers/test'
 import { QuestionOptionVideoToWord as QuestionModel } from '../../models/test'
@@ -11,11 +11,12 @@ const height = '240'
 
 interface QuestionOptionVideoToWordProps {
   question: QuestionModel,
-  editable: boolean
+  editable: boolean,
+  setCurrentAnswer: Function
 }
 
 export const QuestionOptionVideoToWord = ({
-  question, editable
+  question, editable, setCurrentAnswer
 } : QuestionOptionVideoToWordProps) => {
     const { token } = useAppSelector(state => state.auth.user)
     const [value, setValue] = useState<string>(question.userAnswer ?? '')
@@ -38,7 +39,10 @@ export const QuestionOptionVideoToWord = ({
   }, [question, questions])
 
     const handleOnChange = (ev : any, value : string) => {
-        if (editable) setValue(value)
+        if (editable) {
+          setValue(value)
+          setCurrentAnswer(value)
+        }
     }
 
     const getColor = (label : string) => {
@@ -48,45 +52,60 @@ export const QuestionOptionVideoToWord = ({
     }
 
     return (
-        <>
-            <Typography variant='h2' component='h2'>
+      <Box sx={{ width: '80%' }}>
+            <Typography variant='h5' component='h2' sx={{ alignSelf: 'flex-start', marginBottom: 3}}>
                 To guess:
             </Typography>
 
-            <video width={width} height={height} ref={refVideo} controls />
+            <Box sx={{ marginBottom: 3, alignSelf: 'flex-start' }}>
+              <video width={width} height={height} ref={refVideo} controls />
+            </Box>
 
-            <FormControl>
+            <FormControl sx={{ display: 'flex', justifyContent: 'center'}}>
               <RadioGroup value={value} onChange={handleOnChange}>
-                <Paper variant='outlined' sx={{borderColor: getColor(question.possibleAnswer0)}}>
-                  <FormControlLabel
-                    value={question.possibleAnswer0} 
-                    control={<Radio />} 
-                    label={question.possibleAnswer0} 
-                  />
-                </Paper>
-                <Paper variant='outlined' sx={{borderColor: getColor(question.possibleAnswer1)}}>
-                  <FormControlLabel 
-                    value={question.possibleAnswer1} 
-                    control={<Radio />} 
-                    label={question.possibleAnswer1} 
-                  />
-                </Paper>
-                <Paper variant='outlined' sx={{borderColor: getColor(question.possibleAnswer2)}}>
-                  <FormControlLabel 
-                    value={question.possibleAnswer2} 
-                    control={<Radio />} 
-                    label={question.possibleAnswer2} 
-                  />
-                </Paper>
-                <Paper variant='outlined' sx={{borderColor: getColor(question.possibleAnswer3)}}>
-                  <FormControlLabel 
-                    value={question.possibleAnswer3} 
-                    control={<Radio />} 
-                    label={question.possibleAnswer3} 
-                  />
-                </Paper>
+                <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+                  <Grid item xs={4} sm={4} md={6}>
+                    <Paper variant='outlined' sx={{borderColor: getColor(question.possibleAnswer0), padding: 1}}>
+                      <FormControlLabel
+                        value={question.possibleAnswer0} 
+                        control={<Radio />} 
+                        label={question.possibleAnswer0} 
+                      />
+                    </Paper>
+                  </Grid>
+
+                  <Grid item xs={4} sm={4} md={6}>
+                    <Paper variant='outlined' sx={{borderColor: getColor(question.possibleAnswer1), padding: 1}}>
+                      <FormControlLabel
+                        value={question.possibleAnswer1} 
+                        control={<Radio />} 
+                        label={question.possibleAnswer1} 
+                      />
+                    </Paper>
+                  </Grid>
+
+                  <Grid item xs={4} sm={4} md={6}>
+                    <Paper variant='outlined' sx={{borderColor: getColor(question.possibleAnswer2), padding: 1}}>
+                      <FormControlLabel
+                        value={question.possibleAnswer2} 
+                        control={<Radio />} 
+                        label={question.possibleAnswer2} 
+                      />
+                    </Paper>
+                  </Grid>
+
+                  <Grid item xs={4} sm={4} md={6}>
+                    <Paper variant='outlined' sx={{borderColor: getColor(question.possibleAnswer3), padding: 1}}>
+                      <FormControlLabel
+                        value={question.possibleAnswer3} 
+                        control={<Radio />} 
+                        label={question.possibleAnswer3} 
+                      />
+                    </Paper>
+                  </Grid>
+                </Grid>
               </RadioGroup>
             </FormControl>
-        </>
+        </Box>
     )
 }

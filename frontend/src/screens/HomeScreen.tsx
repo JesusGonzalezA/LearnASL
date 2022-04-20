@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Typography, TablePagination } from '@mui/material'
+import { Typography, TablePagination, Skeleton, Box, Card, CardContent, Grid } from '@mui/material'
 import { Test } from '../models/test'
 import { useAppSelector, useAppDispatch } from '../redux/hooks'
 import * as TestApi from '../api/test'
@@ -16,34 +16,27 @@ export const HomeScreen = () => {
   const { id } = useAppSelector(state => state.auth.user)
   const dispatch = useAppDispatch()
   const [recentTests, setRecentTests] = useState<Test[]>([])
+  const [isLoaded, setIsLoaded] = useState<boolean>(false)
 
   const getTests = useCallback(async (abortController: AbortController) => {
-    const response = await TestApi.getTests
-    (
-      {
-        pageSize: filters.recent.pageSize, 
-        pageNumber: filters.recent.pageNumber + 1,
-        userId: id ?? '',
-      },
-      abortController
-    )
-    return response
+    return await TestApi.getTests({
+      pageSize: filters.recent.pageSize, 
+      pageNumber: filters.recent.pageNumber + 1,
+      userId: id ?? '',
+    }, abortController)
   }, [id, filters.recent])
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     dispatch(setRecentFilter({
       pageSize: parseInt(event.target.value, 10), 
       pageNumber: 0
     }))
+    setIsLoaded(false)
   }
 
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
-  ) => {
+  const handleChangePage = (e : any, newPage: number) => {
     dispatch(setRecentPageNumber(newPage))
+    setIsLoaded(false)
   }
 
   useEffect(() => {
@@ -66,8 +59,10 @@ export const HomeScreen = () => {
           
           dispatch(setTotalTests(pagination.TotalCount))
           setRecentTests(body)
+          setIsLoaded(true)
         })
-        .catch( (err) => {
+        .catch( () => {
+          if (abortController.signal.aborted) return
           dispatch(setErrors(['Something went wrong']))
         })
     }
@@ -80,15 +75,14 @@ export const HomeScreen = () => {
   }, [dispatch, getTests])
 
   return (
-    <div>
-      <Typography variant='h1' component='h1'>Home</Typography>
-      <Typography variant='h2' component='h2'>Recent quizs</Typography>
-
-      {
-        recentTests.map(t => (
-          <CardTest test={t} key={t.id} />
-        ))
-      }
+    <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        width={'100vw'}
+    >
+      <Typography variant='h3' component='h1'>Recent quizs</Typography>
 
       <TablePagination
         component="div"
@@ -100,6 +94,31 @@ export const HomeScreen = () => {
         rowsPerPageOptions={[5, 10]}
       />
 
-    </div>
+      {
+        (!isLoaded)
+          ? (
+            Array.from({ length: filters.recent.pageSize }).map((t, index) => (
+              <Card sx={{minWidth: 340, maxWidth: 360, marginBottom: '10px'}} key={index}>
+                <CardContent>
+                  <Box>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                      <Skeleton animation="wave" variant="rectangular" width={'30%'} />
+                      <Skeleton animation="wave" variant="circular" width={40} height={40} />
+                    </Box> 
+                    <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                      <Skeleton animation="wave" variant="rectangular" width={'30%'} />
+                      <Skeleton animation="wave" variant="rectangular" width={'30%'} />
+                    </Box>
+                  </Box>
+                </CardContent>
+              </Card>
+            ))
+          )
+          : (
+            recentTests.map(t => ( <CardTest test={t} key={t.id} /> ))
+          )
+      }
+
+    </Grid> 
   )
 }

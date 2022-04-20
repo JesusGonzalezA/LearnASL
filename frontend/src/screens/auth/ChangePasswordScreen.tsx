@@ -1,6 +1,9 @@
 import { Formik, Form } from 'formik'
 import { useParams } from 'react-router-dom'
-import { Typography, Button } from '@mui/material'
+import { Link } from 'react-router-dom'
+import { Avatar, Box, Button, Container, Typography } from '@mui/material'
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
+
 
 import * as AuthActions from '../../redux/auth/actions'
 import { useAppDispatch } from '../../redux/hooks'
@@ -22,63 +25,93 @@ export const ChangePasswordScreen = () => {
     }
 
     return (
-        <div>
-            <Typography variant='h1' component='h1'>Recover password</Typography>
-            
-            <Formik
-                initialValues={initialValues}
-                onSubmit={handleSubmit}
-                validationSchema={changePasswordSchema}
-                validateOnMount
+        <Container component='main'>
+            <Box
+                sx={{
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center'
+                }}
             >
-                {({isValid, dirty, errors, touched}) => (
-                    <Form>
-                        <div>
-                            <FormikField 
-                                name='email'
-                                type='input'
-                                label='Email'
-                                variant='standard'
-                                errorText={errors.email}
-                                touched={touched.email}
-                                required
-                            />
-                        </div>
+                <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                    <LockOutlinedIcon />
+                </Avatar>
 
-                        <div>
-                            <FormikField 
-                                name='password' 
-                                type='password'
-                                label='Password' 
-                                variant='standard' 
-                                errorText={errors.password}
-                                touched={touched.password}
-                                required 
-                            />
-                        </div>
+                <Typography component='h1' variant='h5'>
+                    Change password
+                </Typography>
 
-                        <div>
-                            <FormikField 
-                                name='repeatPassword' 
-                                type='password'
-                                label='Repeat the password' 
-                                variant='standard' 
-                                errorText={errors.repeatPassword}
-                                touched={touched.repeatPassword}
-                                required 
-                            />
-                        </div>
+                <Box sx={{ 
+                    mt: 1, 
+                    maxWidth: 0.7,
+                    width: 400
+                }}>
+                    <Formik
+                        initialValues={initialValues}
+                        onSubmit={handleSubmit}
+                        validationSchema={changePasswordSchema}
+                        validateOnMount
+                    >
+                        {({isValid, dirty, errors, touched}) => (
+                            <Form>
+                                <div>
+                                    <FormikField 
+                                        name='email'
+                                        type='input' 
+                                        label='Email'
+                                        errorText={errors.email} 
+                                        touched={touched.email}
+                                        margin='normal'
+                                        fullWidth
+                                        required
+                                    />
+                                </div>
 
-                        <Button 
-                            variant='contained'
-                            disabled={!dirty || !isValid}
-                            type='submit'
-                        >
-                            Change password
-                        </Button>
-                    </Form>
-                )}
-            </Formik>
-        </div>
+                                <div>
+                                    <FormikField 
+                                        name='password' 
+                                        type='password'
+                                        label='Password'
+                                        errorText={errors.password}
+                                        touched={touched.password}
+                                        margin='normal'
+                                        fullWidth
+                                        required 
+                                    />
+                                </div>
+
+                                <div>
+                                    <FormikField 
+                                        name='repeatPassword' 
+                                        type='password'
+                                        label='Repeat the password'
+                                        errorText={errors.repeatPassword}
+                                        touched={touched.repeatPassword}
+                                        margin='normal'
+                                        fullWidth
+                                        required 
+                                    />
+                                </div>
+
+                                <Button
+                                    disabled={!dirty || !isValid}
+                                    type='submit'
+                                    fullWidth
+                                    variant='contained'
+                                    sx={{ mt: 3, mb: 2 }}
+                                >
+                                    Change password
+                                </Button>
+                            </Form> 
+                        )}
+                    </Formik>
+
+                    <div>
+                    <Link to='/auth/login'>Sign in</Link>
+                    </div>
+                </Box>
+            </Box>
+        </Container>
     )
 }
