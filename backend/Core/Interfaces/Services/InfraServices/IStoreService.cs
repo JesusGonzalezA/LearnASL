@@ -6,7 +6,7 @@ namespace Core.Interfaces
 {
     public interface IStoreService
     {
-        Task SaveVideo(string filename, IFormFile video);
+        Task<string> SaveVideo(string filename, IFormFile video);
         void CreateUserDirectory(Guid userId);
         void CleanDirectory(string directory);
         void DeleteDirectory(string directory);

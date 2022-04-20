@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { QuestionOptionWordToVideo as QuestionModel } from '../../models/test'
 import { useAppSelector } from '../../redux/hooks'
-import { Grid, Typography } from '@mui/material'
+import { Box, Grid, Typography } from '@mui/material'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControl from '@mui/material/FormControl'
 import {
@@ -55,7 +55,7 @@ export const QuestionOptionWordToVideo = ({ setCurrentAnswer, question, editable
     }
 
     return (
-        <>
+        <Box sx={{ width: '80%' }}>
             <Typography variant='h5' component='h2' sx={{ alignSelf: 'flex-start', marginBottom: 3}}>
                 Guess: '{ question?.wordToGuess ?? '' }'
             </Typography>
@@ -98,6 +98,6 @@ export const QuestionOptionWordToVideo = ({ setCurrentAnswer, question, editable
                     </Grid>
                 </RadioGroup>
             </FormControl>
-        </>
+        </Box>
     )
 }

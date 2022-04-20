@@ -52,7 +52,7 @@ export const QuestionOptionVideoToWord = ({
     }
 
     return (
-        <>
+      <Box sx={{ width: '80%' }}>
             <Typography variant='h5' component='h2' sx={{ alignSelf: 'flex-start', marginBottom: 3}}>
                 To guess:
             </Typography>
@@ -61,11 +61,11 @@ export const QuestionOptionVideoToWord = ({
               <video width={width} height={height} ref={refVideo} controls />
             </Box>
 
-            <FormControl>
+            <FormControl sx={{ display: 'flex', justifyContent: 'center'}}>
               <RadioGroup value={value} onChange={handleOnChange}>
                 <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                   <Grid item xs={4} sm={4} md={6}>
-                    <Paper variant='outlined' sx={{borderColor: getColor(question.possibleAnswer0)}}>
+                    <Paper variant='outlined' sx={{borderColor: getColor(question.possibleAnswer0), padding: 1}}>
                       <FormControlLabel
                         value={question.possibleAnswer0} 
                         control={<Radio />} 
@@ -75,7 +75,7 @@ export const QuestionOptionVideoToWord = ({
                   </Grid>
 
                   <Grid item xs={4} sm={4} md={6}>
-                    <Paper variant='outlined' sx={{borderColor: getColor(question.possibleAnswer1)}}>
+                    <Paper variant='outlined' sx={{borderColor: getColor(question.possibleAnswer1), padding: 1}}>
                       <FormControlLabel
                         value={question.possibleAnswer1} 
                         control={<Radio />} 
@@ -85,7 +85,7 @@ export const QuestionOptionVideoToWord = ({
                   </Grid>
 
                   <Grid item xs={4} sm={4} md={6}>
-                    <Paper variant='outlined' sx={{borderColor: getColor(question.possibleAnswer2)}}>
+                    <Paper variant='outlined' sx={{borderColor: getColor(question.possibleAnswer2), padding: 1}}>
                       <FormControlLabel
                         value={question.possibleAnswer2} 
                         control={<Radio />} 
@@ -95,7 +95,7 @@ export const QuestionOptionVideoToWord = ({
                   </Grid>
 
                   <Grid item xs={4} sm={4} md={6}>
-                    <Paper variant='outlined' sx={{borderColor: getColor(question.possibleAnswer3)}}>
+                    <Paper variant='outlined' sx={{borderColor: getColor(question.possibleAnswer3), padding: 1}}>
                       <FormControlLabel
                         value={question.possibleAnswer3} 
                         control={<Radio />} 
@@ -106,6 +106,6 @@ export const QuestionOptionVideoToWord = ({
                 </Grid>
               </RadioGroup>
             </FormControl>
-        </>
+        </Box>
     )
 }

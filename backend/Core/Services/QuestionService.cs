@@ -14,10 +14,12 @@ namespace Core.Services
     public partial class QuestionService : IQuestionService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IAIService _aiService;
 
-        public QuestionService(IUnitOfWork unitOfWork)
+        public QuestionService(IUnitOfWork unitOfWork, IAIService aiService)
         {
             _unitOfWork = unitOfWork;
+            _aiService = aiService;
         }
 
         public async Task AddQuestions(TestType testType, IEnumerable<BaseQuestionEntity> questions)
@@ -41,9 +43,16 @@ namespace Core.Services
             return questionsFromTest;
         }
 
-        public async Task UpdateQuestion(TestType testType, Guid questionGuid, UpdateQuestionParameters parameters)
+        public async Task UpdateQuestion
+        (
+            TestType testType,
+            Guid questionGuid,
+            UpdateQuestionParameters parameters,
+            string token,
+            string filename
+        )
         {
-            dynamic updatedQuestion = await GetUpdatedQuestion(testType, questionGuid, parameters);
+            dynamic updatedQuestion = await GetUpdatedQuestion(testType, questionGuid, parameters, token, filename);
             dynamic repository = GetQuestionRepository(testType);
 
             Guid userId = updatedQuestion.Test.UserId;
@@ -101,7 +110,14 @@ namespace Core.Services
             }
         }
 
-        private async Task<dynamic> GetUpdatedQuestion(TestType testType, Guid questionGuid, UpdateQuestionParameters parameters)
+        private async Task<dynamic> GetUpdatedQuestion
+        (
+            TestType testType,
+            Guid questionGuid,
+            UpdateQuestionParameters parameters,
+            string token,
+            string filename
+        )
         {
             dynamic question = await GetQuestion(testType, questionGuid);
 
@@ -118,7 +134,10 @@ namespace Core.Services
                 case TestType.QA_Error:
                 case TestType.Mimic:
                 case TestType.Mimic_Error:
+                    List<Prediction> predictions = await _aiService.SendRequest(filename, token);
+                    Prediction correctPrediction = predictions.Find(p => p.Label == question.WordToGuess);
                     question.VideoUser = parameters.VideoUser;
+                    question.IsCorrect = correctPrediction != null;
                     break;
             }
 

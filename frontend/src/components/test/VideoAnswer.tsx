@@ -18,9 +18,11 @@ export const VideoAnswer = ({handleOnChange, refAnswer, label, type} : any) => {
     const props : CardProps = (isOutlined)
     ? {
         variant: 'outlined',
-        sx: {border: '2px solid', borderColor: cardColor}
+        sx: {border: '2px solid', borderColor: cardColor, padding: 1}
     }
-    : {}
+    : { 
+        sx: {padding: 1}
+    }
 
     return (
         <Card {...props}>

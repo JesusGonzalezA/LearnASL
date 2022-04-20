@@ -47,6 +47,7 @@ export const TestComponent = ({editable} : ITestProps) => {
   const [currentAnswer, setCurrentAnswer] = useState(null)
   const [refTitle, setRefTitle] = useState<HTMLDivElement>()
   const [refInfo, setRefInfo] = useState<HTMLDivElement>()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   
   const handleRefTitle = useCallback((node) => {
     setRefTitle(node)
@@ -129,6 +130,7 @@ export const TestComponent = ({editable} : ITestProps) => {
       return
     }
 
+    setIsLoading(true)
     await TestApi.replyToQuestion({
       id: currentTest.test?.questions[page-1].id ?? '', 
       testType: currentTest.test?.testType as TestType, 
@@ -165,6 +167,7 @@ export const TestComponent = ({editable} : ITestProps) => {
       .catch( (err) => {
         dispatch(setErrors(['Something went wrong']))
       })
+    setIsLoading(false)
   }
 
   const goToPage = (page: number) => {
@@ -257,6 +260,7 @@ export const TestComponent = ({editable} : ITestProps) => {
         testLength={currentTest.test?.questions.length} 
         handleStop={handleStop} 
         handleFinish={handleFinish}
+        loading={isLoading}
       />
     </>
   )

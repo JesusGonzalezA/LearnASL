@@ -1,3 +1,4 @@
+import { LoadingButton } from "@mui/lab"
 import { Box, Button } from "@mui/material"
 
 interface NavButtonsProps {
@@ -6,7 +7,8 @@ interface NavButtonsProps {
     handleOnPageChange: Function,
     testLength?: number,
     handleStop: Function,
-    handleFinish: Function
+    handleFinish: Function,
+    loading: boolean
 }
 
 export const NavButtons = ({
@@ -15,14 +17,16 @@ export const NavButtons = ({
     handleOnPageChange,
     testLength,
     handleStop,
-    handleFinish
+    handleFinish,
+    loading
 } : NavButtonsProps) => {
   return (
     <Box sx={{ marginTop: 3, display: 'flex', width: '80%', justifyContent: 'space-between'}}>
         <Button 
             variant='outlined'
             onClick={() => { handleOnPageChange({}, page-1) }}
-            disabled={(page)===1}
+            disabled={(page)===1 || loading}
+            sx={{ mt: 3, mb: 2, padding: 1 }}
         >
             Previous
         </Button>
@@ -31,28 +35,33 @@ export const NavButtons = ({
             (editable && (page)===testLength) 
             ? (
                 <>
-                    <Button
+                    <LoadingButton
                         variant='contained'
                         onClick={() => handleFinish()}
+                        loading={loading}
+                        sx={{ mt: 3, mb: 2, padding: 1 }}
                     >
                         Send test
-                    </Button>
+                    </LoadingButton>
                 </>
             )
             : (
                 <>
-                    <Button 
+                    <LoadingButton
                         variant='contained'
                         onClick={() => { handleOnPageChange({}, page+1) }}
                         disabled={(page)===testLength}
+                        loading={loading}
+                        sx={{ mt: 3, mb: 2, padding: 1 }}
                     >
                         Next
-                    </Button>
+                    </LoadingButton>
 
                     <Button 
                         variant='contained'
                         color='warning'
                         onClick={() => { handleStop() }}
+                        sx={{ mt: 3, mb: 2, padding: 1 }}
                     >
                         Stop
                     </Button>

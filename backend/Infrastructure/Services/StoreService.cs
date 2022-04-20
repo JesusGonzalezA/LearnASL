@@ -17,12 +17,14 @@ namespace Infrastructure.Services
             _videoServingOptions = videoServingOptions.Value;
         }
 
-        public async Task SaveVideo(string filename, IFormFile video)
+        public async Task<string> SaveVideo(string filename, IFormFile video)
         {
             string filePath = CreateDirectory(filename);
 
             using FileStream stream = File.Create(filePath);
             await video.CopyToAsync(stream);
+
+            return filePath;
         }
 
         public void DeleteDirectory(string directory)
@@ -74,7 +76,6 @@ namespace Infrastructure.Services
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(directoryAbsolutePath));
             }
-            
 
             return directoryAbsolutePath;
         }

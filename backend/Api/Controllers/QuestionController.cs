@@ -45,7 +45,7 @@ namespace Api.Controllers
         {
             BaseQuestionEntity question = await _questionService.GetQuestion(questionReplyDto.TestType, guid);
             TestEntity test = await GetTest(question.TestId, GuidOfCurrentUser);
-
+            
             ValidateQuestionReplyDto(test.TestType, questionReplyDto);
             string filename = await SaveQuestionVideoIfNecessary(test.TestType, GuidOfCurrentUser, test.Id, guid, questionReplyDto);
             string videoUri = _uriService.GetVideoUri(filename);
@@ -56,7 +56,7 @@ namespace Api.Controllers
                 UserAnswer = questionReplyDto.UserAnswer
             };
 
-            await _questionService.UpdateQuestion(test.TestType, guid, updateQuestionParameters);
+            await _questionService.UpdateQuestion(test.TestType, guid, updateQuestionParameters, TokenOfCurrentRequest, filename);
 
             return Ok(updateQuestionParameters);
         }
@@ -81,9 +81,9 @@ namespace Api.Controllers
             string extension = Path.GetExtension(questionReplyDto.VideoUser.FileName);
             string filename = $"{userId}/{testGuid}/{questionGuid}{extension}";
             
-            await _storeService.SaveVideo(filename, questionReplyDto.VideoUser);
+            string path = await _storeService.SaveVideo(filename, questionReplyDto.VideoUser);
 
-            return filename;
+            return path;
         }
 
         private static void ValidateQuestionReplyDto(TestType testType, QuestionReplyDto questionReplyDto)
