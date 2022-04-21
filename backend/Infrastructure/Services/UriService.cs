@@ -26,7 +26,7 @@ namespace Infrastructure.Services
 
         public string GetVideoUri(string? filename)
         {
-            return filename == null ? null : $"{_baseUri}{_staticBaseUri}{filename}";
+            return filename == null ? null : $"{_baseUri}{_staticBaseUri}/{filename}";
         }
 
         public Metadata<TestWithQuestions> UpdateMetadataTests
