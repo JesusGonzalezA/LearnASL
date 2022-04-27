@@ -47,7 +47,10 @@ namespace Api.Controllers
             TestEntity test = await GetTest(question.TestId, GuidOfCurrentUser);
             
             ValidateQuestionReplyDto(test.TestType, questionReplyDto);
-            string filename = await SaveQuestionVideoIfNecessary(test.TestType, GuidOfCurrentUser, test.Id, guid, questionReplyDto);
+            Tuple<string, string> pathAndFilename = await SaveQuestionVideoIfNecessary(test.TestType, GuidOfCurrentUser, test.Id, guid, questionReplyDto);
+            string path = pathAndFilename?.Item1;
+            string filename = pathAndFilename?.Item2;
+            
             string videoUri = _uriService.GetVideoUri(filename);
 
             UpdateQuestionParameters updateQuestionParameters = new UpdateQuestionParameters()
@@ -56,12 +59,12 @@ namespace Api.Controllers
                 UserAnswer = questionReplyDto.UserAnswer
             };
 
-            await _questionService.UpdateQuestion(test.TestType, guid, updateQuestionParameters, TokenOfCurrentRequest, filename);
+            await _questionService.UpdateQuestion(test.TestType, guid, updateQuestionParameters, TokenOfCurrentRequest, path);
 
             return Ok(updateQuestionParameters);
         }
 
-        private async Task<string> SaveQuestionVideoIfNecessary
+        private async Task<Tuple<string, string> > SaveQuestionVideoIfNecessary
         (
             TestType testType,
             Guid userId,
@@ -83,7 +86,7 @@ namespace Api.Controllers
             
             string path = await _storeService.SaveVideo(filename, questionReplyDto.VideoUser);
 
-            return path;
+            return Tuple.Create(path, filename);
         }
 
         private static void ValidateQuestionReplyDto(TestType testType, QuestionReplyDto questionReplyDto)

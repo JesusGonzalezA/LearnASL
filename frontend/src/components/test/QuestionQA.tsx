@@ -14,16 +14,42 @@ interface QuestionQAProps {
   setCurrentAnswer: Function
 }
 
+const baseOptions = {
+  constraints : {
+    audio: false,
+    video: true
+  },
+  timeLimit: 7000
+}
+
+const recordOptions = {
+  ...baseOptions,
+  isOnInitially: true,
+  isFlipped: true
+}
+
+const uploadOptions = {
+  ...baseOptions,
+  useVideoInput: true
+}
+
 export const QuestionQA = ({
   question, editable, setCurrentAnswer
 } : QuestionQAProps) => {
     const { token } = useAppSelector(state => state.auth.user)
     const [option, setOption] = useState<string>('Record')
     const refVideo = useRef<HTMLVideoElement>(null)
+    const refVideoRecorder = useRef<any>(null)
 
     useEffect(() => {
       fetchVideoAndSet(question.videoUser ?? '', token ?? '', refVideo)
     },[question, token])
+
+    useEffect(() => {
+      if(!refVideoRecorder.current || question.videoUser) return
+      
+      refVideoRecorder.current.handleStopReplaying()
+    }, [refVideoRecorder, question])
 
     const onRecordingComplete = (videoBlob: Blob) => {
       const file = new File([videoBlob], `${question.id}.mp4`)
@@ -40,7 +66,17 @@ export const QuestionQA = ({
               {
                 (editable) 
                 ? (
-                  <>
+                  <div>
+
+                    {
+                      question.videoUser && (
+                        <div>
+                          <p>Your current video</p>
+                          <video width={width} height={height} ref={refVideo} controls />
+                        </div>
+                      )
+                    }
+
                     <ToggleButtonGroup
                       color="primary"
                       value={option}
@@ -51,35 +87,27 @@ export const QuestionQA = ({
                       <ToggleButton value="Upload">Upload</ToggleButton>
                     </ToggleButtonGroup>
 
-                    {
-                      (option === 'Record') ? (
-                        <div>
-                          <VideoRecorder
-                            constraints={{
-                              audio: false,
-                              video: true
-                            }}
-                            isOnInitially
-                            timeLimit={7000}
-                            isFlipped={true}
-                            onRecordingComplete={onRecordingComplete}
-                          />
-                        </div>
-                      ) : (
-                        <>
-                          <VideoRecorder
-                            constraints={{
-                              audio: false,
-                              video: true
-                            }}
-                            timeLimit={7000}
-                            useVideoInput={true}
-                            onRecordingComplete={onRecordingComplete}
-                          />
-                        </>
-                      )
-                    }
-                  </>
+                    <div style={{ width: `${width}px` }}>
+                      { (option === 'Record') 
+                        ? 
+                          <>
+                            <VideoRecorder
+                              ref={refVideoRecorder}
+                              {...recordOptions}
+                              onRecordingComplete={onRecordingComplete}
+                            />
+                          </>
+                        : 
+                          <div>
+                            <VideoRecorder
+                              ref={refVideoRecorder}
+                              {...uploadOptions}
+                              onRecordingComplete={onRecordingComplete}
+                            />
+                          </div>
+                      }
+                    </div>
+                  </div>
                 )
                 : (
                   <>

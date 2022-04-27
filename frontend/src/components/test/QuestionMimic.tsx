@@ -14,6 +14,26 @@ interface QuestionMimicProps {
   setCurrentAnswer: Function
 }
 
+const baseOptions = {
+  constraints : {
+    audio: false,
+    video: true
+  },
+  
+  timeLimit: 7000
+}
+
+const recordOptions = {
+  ...baseOptions,
+  isOnInitially: true,
+  isFlipped: true
+}
+
+const uploadOptions = {
+  ...baseOptions,
+  useVideoInput: true
+}
+
 export const QuestionMimic = ({
   question, editable, setCurrentAnswer
 } : QuestionMimicProps) => {
@@ -21,16 +41,23 @@ export const QuestionMimic = ({
     const [option, setOption] = useState<string>('Record')
     const refVideoHelp = useRef<HTMLVideoElement>(null)
     const refVideoUser = useRef<HTMLVideoElement>(null)
+    const refVideoRecorder = useRef<any>(null)
 
     useEffect(() => {
         fetchVideoAndSet(question.videoHelp ?? '', token ?? '', refVideoHelp)
         fetchVideoAndSet(question.videoUser ?? '', token ?? '', refVideoUser)
-    },[question, token])
+    },[question.videoHelp, question.videoUser, token, editable])
 
     const onRecordingComplete = (videoBlob: Blob) => {
       const file = new File([videoBlob], `${question.id}.mp4`)
       setCurrentAnswer(file)
     }
+
+    useEffect(() => {
+      if(!refVideoRecorder.current || question.videoUser) return
+      
+      refVideoRecorder.current.handleStopReplaying()
+    }, [refVideoRecorder, question])
 
     return (
         <Box sx={{ width: '80%' }}>
@@ -47,7 +74,18 @@ export const QuestionMimic = ({
             {
               (editable) 
               ? (
-                <>
+                
+                <div>
+
+                  {
+                    question.videoUser && (
+                      <div>
+                        <p>Your current video</p>
+                        <video width={width} height={height} ref={refVideoUser} controls />
+                      </div>
+                    )
+                  }
+
                   <ToggleButtonGroup
                     color="primary"
                     value={option}
@@ -58,35 +96,26 @@ export const QuestionMimic = ({
                     <ToggleButton value="Upload">Upload</ToggleButton>
                   </ToggleButtonGroup>
 
-                  {
-                    (option === 'Record') ? (
-                      <div>
-                        <VideoRecorder
-                          constraints={{
-                            audio: false,
-                            video: true
-                          }}
-                          isOnInitially
-                          timeLimit={7000}
-                          isFlipped={true}
-                          onRecordingComplete={onRecordingComplete}
-                        />
-                      </div>
-                    ) : (
-                      <>
-                        <VideoRecorder
-                          constraints={{
-                            audio: false,
-                            video: true
-                          }}
-                          timeLimit={7000}
-                          useVideoInput={true}
-                          onRecordingComplete={onRecordingComplete}
-                        />
-                      </>
-                    )
-                  }
-                </>
+                  <div style={{ width: `${width}px` }}>
+                    { (option === 'Record') 
+                      ? 
+                        <>
+                          <VideoRecorder
+                            ref={refVideoRecorder}
+                            {...recordOptions}
+                            onRecordingComplete={onRecordingComplete}
+                          />
+                        </>
+                      : 
+                        <div>
+                          <VideoRecorder
+                            {...uploadOptions}
+                            onRecordingComplete={onRecordingComplete}
+                          />
+                        </div>
+                    }
+                  </div>
+                </div>
               )
               : (
                 <>
