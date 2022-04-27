@@ -15,6 +15,7 @@ namespace Infrastructure.Services
             _options = options.Value;
         }
 
+        // TODO
         public bool Check(string hash, string password)
         {
             string[] parts = hash.Split('.');

@@ -48,8 +48,8 @@ namespace Api.Controllers
             
             ValidateQuestionReplyDto(test.TestType, questionReplyDto);
             Tuple<string, string> pathAndFilename = await SaveQuestionVideoIfNecessary(test.TestType, GuidOfCurrentUser, test.Id, guid, questionReplyDto);
-            string path = pathAndFilename.Item1;
-            string filename = pathAndFilename.Item2;
+            string path = pathAndFilename?.Item1;
+            string filename = pathAndFilename?.Item2;
             
             string videoUri = _uriService.GetVideoUri(filename);
 

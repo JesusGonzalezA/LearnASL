@@ -20,7 +20,6 @@ VIDEO_NAME = os.getenv('VIDEO_NAME')
 VIDEO_EXTENSION = os.getenv('VIDEO_EXTENSION')
 NUM_CHANNELS = int(os.getenv('NUM_CHANNELS'))
 
-
 def predict(filename):
     video = cv2.VideoCapture(filename)
 
