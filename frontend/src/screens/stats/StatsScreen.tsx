@@ -8,7 +8,7 @@ import { UseOfTheApp } from '../../components/stats/UseOfTheApp'
 
 export const StatsScreen = () => {
   return (
-    <Container component='main' sx={{marginBottom: '10px'}}>
+    <Container component='main' sx={{marginBottom: 3 }}>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Typography variant='h3' component='h1' sx={{ marginBottom: 3 }}>My stats</Typography>
 

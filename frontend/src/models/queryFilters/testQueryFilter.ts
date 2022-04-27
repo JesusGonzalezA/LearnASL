@@ -6,6 +6,6 @@ export type TestQueryFilter = {
     pageNumber: number,
     testType?: TestType,
     difficulty?: Difficulty,
-    fromDate?: Date,
-    toDate?: Date
+    fromDate?: string,
+    toDate?: string
 }

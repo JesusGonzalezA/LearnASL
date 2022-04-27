@@ -6,6 +6,7 @@ import * as TestApi from '../api/test'
 import { CardTest } from '../components/test/CardTest'
 import { setRecentFilter, setRecentPageNumber, setTotalTests } from '../redux/test/testSlice'
 import { setErrors } from '../redux/dashboard/dashboardSlice'
+import { Filter } from '../components/home/Filter'
 
 interface Metadata {
   TotalCount: number
@@ -22,27 +23,44 @@ export const HomeScreen = () => {
     return await TestApi.getTests({
       pageSize: filters.recent.pageSize, 
       pageNumber: filters.recent.pageNumber + 1,
+      difficulty: filters.recent.difficulty,
+      testType: filters.recent.type,
+      fromDate: filters.recent.fromDate,
+      toDate: filters.recent.toDate,
       userId: id ?? '',
     }, abortController)
   }, [id, filters.recent])
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     dispatch(setRecentFilter({
+      ...filters.recent,
       pageSize: parseInt(event.target.value, 10), 
       pageNumber: 0
     }))
-    setIsLoaded(false)
   }
 
   const handleChangePage = (e : any, newPage: number) => {
     dispatch(setRecentPageNumber(newPage))
-    setIsLoaded(false)
   }
+
+  const handleChangeFilter = useCallback((value: any) => {
+    const updatedFilter = { ...filters.recent, ...value }
+    if (!updatedFilter.useDateFiltering) {
+      delete updatedFilter.fromDate
+      delete updatedFilter.toDate
+    }
+    delete updatedFilter.useDateFiltering
+  
+    if (JSON.stringify(filters.recent) !== JSON.stringify(updatedFilter)) {
+      dispatch(setRecentFilter(updatedFilter))
+    }
+  }, [dispatch, filters.recent])
 
   useEffect(() => {
     const abortController = new AbortController()
 
     const fetchAndSet = async () => {
+      setIsLoaded(false)
       getTests(abortController)
         .then( async (result) => {
           if (!result.ok)
@@ -94,30 +112,36 @@ export const HomeScreen = () => {
         rowsPerPageOptions={[5, 10]}
       />
 
-      {
-        (!isLoaded)
-          ? (
-            Array.from({ length: filters.recent.pageSize }).map((t, index) => (
-              <Card sx={{minWidth: 340, maxWidth: 360, marginBottom: '10px'}} key={index}>
-                <CardContent>
-                  <Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                      <Skeleton animation="wave" variant="rectangular" width={'30%'} />
-                      <Skeleton animation="wave" variant="circular" width={40} height={40} />
-                    </Box> 
-                    <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                      <Skeleton animation="wave" variant="rectangular" width={'30%'} />
-                      <Skeleton animation="wave" variant="rectangular" width={'30%'} />
+      <Box sx={{minWidth: 340, maxWidth: 360, marginBottom: 3 }}>
+        <Filter onChange={handleChangeFilter} value={filters.recent} />
+      </Box>
+
+      <Box sx={{ marginBottom: 3 }}>
+        {
+          (!isLoaded)
+            ? (
+              Array.from({ length: filters.recent.pageSize }).map((t, index) => (
+                <Card sx={{minWidth: 340, maxWidth: 360, marginBottom: '10px'}} key={index}>
+                  <CardContent>
+                    <Box>
+                      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                        <Skeleton animation="wave" variant="rectangular" width={'30%'} />
+                        <Skeleton animation="wave" variant="circular" width={40} height={40} />
+                      </Box> 
+                      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <Skeleton animation="wave" variant="rectangular" width={'30%'} />
+                        <Skeleton animation="wave" variant="rectangular" width={'30%'} />
+                      </Box>
                     </Box>
-                  </Box>
-                </CardContent>
-              </Card>
-            ))
-          )
-          : (
-            recentTests.map(t => ( <CardTest test={t} key={t.id} /> ))
-          )
-      }
+                  </CardContent>
+                </Card>
+              ))
+            )
+            : (
+              recentTests.map(t => ( <CardTest test={t} key={t.id} /> ))
+            )
+        }
+      </Box>
 
     </Grid> 
   )
