@@ -23,8 +23,8 @@ const testQueryFilterToUrlSearchParams = (filter: TestQueryFilter) : URLSearchPa
     setToUrlSearchParamsIfDefined(params, 'PageSize', filter.pageSize.toString())
     setToUrlSearchParamsIfDefined(params, 'TestType', filter.testType?.toString())
     setToUrlSearchParamsIfDefined(params, 'Difficulty', filter.difficulty?.toString())
-    setToUrlSearchParamsIfDefined(params, 'PageNumber', filter.toDate?.toString())
-    setToUrlSearchParamsIfDefined(params, 'PageNumber', filter.fromDate?.toString())
+    setToUrlSearchParamsIfDefined(params, 'ToDate', filter.toDate?.toString())
+    setToUrlSearchParamsIfDefined(params, 'FromDate', filter.fromDate?.toString())
 
     return params
 }

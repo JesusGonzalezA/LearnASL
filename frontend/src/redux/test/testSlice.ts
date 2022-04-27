@@ -1,11 +1,15 @@
 import { createSlice, ThunkAction, AnyAction } from '@reduxjs/toolkit';
-import { Test } from '../../models/test'
+import { Difficulty, Test, TestType } from '../../models/test'
 import * as TestActions from './actions'
 import { PersistenceService } from '../../services/persistenceService';
 
 interface Filter {
   pageSize: number,
-  pageNumber: number
+  pageNumber: number,
+  type?: TestType,
+  difficulty?: Difficulty,
+  fromDate?: string,
+  toDate?: string
 }
 
 export interface TestState {
