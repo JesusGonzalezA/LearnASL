@@ -1,7 +1,12 @@
+import { PersistenceService } from '../../services/persistenceService'
 import getBaseUrl from '../helpers/getBaseUrl'
 
 const baseURL = getBaseUrl()
 const baseEndpoint = `${baseURL}/auth`
+
+const getToken = () => {
+    return new PersistenceService().get('user')?.token
+} 
 
 const loginAsync = async (email : string, password : string) => {
     return fetch(`${baseEndpoint}/login`, {
@@ -57,11 +62,33 @@ const confirmEmailAsync = (email : string, token : string) => {
     })
 }
 
+const changeEmailAsync = (email : string) => {
+    return fetch(`${baseEndpoint}`, {
+        method: 'PUT',
+        headers: {
+            Authorization: `Bearer ${getToken()}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email })
+    })
+}
+
+const deleteMyAccountAsync = () => {
+    return fetch(`${baseEndpoint}/delete`, {
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        }
+    })
+}
+
 export {
     loginAsync,
     registerAsync,
     startPasswordRecoveryAsync,
     startEmailConfirmationAsync,
     recoverPasswordAsync,
-    confirmEmailAsync
+    confirmEmailAsync,
+    changeEmailAsync,
+    deleteMyAccountAsync
 }

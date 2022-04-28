@@ -2,8 +2,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import * as AuthApi from '../../api/auth'
 import { LoginResponse, RegisterResponse } from '../../models/responses'
 import { Login, Register, ConfirmEmail, ChangePassword } from '../../models/auth'
-import { ErrorResponse } from '../../models/responses/error';
+import { ErrorResponse } from '../../models/responses/error'
 import { PersistenceService } from '../../services/persistenceService'
+import { thunkLogout } from './authSlice'
 
 const loginAsync = createAsyncThunk<
     LoginResponse, 
@@ -133,11 +134,53 @@ const changePasswordAsync = createAsyncThunk<
     }
 )
 
+const changeEmailAsync = createAsyncThunk<
+    void,
+    string,
+    {
+        rejectValue: ErrorResponse
+    }>('auth/change-email', async(email, thunkApi) => {
+        return await AuthApi.changeEmailAsync(email).then(async res => {
+            const data = await res.json()
+            if (res.status < 200 || res.status >= 300)
+            {
+                return thunkApi.rejectWithValue({
+                    errors: data.errors
+                } as ErrorResponse) 
+            }
+
+            thunkApi.dispatch(thunkLogout())
+        })
+    }
+)
+
+const deleteMyAccountAsync = createAsyncThunk<
+    void,
+    void,
+    {
+        rejectValue: ErrorResponse
+    }>('auth/delete-my-account', async(_, thunkApi) => {
+        return await AuthApi.deleteMyAccountAsync().then(async res => {
+            const data = await res.json()
+            if (res.status < 200 || res.status >= 300)
+            {
+                return thunkApi.rejectWithValue({
+                    errors: data.errors
+                } as ErrorResponse) 
+            }
+
+            thunkApi.dispatch(thunkLogout())
+        })
+    }
+)
+
 export {
     loginAsync,
     registerAsync,
     resendConfirmationEmailAsync,
     confirmEmailAsync,
     startChangePasswordAsync,
-    changePasswordAsync
+    changePasswordAsync,
+    changeEmailAsync,
+    deleteMyAccountAsync
 }

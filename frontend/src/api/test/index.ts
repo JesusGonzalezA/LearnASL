@@ -77,9 +77,20 @@ const replyToQuestion = ({id, testType, userAnswer, videoUser} : TestReply) => {
     return fetch(`${baseQuestionEndpoint}/${id}`, params)
 }
 
+const deleteAllTests = (abortController: AbortController) => {
+    return fetch(`${baseEndpoint}`, {
+        signal: abortController.signal,
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        }
+    })
+}
+
 export {
     getTest,
     getTests,
     createTest,
-    replyToQuestion
+    replyToQuestion,
+    deleteAllTests
 }

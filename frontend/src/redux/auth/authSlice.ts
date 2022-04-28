@@ -147,9 +147,52 @@ export const authSlice = createSlice({
       })
 
       // Change email
+      .addCase(AuthActions.changeEmailAsync.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(AuthActions.changeEmailAsync.fulfilled, (state) => {
+        state.status = 'idle'
+        state.messages.success = ['Email was changed successfully, check your inbox']
+      })
+      .addCase(AuthActions.changeEmailAsync.rejected, (state, action) => {
+        state.status = 'failed'
+        state.errors = (action.payload) ? action.payload.errors : ['Something went wrong']
+      })
       
+      // Delete my account
+      .addCase(AuthActions.deleteMyAccountAsync.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(AuthActions.deleteMyAccountAsync.fulfilled, (state) => {
+        state.status = 'idle'
+        state.messages.success = ['We hope to see you again']
+      })
+      .addCase(AuthActions.deleteMyAccountAsync.rejected, (state, action) => {
+        state.status = 'failed'
+        state.errors = (action.payload) ? action.payload.errors : ['Something went wrong']
+      })
   }
 })
+
+export const thunkChangeEmail = (email : string): ThunkAction<void, unknown, unknown, AnyAction> => {
+  return (dispatch, getState) => {
+    dispatch(AuthActions.changeEmailAsync(email))
+      .finally(() => {
+        const state : any = getState()
+        dispatch(dashboardSlice.actions.setErrors(state.auth?.errors))
+      })
+  }
+}
+
+export const thunkDeleteMyAccount = (): ThunkAction<void, unknown, unknown, AnyAction> => {
+  return (dispatch, getState) => {
+    dispatch(AuthActions.deleteMyAccountAsync())
+      .finally(() => {
+        const state : any = getState()
+        dispatch(dashboardSlice.actions.setErrors(state.auth?.errors))
+      })
+  }
+}
 
 export const thunkLogout = (): ThunkAction<void, unknown, unknown, AnyAction> => {
   return dispatch => {

@@ -20,7 +20,7 @@ export const BottomBarNav = ({value, onChange}: BottomBarNavProps) => {
             icon={<HomeIcon />} 
         />
         <BottomNavigationAction 
-            label='Start a test'
+            label='Start'
             component={Link}
             to='/test/new'
             value='/test/new'

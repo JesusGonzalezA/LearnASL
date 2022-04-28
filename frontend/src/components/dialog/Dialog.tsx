@@ -6,6 +6,7 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 
 export interface DialogProps {
+  color?: "inherit" | "primary" | "secondary" | "success" | "error" | "info" | "warning" | undefined,
   messageButton: string,
   title: string,
   content: string,
@@ -13,6 +14,7 @@ export interface DialogProps {
 }
 
 export const Dialog = ({ 
+  color,
   messageButton, 
   title, 
   content, 
@@ -30,13 +32,13 @@ export const Dialog = ({
 
   return (
     <div>
-      <Button variant="outlined" onClick={ handleClickOpen }>
+      <Button variant="outlined" onClick={ handleClickOpen } color={color}>
         { messageButton }
       </Button>
       <MuiDialog open={ open } onClose={ handleClose }>
         <DialogTitle>{ title }</DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <DialogContentText sx={{ marginBottom: 1 }}>
             { content }
           </DialogContentText>
           { component }
