@@ -45,6 +45,7 @@ namespace Core.Services
 
         public async Task UpdateQuestion
         (
+            Difficulty difficulty,
             TestType testType,
             Guid questionGuid,
             UpdateQuestionParameters parameters,
@@ -52,7 +53,7 @@ namespace Core.Services
             string filename
         )
         {
-            dynamic updatedQuestion = await GetUpdatedQuestion(testType, questionGuid, parameters, token, filename);
+            dynamic updatedQuestion = await GetUpdatedQuestion(difficulty, testType, questionGuid, parameters, token, filename);
             dynamic repository = GetQuestionRepository(testType);
 
             Guid userId = updatedQuestion.Test.UserId;
@@ -112,6 +113,7 @@ namespace Core.Services
 
         private async Task<dynamic> GetUpdatedQuestion
         (
+            Difficulty difficulty,
             TestType testType,
             Guid questionGuid,
             UpdateQuestionParameters parameters,
@@ -134,7 +136,7 @@ namespace Core.Services
                 case TestType.QA_Error:
                 case TestType.Mimic:
                 case TestType.Mimic_Error:
-                    List<Prediction> predictions = await _aiService.SendRequest(filename, token);
+                    List<Prediction> predictions = await _aiService.SendRequest(difficulty, filename, token);
                     Prediction correctPrediction = predictions.Find(p => p.Label == question.WordToGuess);
                     question.VideoUser = parameters.VideoUser;
                     question.IsCorrect = correctPrediction != null;

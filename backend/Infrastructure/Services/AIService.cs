@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Core.CustomEntities;
+using Core.Enums;
 using Core.Interfaces;
 using Core.Options;
 using Microsoft.Extensions.Options;
@@ -23,7 +23,7 @@ namespace Infrastructure.Services
             _options = options.Value;
         }
 
-        public async Task<List<Prediction> > SendRequest(string filename, string token)
+        public async Task<List<Prediction> > SendRequest(Difficulty difficulty, string filename, string token)
         {
 
             _httpClient.DefaultRequestHeaders.Add(_options.AuthHeader, token);
@@ -37,6 +37,10 @@ namespace Infrastructure.Services
                 fileStreamContent,
                 name: _options.FormContentVideoKey,
                 fileName: filenameWithoutPath
+            );
+            multipartFormContent.Add(
+                name: _options.FormContentDifficultyKey,
+                content: new StringContent(difficulty.ToString())
             );
 
             HttpResponseMessage response = await _httpClient.PostAsync(

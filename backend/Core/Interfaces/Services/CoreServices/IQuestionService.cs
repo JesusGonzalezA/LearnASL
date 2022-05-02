@@ -12,6 +12,6 @@ namespace Core.Interfaces
         Task AddQuestions(TestType testType, IEnumerable<BaseQuestionEntity> questions);
         IEnumerable<BaseQuestionEntity> GetQuestions(TestEntity test);
         Task<BaseQuestionEntity> GetQuestion(TestType testType, Guid guid);
-        Task UpdateQuestion(TestType testType, Guid questionGuid, UpdateQuestionParameters parameters, string token, string filename);
+        Task UpdateQuestion(Difficulty difficulty, TestType testType, Guid questionGuid, UpdateQuestionParameters parameters, string token, string filename);
     }
 }

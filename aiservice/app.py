@@ -1,6 +1,4 @@
-import json
 import os
-import numpy as np
 
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
@@ -27,7 +25,8 @@ def validate_video():
 
         filename = os.path.join(os.getenv('UPLOAD_FOLDER'), secure_filename(video.filename))
         video.save(filename)
-        out_labels, out_probs = predict(filename)
+        difficulty = request.form.get('difficulty')
+        out_labels, out_probs = predict(filename, difficulty)
 
         dict = []
         for label, prob in zip(out_labels, out_probs):

@@ -59,7 +59,14 @@ namespace Api.Controllers
                 UserAnswer = questionReplyDto.UserAnswer
             };
 
-            await _questionService.UpdateQuestion(test.TestType, guid, updateQuestionParameters, TokenOfCurrentRequest, path);
+            await _questionService.UpdateQuestion(
+                test.Difficulty,
+                test.TestType,
+                guid,
+                updateQuestionParameters,
+                TokenOfCurrentRequest,
+                path
+            );
 
             return Ok(updateQuestionParameters);
         }
