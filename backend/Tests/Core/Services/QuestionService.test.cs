@@ -69,7 +69,7 @@ namespace Tests.Core.Services
         }
 
         [Theory]
-        [MemberData(nameof(AllTestTypes))]
+        [MemberData(nameof(OptionTestTypes))]
         public async Task QuestionService_UpdateQuestion_DoesNotThrowException(TestType testType)
         {
             // Add test
@@ -99,7 +99,7 @@ namespace Tests.Core.Services
                 UserAnswer = "answer"
             };
 
-            await questionService.UpdateQuestion(testType, questionDB.Id, parameters);
+            await questionService.UpdateQuestion(testEntityDB.Difficulty, testType, questionDB.Id, parameters, "", "");
         }
 
         [Theory]
@@ -146,6 +146,7 @@ namespace Tests.Core.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly PaginationOptions _paginationOptions;
+        private readonly AIServiceOptions _aIServiceOptions;
         private readonly IQuestionGeneratorService _questionGeneratorService;
 
         public TestQuestionService()
@@ -165,6 +166,14 @@ namespace Tests.Core.Services
                 WLASLDirectory = "WLASL2000"
             });
             _questionGeneratorService = new QuestionGeneratorService(_unitOfWork, videoServingOptions);
+            _aIServiceOptions = new AIServiceOptions()
+            {
+                MediaType = "",
+                AuthHeader = "",
+                FormContentVideoKey = "",
+                FormContentDifficultyKey = "",
+                Route = "",
+            };
         }
 
         public static IEnumerable<object[]> AllTestTypes()
@@ -175,9 +184,18 @@ namespace Tests.Core.Services
             }
         }
 
+        public static IEnumerable<object[]> OptionTestTypes()
+        {
+            yield return new object[] { TestType.OptionVideoToWord };
+            yield return new object[] { TestType.OptionVideoToWord_Error };
+            yield return new object[] { TestType.OptionWordToVideo };
+            yield return new object[] { TestType.OptionWordToVideo_Error };
+        }
+
         private TestService CreateTestService()
         {
-            IQuestionService questionService = new QuestionService(_unitOfWork);
+            IAIService aIService = new AIService(new System.Net.Http.HttpClient(), Options.Create(_aIServiceOptions));
+            IQuestionService questionService = new QuestionService(_unitOfWork, aIService);
             IOptions<PaginationOptions> paginationOptions = Options.Create(_paginationOptions);
             return new TestService(_unitOfWork, questionService, paginationOptions);
         }
@@ -189,7 +207,8 @@ namespace Tests.Core.Services
 
         private QuestionService CreateQuestionService()
         {
-            return new QuestionService(_unitOfWork);
+            IAIService aIService = new AIService(new System.Net.Http.HttpClient(), Options.Create(_aIServiceOptions));
+            return new QuestionService(_unitOfWork, aIService);
         }
 
         private async Task<Guid> AddUser()

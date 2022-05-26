@@ -12,6 +12,7 @@ using Core.Interfaces;
 using Core.Options;
 using Core.QueryFilters;
 using Core.Services;
+using Infrastructure.Services;
 using Microsoft.Extensions.Options;
 using Tests.Mocks;
 using Xunit;
@@ -134,6 +135,7 @@ namespace Tests.Core.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly PaginationOptions _paginationOptions;
+        private readonly AIServiceOptions _aIServiceOptions;
 
         public TestTestService()
         {
@@ -144,11 +146,20 @@ namespace Tests.Core.Services
                 DefaultPageSize = 10,
                 MaximumPageSize = 20
             };
+            _aIServiceOptions = new AIServiceOptions()
+            {
+                MediaType = "",
+                AuthHeader = "",
+                FormContentVideoKey = "",
+                FormContentDifficultyKey = "",
+                Route = "",
+            };
         }
 
         private TestService CreateTestService()
         {
-            IQuestionService questionService = new QuestionService(_unitOfWork);
+            IAIService aIService = new AIService(new System.Net.Http.HttpClient(), Options.Create(_aIServiceOptions));
+            IQuestionService questionService = new QuestionService(_unitOfWork, aIService);
             IOptions<PaginationOptions> paginationOptions = Options.Create(_paginationOptions);
             return new TestService(_unitOfWork, questionService, paginationOptions);
         }
