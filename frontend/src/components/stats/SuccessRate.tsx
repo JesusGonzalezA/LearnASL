@@ -95,7 +95,7 @@ export const SuccessRate = () => {
           }
 
           const body = await result.json()
-          setStat(body.stat)
+          setStat(body.stat * 100.0)
           setIsLoading(false)
         })
         .catch( () => {
@@ -147,7 +147,8 @@ export const SuccessRate = () => {
               : (
                 <PieChart
                   style={{
-                    height: 150
+                    height: 150,
+                    padding: 5
                   }}
                   label={({ dataEntry }) => Math.round(dataEntry.percentage) + '%'}
                   radius={42}
